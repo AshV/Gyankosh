@@ -327,30 +327,34 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
           // Available width for verse text (accounting for page padding and verse number margin)
           const stageWidth = this.stage.clientWidth || window.innerWidth;
-          const availableTextWidth = Math.max(160, stageWidth - 95);
+          const isMobile = window.innerWidth <= 640;
+          const horizontalOffset = isMobile ? 70 : 100;
+          const availableTextWidth = Math.max(120, stageWidth - horizontalOffset);
 
-          // Ensure intra-verse consistency: if ANY line in a verse needs to wrap, all lines in that verse wrap
+          // Evaluate stacking STRICTLY VERSE-BY-VERSE:
+          // For each individual verse block, if any line in THAT verse overflows, ONLY that verse gets stacked.
+          // Other shorter verses in the document remain side-by-side!
           childElements.forEach((node) => {
             if (node.classList.contains('verse-block')) {
               const lines = node.querySelectorAll('.verse-line');
-              let shouldStack = false;
+              let verseNeedsStacking = false;
 
               lines.forEach((line) => {
                 const padas = line.querySelectorAll('.pada');
                 if (padas.length > 1) {
                   const clone = line.cloneNode(true);
-                  clone.style.cssText = 'position:absolute; visibility:hidden; display:inline-flex; flex-wrap:nowrap; width:max-content; column-gap:0.85rem; font-size:var(--reader-font-size); line-height:var(--reader-line-height);';
+                  clone.style.cssText = 'position:absolute; visibility:hidden; display:inline-flex; flex-wrap:nowrap; width:max-content; column-gap:0.85rem; font-family:var(--reader-font-family); font-size:var(--reader-font-size); line-height:var(--reader-line-height);';
                   document.body.appendChild(clone);
                   const neededWidth = clone.offsetWidth;
                   document.body.removeChild(clone);
 
                   if (neededWidth > availableTextWidth) {
-                    shouldStack = true;
+                    verseNeedsStacking = true;
                   }
                 }
               });
 
-              if (shouldStack) {
+              if (verseNeedsStacking) {
                 node.classList.add('verse--stacked');
               } else {
                 node.classList.remove('verse--stacked');
