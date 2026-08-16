@@ -55,6 +55,46 @@ function renderInline(text: string): string {
     .replace(/\*(.+?)\*/g, '<em>$1</em>');
 }
 
+// ─── Helper: split verse line into two parts (from space after ।, ,, or |) ──
+function splitVerseLine(line: string): { part1: string; part2?: string } {
+  const trimmed = line.trim();
+  if (!trimmed) return { part1: '' };
+
+  // Match delimiter (single danda ।, comma ,, or pipe |) followed by whitespace and subsequent text
+  const match = trimmed.match(/^([^।॥,|]+?)(\s*)([।,|])\s+(.+)$/);
+  if (match) {
+    const textBefore = match[1].trim();
+    const spaceBefore = match[2];
+    const delim = match[3];
+    const part2 = match[4].trim();
+
+    // Preserve exact spacing/delimiter formatting on part 1 (e.g. "शब्द।" or "शब्द ।" or "शब्द,")
+    const part1 = spaceBefore ? `${textBefore} ${delim}` : `${textBefore}${delim}`;
+
+    return { part1, part2 };
+  }
+
+  return { part1: trimmed };
+}
+
+// ─── Helper: render verse lines into padas with responsive row containers ──
+function renderVerseLines(lines: string[]): string {
+  return lines
+    .map(line => {
+      const { part1, part2 } = splitVerseLine(line);
+      if (part2) {
+        return `<div class="verse-line">
+    <span class="pada pada--first" data-transliterable="true">${renderInline(part1)}</span>
+    <span class="pada pada--second" data-transliterable="true">${renderInline(part2)}</span>
+  </div>`;
+      }
+      return `<div class="verse-line">
+    <span class="pada" data-transliterable="true">${renderInline(part1)}</span>
+  </div>`;
+    })
+    .join('\n');
+}
+
 // ─── Render a single block into Gita Press HTML ──────────────────────────
 function renderBlock(
   tag: BlockType,
@@ -69,9 +109,7 @@ function renderBlock(
     const verseId = `verse-${state.verseCounter}`;
     const hindiNum = toHindiNumerals(state.verseCounter);
     const label = `${state.verseCounter}`;
-    const padasHtml = lines
-      .map(line => `<span class="pada" data-transliterable="true">${renderInline(line)}</span>`)
-      .join('\n');
+    const padasHtml = renderVerseLines(lines);
 
     return `<div
   class="verse-block ${cssClass}"
@@ -90,9 +128,7 @@ function renderBlock(
     state.nameCounter++;
     const nameId = `name-${state.nameCounter}`;
     const hindiNum = toHindiNumerals(state.nameCounter);
-    const padasHtml = lines
-      .map(line => `<span class="pada" data-transliterable="true">${renderInline(line)}</span>`)
-      .join('\n');
+    const padasHtml = renderVerseLines(lines);
 
     return `<div
   class="verse-block block--name"

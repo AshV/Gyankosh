@@ -325,6 +325,39 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
           if (childElements.length === 0) return;
 
+          // Available width for verse text (accounting for page padding and verse number margin)
+          const stageWidth = this.stage.clientWidth || window.innerWidth;
+          const availableTextWidth = Math.max(160, stageWidth - 95);
+
+          // Ensure intra-verse consistency: if ANY line in a verse needs to wrap, all lines in that verse wrap
+          childElements.forEach((node) => {
+            if (node.classList.contains('verse-block')) {
+              const lines = node.querySelectorAll('.verse-line');
+              let shouldStack = false;
+
+              lines.forEach((line) => {
+                const padas = line.querySelectorAll('.pada');
+                if (padas.length > 1) {
+                  const clone = line.cloneNode(true);
+                  clone.style.cssText = 'position:absolute; visibility:hidden; display:inline-flex; flex-wrap:nowrap; width:max-content; column-gap:0.85rem; font-size:var(--reader-font-size); line-height:var(--reader-line-height);';
+                  document.body.appendChild(clone);
+                  const neededWidth = clone.offsetWidth;
+                  document.body.removeChild(clone);
+
+                  if (neededWidth > availableTextWidth) {
+                    shouldStack = true;
+                  }
+                }
+              });
+
+              if (shouldStack) {
+                node.classList.add('verse--stacked');
+              } else {
+                node.classList.remove('verse--stacked');
+              }
+            }
+          });
+
           // Measurement box
           const measureBox = document.createElement('div');
           measureBox.style.cssText = 'position:absolute; visibility:hidden; width:' + 
