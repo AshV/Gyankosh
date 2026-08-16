@@ -457,7 +457,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           this.updateUI();
         }
 
-        /* 3D Vertical Page Turn */
+        /* 3D Realistic Book Page Turn (पन्ना पलट) */
         flipToPage(newIndex, direction = 'down') {
           if (newIndex < 0 || newIndex >= this.pages.length || this.isFlipping) return;
           if (newIndex === this.currentPageIndex) return;
@@ -467,42 +467,36 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           const oldPage = this.pageElements[oldIndex];
           const newPage = this.pageElements[newIndex];
 
-          const isForward = direction === 'down' || newIndex > oldIndex;
+          const isForward = direction === 'down' || direction === 'next' || newIndex > oldIndex;
 
           if (isForward) {
-            // Turning down to next leaf
-            newPage.className = 'reader-page flip-enter-down';
-            void newPage.offsetWidth;
-
-            oldPage.className = 'reader-page flip-exit-up';
-            newPage.className = 'reader-page active-page';
+            // Forward Turn: old page curls and turns over spine; new page is revealed underneath
+            newPage.className = 'reader-page flip-turn-forward-enter';
+            oldPage.className = 'reader-page flip-turn-forward-exit';
           } else {
-            // Turning up to previous leaf
-            newPage.className = 'reader-page flip-enter-up';
-            void newPage.offsetWidth;
-
-            oldPage.className = 'reader-page flip-exit-down';
-            newPage.className = 'reader-page active-page';
+            // Backward Turn: previous page sweeps from left back onto the stack
+            newPage.className = 'reader-page flip-turn-backward-enter';
+            oldPage.className = 'reader-page flip-turn-backward-exit';
           }
 
           this.currentPageIndex = newIndex;
           this.updateUI();
 
           setTimeout(() => {
-            if (oldPage && oldPage !== this.pageElements[this.currentPageIndex]) {
-              oldPage.className = 'reader-page';
-            }
+            this.pageElements.forEach((el, idx) => {
+              el.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
+            });
             this.isFlipping = false;
             this.savePosition();
-          }, 570);
+          }, 630);
         }
 
         nextPage() {
-          this.flipToPage(this.currentPageIndex + 1, 'down');
+          this.flipToPage(this.currentPageIndex + 1, 'next');
         }
 
         prevPage() {
-          this.flipToPage(this.currentPageIndex - 1, 'up');
+          this.flipToPage(this.currentPageIndex - 1, 'prev');
         }
 
         updateUI() {
@@ -563,7 +557,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           document.getElementById('btn-bottom-prev')?.addEventListener('click', () => this.prevPage());
           document.getElementById('btn-bottom-next')?.addEventListener('click', () => this.nextPage());
 
-          // Tap Zones
+          // Tap Zones (Left = Prev, Right/Center = Next)
           document.getElementById('tap-prev')?.addEventListener('click', (e) => {
             e.stopPropagation();
             this.prevPage();
@@ -572,8 +566,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             e.stopPropagation();
             this.nextPage();
           });
+          document.getElementById('tap-center')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.nextPage();
+          });
 
-          // Touch Gestures
+          // Touch Gestures (Intuitive Book Swiping)
           let touchStartY = 0;
           let touchStartX = 0;
 
@@ -586,7 +584,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             const diffY = touchStartY - e.changedTouches[0].clientY;
             const diffX = touchStartX - e.changedTouches[0].clientX;
 
-            if (Math.abs(diffY) > 35 && Math.abs(diffY) > Math.abs(diffX)) {
+            // Horizontal book swipe takes precedence (swipe left = next, swipe right = prev)
+            if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
+              if (diffX > 0) this.nextPage();
+              else this.prevPage();
+            }
+            // Vertical scroll/swipe fallback
+            else if (Math.abs(diffY) > 35) {
               if (diffY > 0) this.nextPage();
               else this.prevPage();
             }
@@ -598,18 +602,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             e.preventDefault();
             if (wheelTimeout || this.isFlipping) return;
 
-            if (e.deltaY > 20) this.nextPage();
-            else if (e.deltaY < -20) this.prevPage();
+            if (e.deltaY > 20 || e.deltaX > 20) this.nextPage();
+            else if (e.deltaY < -20 || e.deltaX < -20) this.prevPage();
 
             wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 420);
           }, { passive: false });
 
-          // Keyboard
+          // Keyboard (Left/Right & Up/Down arrows)
           document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'j') {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'j') {
               e.preventDefault();
               this.nextPage();
-            } else if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'k') {
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'k') {
               e.preventDefault();
               this.prevPage();
             } else if (e.key === ' ' && !e.target.matches('input, select, textarea')) {

@@ -84,22 +84,22 @@
   color: #fffdf7;
 }
 
-/* ─── 3D Vertical Page-Flip Viewport (Pothi / Paper Folio) ── */
+/* ─── 3D True Book Page-Turn Viewport ───────────────────── */
 .reader-viewport {
   flex: 1;
   overflow: hidden;
   position: relative;
-  perspective: 2200px;
-  perspective-origin: 50% 25%;
-  background: radial-gradient(ellipse at 50% 35%, #f5ebd8 0%, #e6d8ba 60%, #cebc95 100%);
+  perspective: 2500px;
+  perspective-origin: 50% 50%;
+  background: radial-gradient(ellipse at 50% 40%, #f6ebd7 0%, #e6d7b8 60%, #cab790 100%);
   user-select: none;
   -webkit-user-select: none;
   touch-action: pan-x;
-  padding: 14px 10px;
+  padding: 12px 10px;
   box-sizing: border-box;
 }
 
-/* Folio Stage (The Book Page Box with Realistic Stacked Paper Depth) */
+/* Book Folio Stage (With realistic stacked paper block depth) */
 .reader-stage {
   position: relative;
   width: 100%;
@@ -109,17 +109,17 @@
   transform-style: preserve-3d;
 }
 
-/* Bottom stacked pages depth effect (thickness of paper stack) */
+/* Stacked underlying page edge depth (thickness of real paper volume) */
 .reader-stage::before {
   content: '';
   position: absolute;
-  inset: 5px 6px -6px 6px;
-  background: #e2d2b4;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(130, 95, 60, 0.25);
+  inset: 4px -4px -8px 4px;
+  background: #ded0b2;
+  border-radius: 4px;
+  border: 1px solid rgba(120, 85, 50, 0.25);
   box-shadow: 
-    0 12px 35px rgba(50, 30, 15, 0.25),
-    0 3px 10px rgba(50, 30, 15, 0.12);
+    0 15px 40px rgba(50, 30, 15, 0.25),
+    0 4px 12px rgba(50, 30, 15, 0.15);
   z-index: 0;
   pointer-events: none;
 }
@@ -127,10 +127,10 @@
 .reader-stage::after {
   content: '';
   position: absolute;
-  inset: 2px 3px -3px 3px;
-  background: #ede0c6;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(130, 95, 60, 0.2);
+  inset: 2px -2px -4px 2px;
+  background: #eae0c7;
+  border-radius: 3px;
+  border: 1px solid rgba(120, 85, 50, 0.2);
   z-index: 0;
   pointer-events: none;
 }
@@ -147,25 +147,22 @@
   justify-content: flex-start;
   background: var(--color-bg-card);
   background-image: 
-    radial-gradient(ellipse at 50% 15%, rgba(255, 252, 245, 0.95), rgba(246, 238, 222, 0.98)),
-    linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(0,0,0,0.02));
+    radial-gradient(ellipse at 50% 15%, rgba(255, 252, 245, 0.96), rgba(246, 238, 222, 0.98)),
+    linear-gradient(to right, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.01) 3%, transparent 8%);
   
-  /* Traditional Gita Press double-line border with authentic paper edges */
+  /* Traditional Gita Press double-line border */
   border: 3px double var(--color-border);
   border-radius: 3px;
   box-shadow: 
-    0 6px 28px rgba(60, 40, 20, 0.22),
-    0 1px 5px rgba(60, 40, 20, 0.1),
-    inset 0 0 45px rgba(210, 190, 155, 0.28);
+    0 8px 30px rgba(50, 30, 15, 0.2),
+    0 2px 6px rgba(50, 30, 15, 0.08),
+    inset 0 0 45px rgba(210, 190, 155, 0.25);
   
-  transform-origin: 50% 0%;
+  transform-origin: left center;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  will-change: transform, opacity, box-shadow;
-  transition: 
-    transform 0.56s cubic-bezier(0.22, 1, 0.36, 1), 
-    opacity 0.48s ease, 
-    box-shadow 0.56s ease;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow, opacity;
   z-index: 1;
   opacity: 0;
   pointer-events: none;
@@ -181,24 +178,24 @@
   z-index: 1;
 }
 
-/* Dynamic Paper Curl Lighting & Specular Sheen (Real Paper Reflection & Shadow) */
+/* Dynamic Page Lighting & Specular Sheen (Real Paper Reflection & Shadow Sweep) */
 .reader-page::after {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.04) 30%,
-    rgba(255, 255, 255, 0.5) 48%,
-    rgba(255, 255, 255, 0.2) 54%,
-    rgba(40, 20, 5, 0.18) 72%,
-    rgba(20, 10, 5, 0.38) 100%
+    to right,
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.04) 15%,
+    rgba(255, 255, 255, 0.55) 45%,
+    rgba(0, 0, 0, 0.12) 75%,
+    rgba(0, 0, 0, 0.32) 100%
   );
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: 20;
+  border-radius: inherit;
+  z-index: 25;
+  transition: opacity 0.4s ease;
 }
 
 /* Gita Press Running Header at Top of Page: ॥ श्रीहरिः ॥ */
@@ -228,66 +225,134 @@
   color: var(--color-gold);
 }
 
-/* Current Active Page */
+/* Active Page */
 .reader-page.active-page {
   opacity: 1;
   pointer-events: auto;
   z-index: 10;
-  transform: translateY(0) rotateX(0deg) translateZ(0) scale(1);
+  transform: rotateY(0deg);
   box-shadow: 
-    0 8px 30px rgba(60, 40, 20, 0.2),
-    0 2px 6px rgba(60, 40, 20, 0.08),
-    inset 0 0 45px rgba(210, 190, 155, 0.24);
+    0 8px 30px rgba(50, 30, 15, 0.2),
+    0 2px 6px rgba(50, 30, 15, 0.08),
+    inset 0 0 45px rgba(210, 190, 155, 0.25);
 }
 
 .reader-page.active-page::after {
   opacity: 0;
 }
 
-/* 3D Vertical Turn Up (Next Page Flip - Leaf arches & turns over top) */
-.reader-page.flip-exit-up {
-  opacity: 0;
-  z-index: 15;
-  transform: translateY(-98%) rotateX(82deg) translateZ(35px) scale(0.92);
-  box-shadow: 
-    0 40px 80px rgba(45, 25, 10, 0.45),
-    0 12px 25px rgba(0, 0, 0, 0.25);
-}
+/* ── 3D Realistic Keyframe Animations for True Book Page Flip ── */
 
-.reader-page.flip-exit-up::after {
+/* Forward Page Turn (Next): Top page peels right-to-left in 3D */
+.reader-page.flip-turn-forward-exit {
   opacity: 1;
+  pointer-events: none;
+  z-index: 20;
+  animation: pageFlipForwardExit 0.62s cubic-bezier(0.25, 1, 0.4, 1) forwards;
 }
 
-.reader-page.flip-enter-down {
+@keyframes pageFlipForwardExit {
+  0% {
+    transform: rotateY(0deg) translateZ(0);
+    box-shadow: 0 8px 30px rgba(50, 30, 15, 0.2);
+  }
+  30% {
+    transform: rotateY(-35deg) translateZ(40px) skewY(-2.5deg);
+    box-shadow: -15px 25px 50px rgba(35, 15, 5, 0.4);
+  }
+  60% {
+    transform: rotateY(-90deg) translateZ(60px) skewY(-1deg);
+    box-shadow: -25px 35px 70px rgba(35, 15, 5, 0.45);
+  }
+  90% {
+    transform: rotateY(-155deg) translateZ(25px) skewY(1deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: rotateY(-180deg) translateZ(0) skewY(0deg);
+    opacity: 0;
+    box-shadow: 0 0 0 transparent;
+  }
+}
+
+.reader-page.flip-turn-forward-exit::after {
   opacity: 0.85;
+}
+
+/* The incoming page revealed underneath */
+.reader-page.flip-turn-forward-enter {
+  opacity: 1;
+  pointer-events: none;
   z-index: 9;
-  transform: translateY(20px) scale(0.98);
-  box-shadow: 
-    inset 0 25px 50px rgba(45, 25, 10, 0.32),
-    0 4px 15px rgba(50, 30, 15, 0.15);
+  animation: pageFlipForwardEnter 0.62s cubic-bezier(0.25, 1, 0.4, 1) forwards;
 }
 
-/* 3D Vertical Turn Down (Prev Page Flip - Leaf unfolds from top and lands flat) */
-.reader-page.flip-exit-down {
-  opacity: 0;
-  z-index: 15;
-  transform: translateY(75%) rotateX(-65deg) translateZ(30px) scale(0.93);
-  box-shadow: 
-    0 -35px 70px rgba(45, 25, 10, 0.4),
-    0 -10px 20px rgba(0, 0, 0, 0.2);
+@keyframes pageFlipForwardEnter {
+  0% {
+    transform: rotateY(0deg) scale(0.985);
+    box-shadow: inset 20px 0 40px rgba(40, 20, 10, 0.35);
+  }
+  100% {
+    transform: rotateY(0deg) scale(1);
+    box-shadow: inset 0 0 45px rgba(210, 190, 155, 0.25);
+  }
 }
 
-.reader-page.flip-exit-down::after {
+/* Backward Page Turn (Prev): Previous page flips back from left onto right stack */
+.reader-page.flip-turn-backward-enter {
   opacity: 1;
+  pointer-events: none;
+  z-index: 20;
+  animation: pageFlipBackwardEnter 0.62s cubic-bezier(0.25, 1, 0.4, 1) forwards;
 }
 
-.reader-page.flip-enter-up {
+@keyframes pageFlipBackwardEnter {
+  0% {
+    transform: rotateY(-180deg) translateZ(0) skewY(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+    transform: rotateY(-145deg) translateZ(40px) skewY(2deg);
+    box-shadow: -25px 35px 70px rgba(35, 15, 5, 0.45);
+  }
+  60% {
+    transform: rotateY(-80deg) translateZ(60px) skewY(1deg);
+    box-shadow: -15px 25px 50px rgba(35, 15, 5, 0.4);
+  }
+  85% {
+    transform: rotateY(-15deg) translateZ(20px) skewY(-1deg);
+  }
+  100% {
+    transform: rotateY(0deg) translateZ(0) skewY(0deg);
+    opacity: 1;
+    box-shadow: 0 8px 30px rgba(50, 30, 15, 0.2);
+  }
+}
+
+.reader-page.flip-turn-backward-enter::after {
   opacity: 0.85;
-  z-index: 14;
-  transform: translateY(-88%) rotateX(75deg) translateZ(30px) scale(0.93);
-  box-shadow: 
-    0 35px 70px rgba(45, 25, 10, 0.4),
-    0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.reader-page.flip-turn-backward-exit {
+  opacity: 1;
+  pointer-events: none;
+  z-index: 9;
+  animation: pageFlipBackwardExit 0.62s cubic-bezier(0.25, 1, 0.4, 1) forwards;
+}
+
+@keyframes pageFlipBackwardExit {
+  0% {
+    transform: rotateY(0deg) scale(1);
+  }
+  50% {
+    transform: rotateY(0deg) scale(0.985);
+    box-shadow: inset 20px 0 40px rgba(40, 20, 10, 0.3);
+  }
+  100% {
+    transform: rotateY(0deg) scale(1);
+    box-shadow: inset 0 0 45px rgba(210, 190, 155, 0.25);
+  }
 }
 
 /* Page Number in traditional Gita Press footer */
