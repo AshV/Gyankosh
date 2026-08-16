@@ -571,7 +571,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             this.nextPage();
           });
 
-          // Touch Gestures (Intuitive Book Swiping)
+          // Touch Gestures (Natural vertical scroll/swipe with horizontal fallback)
           let touchStartY = 0;
           let touchStartX = 0;
 
@@ -584,14 +584,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             const diffY = touchStartY - e.changedTouches[0].clientY;
             const diffX = touchStartX - e.changedTouches[0].clientX;
 
-            // Horizontal book swipe takes precedence (swipe left = next, swipe right = prev)
-            if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
-              if (diffX > 0) this.nextPage();
+            // Vertical scroll/swipe (swipe up = scroll down to next page, swipe down = scroll up to prev page)
+            if (Math.abs(diffY) > 28) {
+              if (diffY > 0) this.nextPage();
               else this.prevPage();
             }
-            // Vertical scroll/swipe fallback
-            else if (Math.abs(diffY) > 35) {
-              if (diffY > 0) this.nextPage();
+            // Horizontal swipe fallback (swipe left = next, swipe right = prev)
+            else if (Math.abs(diffX) > 30) {
+              if (diffX > 0) this.nextPage();
               else this.prevPage();
             }
           }, { passive: true });
@@ -830,9 +830,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       document.addEventListener('mozfullscreenchange', updateFullscreenUI);
       document.addEventListener('MSFullscreenChange', updateFullscreenUI);
 
-      // On mobile screens, automatically enter fullscreen on opening document to read
-      const isMobileScreen = window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
-      if (isMobileScreen) {
+      // Auto full screen only on mobile phones
+      function isMobilePhone() {
+        const isSmallScreen = window.innerWidth <= 640 || window.matchMedia('(max-width: 640px)').matches;
+        const isTouch = window.matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPod|Mobile/i.test(navigator.userAgent);
+        return isSmallScreen && isTouch;
+      }
+
+      if (isMobilePhone()) {
         // Attempt immediate entry if allowed by browser context
         enterFullscreen();
 

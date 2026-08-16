@@ -101,10 +101,16 @@ const categoryUrl = `${base}/category/${category.toLowerCase()}`;
       }
     });
 
-    // Request fullscreen on user tap when opening any book on mobile
+    // Request fullscreen on user tap when opening any book only on mobile phones
+    function isMobilePhone() {
+      const isSmallScreen = window.innerWidth <= 640 || window.matchMedia('(max-width: 640px)').matches;
+      const isTouch = window.matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPod|Mobile/i.test(navigator.userAgent);
+      return isSmallScreen && isTouch;
+    }
+
     document.querySelectorAll<HTMLAnchorElement>('.book-card').forEach(card => {
       card.addEventListener('click', () => {
-        if (window.innerWidth <= 768 || 'ontouchstart' in window) {
+        if (isMobilePhone()) {
           try {
             const elem = document.documentElement;
             if (elem.requestFullscreen) {

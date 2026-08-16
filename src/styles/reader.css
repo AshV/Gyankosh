@@ -84,14 +84,14 @@
   color: #fffdf7;
 }
 
-/* ─── 3D True Book Page-Turn Viewport ───────────────────── */
+/* ─── 3D True Vertical Book/Folio Page-Turn Viewport ────── */
 .reader-viewport {
   flex: 1;
   overflow: hidden;
   position: relative;
   perspective: 2500px;
-  perspective-origin: 50% 50%;
-  background: radial-gradient(ellipse at 50% 40%, #f6ebd7 0%, #e6d7b8 60%, #cab790 100%);
+  perspective-origin: 50% 25%;
+  background: radial-gradient(ellipse at 50% 30%, #f6ebd7 0%, #e6d7b8 60%, #cab790 100%);
   user-select: none;
   -webkit-user-select: none;
   touch-action: pan-x;
@@ -113,7 +113,7 @@
 .reader-stage::before {
   content: '';
   position: absolute;
-  inset: 4px -4px -8px 4px;
+  inset: 5px 6px -7px 6px;
   background: #ded0b2;
   border-radius: 4px;
   border: 1px solid rgba(120, 85, 50, 0.25);
@@ -127,7 +127,7 @@
 .reader-stage::after {
   content: '';
   position: absolute;
-  inset: 2px -2px -4px 2px;
+  inset: 2px 3px -3px 3px;
   background: #eae0c7;
   border-radius: 3px;
   border: 1px solid rgba(120, 85, 50, 0.2);
@@ -148,7 +148,7 @@
   background: var(--color-bg-card);
   background-image: 
     radial-gradient(ellipse at 50% 15%, rgba(255, 252, 245, 0.96), rgba(246, 238, 222, 0.98)),
-    linear-gradient(to right, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.01) 3%, transparent 8%);
+    linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.01) 3%, transparent 8%);
   
   /* Traditional Gita Press double-line border */
   border: 3px double var(--color-border);
@@ -158,7 +158,7 @@
     0 2px 6px rgba(50, 30, 15, 0.08),
     inset 0 0 45px rgba(210, 190, 155, 0.25);
   
-  transform-origin: left center;
+  transform-origin: 50% 0%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform-style: preserve-3d;
@@ -184,12 +184,12 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.22) 0%,
+    to bottom,
+    rgba(0, 0, 0, 0.25) 0%,
     rgba(0, 0, 0, 0.04) 15%,
-    rgba(255, 255, 255, 0.55) 45%,
+    rgba(255, 255, 255, 0.6) 45%,
     rgba(0, 0, 0, 0.12) 75%,
-    rgba(0, 0, 0, 0.32) 100%
+    rgba(0, 0, 0, 0.35) 100%
   );
   opacity: 0;
   pointer-events: none;
@@ -230,7 +230,7 @@
   opacity: 1;
   pointer-events: auto;
   z-index: 10;
-  transform: rotateY(0deg);
+  transform: rotateX(0deg);
   box-shadow: 
     0 8px 30px rgba(50, 30, 15, 0.2),
     0 2px 6px rgba(50, 30, 15, 0.08),
@@ -241,9 +241,9 @@
   opacity: 0;
 }
 
-/* ── 3D Realistic Keyframe Animations for True Book Page Flip ── */
+/* ── 3D Realistic Keyframe Animations for Vertical Folio/Pothi Flip ── */
 
-/* Forward Page Turn (Next): Top page peels right-to-left in 3D */
+/* Forward Page Turn (Next): Bottom edge curls up & flips over top in 3D */
 .reader-page.flip-turn-forward-exit {
   opacity: 1;
   pointer-events: none;
@@ -253,23 +253,23 @@
 
 @keyframes pageFlipForwardExit {
   0% {
-    transform: rotateY(0deg) translateZ(0);
+    transform: rotateX(0deg) translateZ(0);
     box-shadow: 0 8px 30px rgba(50, 30, 15, 0.2);
   }
   30% {
-    transform: rotateY(-35deg) translateZ(40px) skewY(-2.5deg);
-    box-shadow: -15px 25px 50px rgba(35, 15, 5, 0.4);
+    transform: translateY(-12%) rotateX(42deg) translateZ(45px) skewX(-2deg);
+    box-shadow: 0 30px 60px rgba(35, 15, 5, 0.45);
   }
   60% {
-    transform: rotateY(-90deg) translateZ(60px) skewY(-1deg);
-    box-shadow: -25px 35px 70px rgba(35, 15, 5, 0.45);
+    transform: translateY(-52%) rotateX(95deg) translateZ(65px) skewX(1deg);
+    box-shadow: 0 45px 80px rgba(35, 15, 5, 0.5);
   }
   90% {
-    transform: rotateY(-155deg) translateZ(25px) skewY(1deg);
+    transform: translateY(-92%) rotateX(160deg) translateZ(25px) skewX(0deg);
     opacity: 0.9;
   }
   100% {
-    transform: rotateY(-180deg) translateZ(0) skewY(0deg);
+    transform: translateY(-112%) rotateX(180deg) translateZ(0) skewX(0deg);
     opacity: 0;
     box-shadow: 0 0 0 transparent;
   }
@@ -289,16 +289,16 @@
 
 @keyframes pageFlipForwardEnter {
   0% {
-    transform: rotateY(0deg) scale(0.985);
-    box-shadow: inset 20px 0 40px rgba(40, 20, 10, 0.35);
+    transform: translateY(0) scale(0.985);
+    box-shadow: inset 0 25px 45px rgba(40, 20, 10, 0.35);
   }
   100% {
-    transform: rotateY(0deg) scale(1);
+    transform: translateY(0) scale(1);
     box-shadow: inset 0 0 45px rgba(210, 190, 155, 0.25);
   }
 }
 
-/* Backward Page Turn (Prev): Previous page flips back from left onto right stack */
+/* Backward Page Turn (Prev): Previous leaf drops down from top and settles */
 .reader-page.flip-turn-backward-enter {
   opacity: 1;
   pointer-events: none;
@@ -308,23 +308,23 @@
 
 @keyframes pageFlipBackwardEnter {
   0% {
-    transform: rotateY(-180deg) translateZ(0) skewY(0deg);
+    transform: translateY(-112%) rotateX(180deg) translateZ(0) skewX(0deg);
     opacity: 0;
   }
   20% {
     opacity: 1;
-    transform: rotateY(-145deg) translateZ(40px) skewY(2deg);
-    box-shadow: -25px 35px 70px rgba(35, 15, 5, 0.45);
+    transform: translateY(-88%) rotateX(150deg) translateZ(40px) skewX(1.5deg);
+    box-shadow: 0 45px 80px rgba(35, 15, 5, 0.5);
   }
   60% {
-    transform: rotateY(-80deg) translateZ(60px) skewY(1deg);
-    box-shadow: -15px 25px 50px rgba(35, 15, 5, 0.4);
+    transform: translateY(-42%) rotateX(85deg) translateZ(65px) skewX(-1deg);
+    box-shadow: 0 30px 60px rgba(35, 15, 5, 0.45);
   }
   85% {
-    transform: rotateY(-15deg) translateZ(20px) skewY(-1deg);
+    transform: translateY(-6%) rotateX(18deg) translateZ(20px);
   }
   100% {
-    transform: rotateY(0deg) translateZ(0) skewY(0deg);
+    transform: translateY(0) rotateX(0deg) translateZ(0) skewX(0deg);
     opacity: 1;
     box-shadow: 0 8px 30px rgba(50, 30, 15, 0.2);
   }
@@ -343,14 +343,14 @@
 
 @keyframes pageFlipBackwardExit {
   0% {
-    transform: rotateY(0deg) scale(1);
+    transform: translateY(0) scale(1);
   }
   50% {
-    transform: rotateY(0deg) scale(0.985);
-    box-shadow: inset 20px 0 40px rgba(40, 20, 10, 0.3);
+    transform: translateY(0) scale(0.985);
+    box-shadow: inset 0 25px 45px rgba(40, 20, 10, 0.3);
   }
   100% {
-    transform: rotateY(0deg) scale(1);
+    transform: translateY(0) scale(1);
     box-shadow: inset 0 0 45px rgba(210, 190, 155, 0.25);
   }
 }
