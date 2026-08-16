@@ -29,8 +29,6 @@ Knowing myself to be ignorant, I remember the Son of Pawan (Wind); grant me stre
 [Chaupai]
 जय हनुमान ज्ञान गुन सागर।
 जय कपीस तिहुँ लोक उजागर॥
-
-[Chaupai]
 राम दूत अतुलित बल धामा।
 अंजनि-पुत्र पवनसुत नामा॥
 
