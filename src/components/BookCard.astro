@@ -1,0 +1,103 @@
+---
+/**
+ * BookCard.astro
+ * Premium book card for the catalog/category pages.
+ * Shows generated cover art, title, author, category chip, and resume-reading progress.
+ */
+export interface Props {
+  slug: string;
+  title: string;
+  author?: string;
+  description: string;
+  category: string;
+  language: string;
+  coverColor?: string;
+}
+
+const {
+  slug,
+  title,
+  author,
+  description,
+  category,
+  language,
+  coverColor = 'hsl(22, 70%, 45%)',
+} = Astro.props;
+
+// Category → emoji icon mapping
+const categoryIcons: Record<string, string> = {
+  Veda: '🔥',
+  Purana: '📖',
+  Chalisa: '🪔',
+  Stotra: '🌸',
+  Gita: '🎵',
+  Other: '📜',
+};
+
+const icon = categoryIcons[category] ?? '📜';
+const readUrl = `/read/${slug}`;
+const categoryUrl = `/category/${category.toLowerCase()}`;
+---
+
+<a
+  href={readUrl}
+  class="book-card"
+  data-slug={slug}
+  aria-label={`Read ${title}`}
+>
+  <!-- Generated Cover Art -->
+  <div
+    class="book-card-cover"
+    style={`background: linear-gradient(135deg, ${coverColor}, color-mix(in hsl, ${coverColor}, black 30%));`}
+  >
+    <div class="book-card-cover-pattern" aria-hidden="true"></div>
+    <span class="book-card-cover-title" aria-hidden="true">{title.charAt(0)}</span>
+  </div>
+
+  <!-- Card Body -->
+  <div class="book-card-body">
+    <p class="book-card-title">{title}</p>
+    {author && <p class="book-card-author">{author}</p>}
+
+    <div class="book-card-footer">
+      <a
+        href={categoryUrl}
+        class="chip"
+        onclick="event.stopPropagation()"
+        aria-label={`Browse ${category} texts`}
+      >
+        {icon} {category}
+      </a>
+      <!-- Progress badge — populated client-side from localStorage -->
+      <span
+        class="book-card-progress"
+        data-progress-badge={slug}
+        style="display:none"
+        aria-label="Reading progress"
+      >
+        <span class="progress-dot" aria-hidden="true"></span>
+        <span class="progress-label"></span>
+      </span>
+    </div>
+  </div>
+</a>
+
+<script>
+  // Populate reading progress badges from localStorage (runs client-side)
+  document.addEventListener('DOMContentLoaded', () => {
+    const badges = document.querySelectorAll<HTMLElement>('[data-progress-badge]');
+    badges.forEach(badge => {
+      const slug = badge.dataset.progressBadge!;
+      const key = `gyankosh_progress_${slug}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const data = JSON.parse(saved);
+        if (data.percent && data.percent > 2) {
+          badge.style.display = 'flex';
+          const label = badge.querySelector('.progress-label');
+          if (label) label.textContent = `${Math.round(data.percent)}% read`;
+        }
+      }
+    });
+  });
+</script>

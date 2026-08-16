@@ -1,0 +1,119 @@
+---
+/**
+ * src/pages/index.astro
+ * Home Page — Library Catalog
+ * Gita Press Gorakhpur Sacred Paper Book Theme
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookCard from '../components/BookCard.astro';
+import { CATEGORIES } from '../content.config';
+
+const allTexts = await getCollection('library');
+
+type CategoryEntry = {
+  id: string;
+  data: {
+    title: string;
+    author?: string;
+    description: string;
+    category: string;
+    language: string;
+    coverColor?: string;
+  };
+};
+
+const grouped: Record<string, CategoryEntry[]> = {};
+for (const text of allTexts) {
+  const cat = text.data.category as string;
+  if (!grouped[cat]) grouped[cat] = [];
+  grouped[cat].push(text);
+}
+
+const totalTexts = allTexts.length;
+
+const categoryMeta: Record<string, { icon: string; nameHindi: string; description: string }> = {
+  Veda:    { icon: '🔥', nameHindi: 'वेद', description: 'सनातन वैदिक ऋचाएं एवं मन्त्र' },
+  Gita:    { icon: '🎵', nameHindi: 'श्रीमद्भगवद्गीता', description: 'भगवान श्रीकृष्ण का दिव्य उपदेश' },
+  Chalisa: { icon: '🪔', nameHindi: 'चालीसा', description: 'चालीस पदों वाले पावन स्तोत्र' },
+  Purana:  { icon: '📖', nameHindi: 'पुराण', description: 'अठारह महापुराण एवं उपपुराण' },
+  Stotra:  { icon: '🌸', nameHindi: 'स्तोत्र', description: 'देवी-देवताओं की पावन स्तुतियां' },
+  Other:   { icon: '📜', nameHindi: 'अन्य धर्मग्रंथ', description: 'विशिष्ट धार्मिक एवं दार्शनिक ग्रन्थ' },
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  'name': 'ज्ञानकोश — Sanskrit Digital Library',
+  'description': 'Free online library of Sanskrit and Hindu sacred texts in authentic Gita Press format.',
+  'url': 'https://gyankosh.in',
+};
+---
+
+<BaseLayout
+  title="ज्ञानकोश — सनातन वैदिक एवं पौराणिक धर्मग्रंथ"
+  description={`पढ़िए ${totalTexts}+ सनातन धर्मग्रंथ ऑनलाइन — वेद, श्रीमद्भगवद्गीता, हनुमान चालीसा, पुराण। गीता प्रेस शैली का डिजिटल पाठक।`}
+  jsonLd={jsonLd}
+>
+  <!-- Gita Press Hero Invocation Section -->
+  <section class="catalog-hero" aria-labelledby="hero-heading">
+    <div class="container">
+      <div class="gita-press-invocation">॥ श्रीहरिः ॥</div>
+      
+      <h1 id="hero-heading">ज्ञानकोश</h1>
+      <p>
+        सनातन वैदिक एवं पौराणिक धर्मग्रंथों का पावन डिजिटल पुस्तकालय।<br />
+        वेद, उपनिषद्, गीता, रामायण, चालीसा एवं स्तोत्र — मूल पाठ एवं प्रामाणिक अर्थ सहित।
+      </p>
+
+      <!-- Category Badges -->
+      <div
+        style="display:flex;gap:1.5rem;justify-content:center;margin-top:1.75rem;flex-wrap:wrap;"
+        role="list"
+        aria-label="ग्रंथ श्रेणियां"
+      >
+        {CATEGORIES.map(cat => grouped[cat] && (
+          <a href={`/category/${cat.toLowerCase()}`} role="listitem" style="text-decoration:none;">
+            <div style="padding:0.4rem 1rem; border:1px solid var(--color-border); border-radius:var(--radius-sm); background:var(--color-bg-card); display:flex; align-items:center; gap:0.5rem; box-shadow:var(--shadow-card);">
+              <span style="font-size:1.2rem;">{categoryMeta[cat]?.icon}</span>
+              <span style="font-family:var(--font-devanagari); font-weight:700; color:var(--color-accent); font-size:0.95rem;">{categoryMeta[cat]?.nameHindi || cat}</span>
+              <span style="font-family:var(--font-devanagari); font-size:0.8rem; color:var(--color-text-faint);">({grouped[cat].length})</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Catalog Sections -->
+  <div class="container">
+    {CATEGORIES.map(cat => grouped[cat] && (
+      <section class="catalog-section" aria-labelledby={`section-${cat.toLowerCase()}`}>
+        <h2 class="catalog-section-title" id={`section-${cat.toLowerCase()}`}>
+          <span aria-hidden="true">{categoryMeta[cat]?.icon}</span>
+          <span>{categoryMeta[cat]?.nameHindi || cat}</span>
+          <span style="font-family:var(--font-devanagari);font-size:0.9rem;font-weight:600;margin-left:auto;">
+            <a href={`/category/${cat.toLowerCase()}`} style="color:var(--color-accent);">
+              सम्पूर्ण देखें →
+            </a>
+          </span>
+        </h2>
+        <div class="book-grid" role="list" aria-label={`${cat} ग्रंथ`}>
+          {grouped[cat].map(text => (
+            <div role="listitem">
+              <BookCard
+                slug={text.id}
+                title={text.data.title}
+                author={text.data.author}
+                description={text.data.description}
+                category={text.data.category}
+                language={text.data.language}
+                coverColor={text.data.coverColor}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

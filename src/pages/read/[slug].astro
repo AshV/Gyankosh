@@ -1,0 +1,69 @@
+---
+/**
+ * src/pages/read/[slug].astro
+ * The Reader View — one page per text, generated at build-time.
+ * Uses the custom indicParser to convert raw MD body → semantic HTML.
+ * All interactive features (transliteration, themes, etc.) via client scripts in ReaderLayout.
+ */
+import { getCollection } from 'astro:content';
+import { parseIndicMarkdown } from '../../utils/indicParser';
+import ReaderLayout from '../../layouts/ReaderLayout.astro';
+
+export async function getStaticPaths() {
+  const allTexts = await getCollection('library');
+  return allTexts.map(entry => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+
+// ── Build-time parsing ──────────────────────────────────────
+// entry.body is the raw Markdown string (no frontmatter).
+// We pass it through our custom parser to get semantic HTML.
+// Zero client-side parsing cost — all done at build time.
+const parsedHtml = parseIndicMarkdown(entry.body);
+
+// ── JSON-LD Schema (Book) ────────────────────────────────────
+const canonicalUrl = `https://gyankosh.in/read/${entry.id}`;
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Book',
+  'name': data.title,
+  'inLanguage': data.language,
+  'genre': data.category,
+  'url': canonicalUrl,
+  'isAccessibleForFree': true,
+  'license': 'https://creativecommons.org/licenses/by-sa/4.0/',
+};
+
+if (data.author) {
+  jsonLd['author'] = {
+    '@type': 'Person',
+    'name': data.author,
+  };
+}
+
+if (data.chapter !== undefined) {
+  jsonLd['position'] = data.chapter;
+}
+---
+
+<ReaderLayout
+  title={data.title}
+  description={data.description}
+  canonical={canonicalUrl}
+  author={data.author}
+  language={data.language}
+  slug={entry.id}
+  jsonLd={jsonLd}
+>
+  <!--
+    The parsed HTML is injected here via set:html.
+    All verse blocks, padas, translation blocks etc. are pre-rendered at build time.
+    NO JavaScript parsing happens in the browser for this content.
+  -->
+  <Fragment set:html={parsedHtml} />
+</ReaderLayout>

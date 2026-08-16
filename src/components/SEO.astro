@@ -1,0 +1,54 @@
+---
+/**
+ * SEO.astro
+ * Dynamic SEO head tags — title, meta description, canonical, OG, Twitter, JSON-LD.
+ * All values are driven by YAML frontmatter at build-time.
+ */
+export interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  author?: string;
+  language?: string;
+  type?: 'website' | 'book' | 'article';
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  author,
+  language = 'Sanskrit',
+  type = 'website',
+  jsonLd,
+} = Astro.props;
+
+const siteName = 'Gyankosh — Sanskrit Digital Library';
+const fullTitle = `${title} | ${siteName}`;
+---
+
+<!-- Primary Meta Tags -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={author ?? siteName} />
+<meta name="language" content={language} />
+<link rel="canonical" href={canonical} />
+
+<!-- Open Graph / Facebook / WhatsApp -->
+<meta property="og:type" content={type === 'book' ? 'book' : 'article'} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+{author && <meta property="book:author" content={author} />}
+
+<!-- Twitter / X Cards -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+
+<!-- JSON-LD Structured Data (Schema.org) -->
+{jsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}

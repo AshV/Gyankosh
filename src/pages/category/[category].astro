@@ -1,0 +1,96 @@
+---
+/**
+ * src/pages/category/[category].astro
+ * Category collection page — lists all texts in a given category.
+ * One page generated per category at build-time via getStaticPaths.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookCard from '../../components/BookCard.astro';
+import { CATEGORIES } from '../../content.config';
+
+export async function getStaticPaths() {
+  const allTexts = await getCollection('library');
+
+  return CATEGORIES.map(category => {
+    const filtered = allTexts.filter(t => t.data.category === category);
+    return {
+      params: { category: category.toLowerCase() },
+      props: { category, texts: filtered },
+    };
+  });
+}
+
+const { category, texts } = Astro.props;
+
+const categoryMeta: Record<string, { icon: string; description: string }> = {
+  Veda:    { icon: '🔥', description: 'The foundational hymns of Vedic civilization — Rigveda, Samaveda, Yajurveda, and Atharvaveda.' },
+  Gita:    { icon: '🎵', description: 'The Bhagavad Gita — Lord Krishna\'s divine discourse to Arjuna on the battlefield of Kurukshetra.' },
+  Chalisa: { icon: '🪔', description: 'Chalisas are forty-verse devotional hymns in praise of Hindu deities, often recited daily.' },
+  Purana:  { icon: '📖', description: 'The Puranas are ancient texts containing myths, cosmology, genealogies, and devotional teachings.' },
+  Stotra:  { icon: '🌸', description: 'Stotras are Sanskrit hymns of praise composed by sages and saints.' },
+  Other:   { icon: '📜', description: 'Additional sacred texts from the Hindu and Sanskrit tradition.' },
+};
+
+const meta = categoryMeta[category] ?? { icon: '📜', description: `Sacred texts in the ${category} category.` };
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  'name': `${category} — ज्ञानकोश`,
+  'description': meta.description,
+  'url': `https://gyankosh.in/category/${category.toLowerCase()}`,
+};
+---
+
+<BaseLayout
+  title={`${category} Texts`}
+  description={`Browse ${texts.length} ${category} texts on Gyankosh — ${meta.description}`}
+  jsonLd={jsonLd}
+>
+  <!-- Category Header -->
+  <div class="container">
+    <div class="category-header" aria-labelledby="category-title">
+      <nav aria-label="Breadcrumb">
+        <ol style="display:flex;gap:0.5rem;list-style:none;font-family:var(--font-ui);font-size:0.8rem;color:var(--color-text-muted);margin-bottom:1rem;">
+          <li><a href="/" style="color:var(--color-accent);">Library</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page">{category}</li>
+        </ol>
+      </nav>
+
+      <h1 id="category-title">
+        <span aria-hidden="true">{meta.icon}</span> {category}
+      </h1>
+      <p style="font-family:var(--font-ui);color:var(--color-text-muted);margin-top:0.5rem;max-width:55ch;">
+        {meta.description}
+      </p>
+      <p style="font-family:var(--font-ui);font-size:0.85rem;color:var(--color-text-faint);margin-top:0.75rem;">
+        {texts.length} text{texts.length !== 1 ? 's' : ''} available
+      </p>
+    </div>
+
+    <!-- Texts Grid -->
+    {texts.length > 0 ? (
+      <div class="book-grid" role="list" aria-label={`${category} texts`}>
+        {texts.map(text => (
+          <div role="listitem">
+            <BookCard
+              slug={text.id}
+              title={text.data.title}
+              author={text.data.author}
+              description={text.data.description}
+              category={text.data.category}
+              language={text.data.language}
+              coverColor={text.data.coverColor}
+            />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p style="font-family:var(--font-ui);color:var(--color-text-muted);padding:2rem 0;">
+        No texts available in this category yet. Check back soon!
+      </p>
+    )}
+  </div>
+</BaseLayout>

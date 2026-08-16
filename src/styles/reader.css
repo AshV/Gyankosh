@@ -1,0 +1,613 @@
+/* ============================================================
+   reader.css — Gita Press Gorakhpur E-Reader Styles
+   Authentic Sacred Hindu Paper Book Aesthetic
+   ============================================================ */
+
+/* ─── Reader Shell ───────────────────────────────────────── */
+.reader-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+/* ─── Top Bar (Traditional Gita Press Header) ─────────────── */
+.reader-topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem var(--space-md);
+  background: var(--color-bg);
+  border-bottom: 2px solid var(--color-border);
+  z-index: 50;
+  gap: var(--space-sm);
+  box-shadow: 0 1px 4px rgba(142, 27, 20, 0.08);
+}
+
+.reader-topbar .back-link {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-accent);
+  font-family: var(--font-devanagari);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.reader-topbar .back-link:hover {
+  opacity: 0.75;
+}
+
+.reader-topbar .book-title-bar {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  color: var(--color-accent);
+  text-align: center;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+}
+
+.reader-topbar .topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  height: 36px;
+  min-width: 36px;
+  padding: 0 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  color: var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--font-devanagari);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.icon-btn:hover, .icon-btn.active {
+  background: var(--color-accent);
+  color: #fffdf7;
+}
+
+/* ─── 3D Vertical Page-Flip Viewport (Pothi / Paper Folio) ── */
+.reader-viewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  perspective: 1800px;
+  perspective-origin: 50% 50%;
+  background: #ede3cb; /* Deeper wooden book-stand background */
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-x;
+  padding: 12px 8px;
+  box-sizing: border-box;
+}
+
+/* Folio Stage (The Book Page Box) */
+.reader-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 72ch;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+}
+
+/* Authentic Gita Press Paper Book Page */
+.reader-page {
+  position: absolute;
+  inset: 0;
+  padding: 1.25rem 1.5rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: var(--color-bg-card);
+  
+  /* Traditional Gita Press double-line border */
+  border: 3px double var(--color-border);
+  box-shadow: 
+    0 4px 20px rgba(70, 50, 30, 0.15),
+    0 1px 4px rgba(70, 50, 30, 0.08),
+    inset 0 0 40px rgba(217, 203, 178, 0.25);
+  
+  transform-origin: 50% 0%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform, opacity;
+  transition: transform 0.52s cubic-bezier(0.25, 1, 0.5, 1), 
+              opacity 0.45s ease, 
+              box-shadow 0.52s ease;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Inner decorative frame line (traditional Indian press ornament) */
+.reader-page::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid var(--color-border-subtle);
+  pointer-events: none;
+}
+
+/* Gita Press Running Header at Top of Page: ॥ श्रीहरिः ॥ */
+.page-header-invocation {
+  text-align: center;
+  font-family: var(--font-devanagari);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--color-border);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.page-header-invocation::before,
+.page-header-invocation::after {
+  content: '❖';
+  font-size: 0.65rem;
+  color: var(--color-gold);
+}
+
+/* Current Active Page */
+.reader-page.active-page {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 10;
+  transform: translateY(0) rotateX(0deg) scale(1);
+}
+
+/* 3D Vertical Turn Up (Next Page) */
+.reader-page.flip-exit-up {
+  opacity: 0;
+  z-index: 12;
+  transform: translateY(-90%) rotateX(65deg) scale(0.94);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+
+.reader-page.flip-enter-down {
+  opacity: 0;
+  z-index: 9;
+  transform: translateY(60px) rotateX(-25deg) scale(0.96);
+}
+
+/* 3D Vertical Turn Down (Prev Page) */
+.reader-page.flip-exit-down {
+  opacity: 0;
+  z-index: 12;
+  transform: translateY(80%) rotateX(-55deg) scale(0.94);
+  box-shadow: 0 -25px 50px rgba(0, 0, 0, 0.25);
+}
+
+.reader-page.flip-enter-up {
+  opacity: 0;
+  z-index: 9;
+  transform: translateY(-60px) rotateX(25deg) scale(0.96);
+}
+
+/* Page Number in traditional Gita Press footer */
+.page-footer-bar {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-devanagari);
+  font-size: 0.8rem;
+  color: var(--color-text-faint);
+  flex-shrink: 0;
+}
+
+.page-corner-num {
+  font-family: var(--font-devanagari);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* ─── Reader Content Area (Gita Press Typography) ────────── */
+.reader-content {
+  font-feature-settings: "cjct" on, "pres" on, "abvs" on, "blws" on, "half" on, "vatu" on;
+  -webkit-font-feature-settings: "cjct" on, "pres" on, "abvs" on, "blws" on;
+  font-family: var(--reader-font-family);
+  font-size: var(--reader-font-size);
+  line-height: var(--reader-line-height);
+  color: var(--color-ink);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  flex: 1;
+}
+
+/* ─── STRICT POETIC FORMATTING (Padas & Verses) ──────────── */
+
+/* Every .pada is a strict line */
+.pada {
+  display: block;
+  padding-left: 2rem;
+  text-indent: -2rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  color: var(--color-ink);
+}
+
+/* Verse Blocks */
+.verse-block {
+  position: relative;
+  margin: 0.75rem 0;
+  padding: 0.4rem 0.5rem 0.4rem 2.8rem;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  border-left: 2px solid var(--color-border-subtle);
+}
+
+.verse-block:hover {
+  border-left-color: var(--color-accent);
+}
+
+/* Sacred red verse number marker: ॥ १ ॥ */
+.verse-num {
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  font-family: var(--font-devanagari);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-verse-num);
+  line-height: 1.2;
+}
+
+/* Shloka styling */
+.block--shloka .pada {
+  font-size: calc(var(--reader-font-size) * 1.05);
+  font-weight: 600;
+}
+
+/* Mantra styling */
+.block--mantra {
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-accent-soft);
+  padding: 0.5rem 0.75rem 0.5rem 2.8rem;
+  border-radius: var(--radius-sm);
+}
+
+.block--mantra .pada {
+  font-size: calc(var(--reader-font-size) * 1.08);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Chaupai & Doha */
+.block--chaupai .pada {
+  font-weight: 500;
+}
+
+.block--doha .pada,
+.block--soratha .pada {
+  font-weight: 600;
+}
+
+/* Gita Press Sacred Speaker Heading: ॥ श्रीभगवानुवाच ॥ */
+.speaker-block {
+  text-align: center;
+  margin: 0.85rem 0 0.4rem;
+}
+
+.speaker-title {
+  display: inline-block;
+  font-family: var(--font-devanagari);
+  font-size: calc(var(--reader-font-size) * 1.02);
+  font-weight: 700;
+  color: var(--color-speaker);
+  padding: 0.15rem 0.75rem;
+  border-top: 1px solid var(--color-accent);
+  border-bottom: 1px solid var(--color-accent);
+  letter-spacing: 0.04em;
+}
+
+/* Gita Press Bhavarth / Translation Box: भावार्थ : ... */
+.translation-block {
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-translation-bg);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: calc(var(--reader-font-size) * 0.9);
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+
+.translation-prefix {
+  font-family: var(--font-devanagari);
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-right: 0.35rem;
+}
+
+.translation-text {
+  color: var(--color-text-muted);
+}
+
+/* Gita Press Invocations / Instructions: ॥ श्रीगणेशाय नमः ॥ */
+.instruction-block {
+  text-align: center;
+  margin: 0.6rem 0;
+  padding: 0.35rem 0.5rem;
+}
+
+.instruction-content {
+  font-family: var(--font-devanagari);
+  font-size: calc(var(--reader-font-size) * 0.95);
+  font-weight: 600;
+  color: var(--color-instruction);
+  font-style: normal;
+}
+
+/* Chanting Mode: hide translations */
+body.chanting-mode .translation-block,
+body.chanting-mode .block--translation,
+body.chanting-mode .block--bhavarth {
+  display: none !important;
+}
+
+/* ─── Bottom Bar (Gita Press Navigation) ─────────────────── */
+.reader-bottombar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem var(--space-md);
+  background: var(--color-bg);
+  border-top: 2px solid var(--color-border);
+  z-index: 50;
+  gap: var(--space-sm);
+  box-shadow: 0 -1px 4px rgba(142, 27, 20, 0.08);
+}
+
+.reader-page-info {
+  font-family: var(--font-devanagari);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-align: center;
+}
+
+/* Floating Navigation Buttons */
+.flip-floating-nav {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 40;
+}
+
+.flip-nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-card);
+  border: 1.5px solid var(--color-border);
+  color: var(--color-accent);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.flip-nav-btn:hover:not(:disabled) {
+  background: var(--color-accent);
+  color: #fffdf7;
+  transform: scale(1.05);
+}
+
+.flip-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ─── Settings Panel (Streamlined for Gita Press) ────────── */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(40, 25, 15, 0.45);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-med);
+}
+
+.settings-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.settings-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-bg-card);
+  border-top: 3px double var(--color-border);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  padding: var(--space-md) var(--space-lg) calc(var(--space-lg) + env(safe-area-inset-bottom));
+  z-index: 201;
+  transform: translateY(100%);
+  transition: transform var(--transition-med);
+  box-shadow: 0 -8px 40px rgba(70, 40, 20, 0.2);
+  max-height: 80dvh;
+  overflow-y: auto;
+}
+
+.settings-panel.open {
+  transform: translateY(0);
+}
+
+.settings-panel .panel-handle {
+  width: 44px;
+  height: 4px;
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+  margin: 0 auto var(--space-md);
+}
+
+.settings-section {
+  margin-bottom: var(--space-md);
+}
+
+.settings-section-label {
+  font-family: var(--font-devanagari);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: var(--space-xs);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.control-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: var(--color-border-subtle);
+  border-radius: var(--radius-pill);
+  outline: none;
+  cursor: pointer;
+}
+
+.control-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  cursor: pointer;
+  border: 2px solid #fffdf7;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.control-select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-devanagari);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+}
+
+.toggle-row-label {
+  font-family: var(--font-devanagari);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.toggle-switch {
+  position: relative;
+  width: 46px;
+  height: 26px;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0; height: 0;
+}
+
+.toggle-knob {
+  position: absolute;
+  inset: 0;
+  background: var(--color-surface);
+  border-radius: var(--radius-pill);
+  transition: background var(--transition-fast);
+  border: 1px solid var(--color-border);
+}
+
+.toggle-knob::after {
+  content: '';
+  position: absolute;
+  width: 20px; height: 20px;
+  left: 2px; top: 2px;
+  background: #fffdf7;
+  border-radius: 50%;
+  transition: transform var(--transition-fast);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
+
+.toggle-switch input:checked + .toggle-knob {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.toggle-switch input:checked + .toggle-knob::after {
+  transform: translateX(20px);
+}
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .reader-viewport {
+    padding: 6px 4px;
+  }
+
+  .reader-page {
+    padding: 0.85rem 0.85rem;
+  }
+
+  .verse-block {
+    padding-left: 2.2rem;
+  }
+
+  .flip-floating-nav {
+    display: none; /* Rely on bottom bar and tap zones on mobile */
+  }
+}

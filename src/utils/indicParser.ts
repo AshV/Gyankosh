@@ -1,0 +1,169 @@
+/**
+ * indicParser.ts
+ * Build-time Indic Markdown parser for Gyankosh.
+ * Formats texts with authentic Gita Press Gorakhpur paper book typography:
+ * - Sacred red speaker tags: ॥ श्रीभगवानुवाच ॥
+ * - Traditional verse numbering: ॥ १ ॥
+ * - Gita Press Bhavarth/Translation styling: भावार्थ :
+ * - Sacred invocations: ॥ श्रीहरिः ॥ / ॥ अथ प्रथमोऽध्यायः ॥
+ *
+ * All processing happens at build-time — zero client JS overhead.
+ */
+
+// ─── Block-type definitions ────────────────────────────────────────────────
+
+type BlockType =
+  | 'Shloka' | 'Mantra' | 'Chaupai' | 'Doha' | 'Soratha' | 'Prose'
+  | 'Translation' | 'Bhavarth'
+  | 'Speaker' | 'Uvacha'
+  | 'Instruction' | 'Viniyoga'
+  | 'Name';
+
+interface ParseState {
+  verseCounter: number;   // 1-based, auto-increments for verse blocks
+  nameCounter: number;    // 1-based, separate counter for [Name] blocks
+}
+
+// Block types that get the verse counter
+const VERSE_BLOCKS: ReadonlySet<BlockType> = new Set([
+  'Shloka', 'Mantra', 'Chaupai', 'Doha', 'Soratha', 'Prose',
+]);
+
+// Tag regex: matches [TagName] at start of a trimmed block
+const TAG_REGEX = /^\[([A-Za-z]+)\]\s*/;
+
+// Hindi numerals for Gita Press feel
+function toHindiNumerals(num: number): string {
+  const digits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  return num.toString().split('').map(d => digits[parseInt(d, 10)] || d).join('');
+}
+
+// ─── Helper: escape HTML special chars ────────────────────────────────────
+function escHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ─── Helper: inline markup (bold, italic) inside a line ──────────────────
+function renderInline(text: string): string {
+  return escHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+// ─── Render a single block into Gita Press HTML ──────────────────────────
+function renderBlock(
+  tag: BlockType,
+  lines: string[],
+  state: ParseState
+): string {
+  const cssClass = `block--${tag.toLowerCase()}`;
+
+  // Numbered verse blocks (Shloka, Mantra, Chaupai, Doha, Soratha, Prose)
+  if (VERSE_BLOCKS.has(tag)) {
+    state.verseCounter++;
+    const verseId = `verse-${state.verseCounter}`;
+    const hindiNum = toHindiNumerals(state.verseCounter);
+    const label = `${state.verseCounter}`;
+    const padasHtml = lines
+      .map(line => `<span class="pada" data-transliterable="true">${renderInline(line)}</span>`)
+      .join('\n');
+
+    return `<div
+  class="verse-block ${cssClass}"
+  data-verse-id="${verseId}"
+  data-block-type="${tag.toLowerCase()}"
+  data-verse-num="${label}"
+  id="${verseId}"
+>
+  <span class="verse-num" aria-label="Verse ${label}">॥ ${hindiNum} ॥</span>
+  <div class="verse-body">${padasHtml}</div>
+</div>`;
+  }
+
+  // [Name] — separate 1-to-1000 counter
+  if (tag === 'Name') {
+    state.nameCounter++;
+    const nameId = `name-${state.nameCounter}`;
+    const hindiNum = toHindiNumerals(state.nameCounter);
+    const padasHtml = lines
+      .map(line => `<span class="pada" data-transliterable="true">${renderInline(line)}</span>`)
+      .join('\n');
+
+    return `<div
+  class="verse-block block--name"
+  data-verse-id="${nameId}"
+  data-block-type="name"
+  data-name-num="${state.nameCounter}"
+  id="${nameId}"
+>
+  <span class="verse-num name-num" aria-label="Name ${state.nameCounter}">॥ ${hindiNum} ॥</span>
+  <div class="verse-body">${padasHtml}</div>
+</div>`;
+  }
+
+  // [Translation] / [Bhavarth] — Gita Press translation paragraph
+  if (tag === 'Translation' || tag === 'Bhavarth') {
+    const html = lines.map(l => renderInline(l)).join(' ');
+    const prefix = tag === 'Bhavarth' ? 'भावार्थ :' : 'अर्थ :';
+    return `<div class="translation-block ${cssClass}" data-block-type="${tag.toLowerCase()}">
+  <span class="translation-prefix">${prefix}</span>
+  <span class="translation-text">${html}</span>
+</div>`;
+  }
+
+  // [Speaker] / [Uvacha] — Gita Press sacred speaker tag
+  if (tag === 'Speaker' || tag === 'Uvacha') {
+    const cleanText = lines.join(' ').replace(/^॥\s*|\s*॥$/g, '').trim();
+    return `<div class="speaker-block ${cssClass}" data-block-type="${tag.toLowerCase()}">
+  <span class="speaker-title">॥ ${renderInline(cleanText)} ॥</span>
+</div>`;
+  }
+
+  // [Instruction] / [Viniyoga] — sacred invocation / chapter header
+  if (tag === 'Instruction' || tag === 'Viniyoga') {
+    const html = lines.map(l => renderInline(l)).join('<br>');
+    return `<div class="instruction-block ${cssClass}" data-block-type="${tag.toLowerCase()}">
+  <div class="instruction-content">${html}</div>
+</div>`;
+  }
+
+  // Fallback
+  const html = lines.map(l => renderInline(l)).join('<br>');
+  return `<p class="block--plain">${html}</p>`;
+}
+
+// ─── Main export ──────────────────────────────────────────────────────────
+export function parseIndicMarkdown(body: string): string {
+  if (!body || body.trim() === '') return '';
+
+  const state: ParseState = { verseCounter: 0, nameCounter: 0 };
+  const htmlParts: string[] = [];
+
+  const rawBlocks = body.split(/\n\n+/).map(b => b.trim()).filter(Boolean);
+
+  for (const rawBlock of rawBlocks) {
+    const tagMatch = rawBlock.match(TAG_REGEX);
+
+    if (!tagMatch) {
+      const lines = rawBlock.split('\n').map(l => l.trim()).filter(Boolean);
+      const html = lines.map(l => renderInline(l)).join('<br>');
+      htmlParts.push(`<p class="block--plain">${html}</p>`);
+      continue;
+    }
+
+    const tagName = tagMatch[1] as BlockType;
+    const bodyText = rawBlock.slice(tagMatch[0].length);
+    const lines = bodyText.split('\n').map(l => l.trim()).filter(Boolean);
+
+    if (lines.length === 0) continue;
+
+    htmlParts.push(renderBlock(tagName, lines, state));
+  }
+
+  return htmlParts.join('\n\n');
+}

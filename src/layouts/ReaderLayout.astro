@@ -1,0 +1,756 @@
+---
+/**
+ * ReaderLayout.astro
+ * Authentic Gita Press Gorakhpur Sacred Paper Book E-Reader
+ *
+ * Visual & Typographic Identity:
+ * - Single authentic Gita Press paper book theme (off-white warm paper, red border frames, rich black ink).
+ * - 3D Vertical Page-Flip Animation (पन्ना पलट).
+ * - Running page header: ॥ श्रीहरिः ॥
+ * - Devanagari numerals and traditional sacred speaker / verse markers.
+ */
+import '../styles/global.css';
+import '../styles/reader.css';
+import SEO from '../components/SEO.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  author?: string;
+  language?: string;
+  slug: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description,
+  canonical = Astro.url.href,
+  author,
+  language = 'Sanskrit',
+  slug,
+  jsonLd,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="hi" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#8e1b14" id="theme-color-meta" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Sanscript.js for client-side transliteration -->
+    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.2.8/sanscript.min.js" is:inline></script>
+
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonical}
+      author={author}
+      language={language}
+      type="book"
+      jsonLd={jsonLd}
+    />
+
+    <!-- Restore user font preferences immediately before paint -->
+    <script is:inline>
+      (function () {
+        var prefs = {};
+        try { prefs = JSON.parse(localStorage.getItem('gyankosh_prefs') || '{}'); } catch(e) {}
+        var fontSize = prefs.fontSize || '1.2';
+        var lineHeight = prefs.lineHeight || '2.15';
+        document.documentElement.style.setProperty('--reader-font-size', fontSize + 'rem');
+        document.documentElement.style.setProperty('--reader-line-height', lineHeight);
+      })();
+    </script>
+  </head>
+
+  <body>
+    <!-- Sacred Red/Gold Reading Progress Bar -->
+    <div id="reading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Reading progress"></div>
+
+    <!-- Reader Shell -->
+    <div class="reader-shell">
+
+      <!-- Top Bar -->
+      <header class="reader-topbar" role="banner">
+        <a href="/" class="back-link" aria-label="मुख्य सूची">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          <span>ज्ञानकोश</span>
+        </a>
+
+        <span class="book-title-bar" aria-label={`पठन: ${title}`}>{title}</span>
+
+        <div class="topbar-actions">
+          <!-- Chanting Mode Toggle (पाठ मोड) -->
+          <button
+            id="chanting-toggle"
+            class="icon-btn"
+            aria-label="पाठ मोड (केवल मूल श्लोक)"
+            title="पाठ मोड — केवल मूल श्लोक (अर्थ छिपाएं)"
+            aria-pressed="false"
+          >🕉️ पाठ</button>
+
+          <!-- Settings Button -->
+          <button
+            id="settings-open"
+            class="icon-btn"
+            aria-label="पठन विकल्प"
+            title="पठन सेटिंग्स"
+            aria-expanded="false"
+            aria-controls="settings-panel"
+          >⚙️</button>
+        </div>
+      </header>
+
+      <!-- Reading Viewport (Gita Press 3D Folio Stage) -->
+      <main
+        class="reader-viewport"
+        id="reader-viewport"
+        role="region"
+        aria-label="गीता प्रेस पुस्तक पृष्ठ"
+      >
+        <!-- Tap zones for quick thumb-tap navigation -->
+        <div class="tap-zone tap-zone--prev" id="tap-prev" title="पिछला पृष्ठ (ऊपर टैप करें)" aria-label="पिछला पृष्ठ"></div>
+        <div class="tap-zone tap-zone--center" id="tap-center" title="पठन क्षेत्र" aria-label="पठन क्षेत्र"></div>
+        <div class="tap-zone tap-zone--next" id="tap-next" title="अगला पृष्ठ (नीचे टैप करें)" aria-label="अगला पृष्ठ"></div>
+
+        <!-- Floating Navigation Buttons -->
+        <div class="flip-floating-nav" id="flip-floating-nav" aria-label="पृष्ठ नियंत्रण">
+          <button id="btn-page-up" class="flip-nav-btn" title="पिछला पृष्ठ (Up)" aria-label="पिछला पृष्ठ">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+          </button>
+          <button id="btn-page-down" class="flip-nav-btn" title="अगला पृष्ठ (Down)" aria-label="अगला पृष्ठ">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+
+        <!-- Dynamic 3D Gita Press Folio Stage -->
+        <div class="reader-stage" id="reader-stage" aria-live="polite">
+          <!-- Virtual Gita Press pages injected here -->
+        </div>
+
+        <!-- Raw source content (parsed at build time) -->
+        <article class="reader-content reader-raw-source" id="reader-raw-source" data-slug={slug}>
+          <h1 class="sr-only">{title}</h1>
+          <slot />
+        </article>
+      </main>
+
+      <!-- Bottom Bar (Gita Press Style Navigation) -->
+      <footer class="reader-bottombar" role="navigation" aria-label="पठन नियंत्रण">
+        <!-- Previous Page Button -->
+        <button
+          id="btn-bottom-prev"
+          class="icon-btn"
+          aria-label="पिछला पृष्ठ"
+          title="पिछला पृष्ठ पलटें"
+          style="padding:0 0.75rem; gap:0.35rem;"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+          <span>पिछला</span>
+        </button>
+
+        <!-- Page Indicator -->
+        <span class="reader-page-info" id="page-info" aria-live="polite">पृष्ठ १</span>
+
+        <!-- Next Page Button -->
+        <button
+          id="btn-bottom-next"
+          class="icon-btn"
+          aria-label="अगला पृष्ठ"
+          title="अगला पृष्ठ पलटें"
+          style="padding:0 0.75rem; gap:0.35rem;"
+        >
+          <span>अगला</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+
+        <div style="width: 1px; height: 22px; background: var(--color-border-subtle); margin: 0 0.25rem;"></div>
+
+        <!-- Font controls -->
+        <button
+          id="font-decrease"
+          class="icon-btn"
+          aria-label="अक्षर छोटा करें"
+          title="अक्षर छोटा करें"
+        >अ<sup>-</sup></button>
+        <button
+          id="font-increase"
+          class="icon-btn"
+          aria-label="अक्षर बड़ा करें"
+          title="अक्षर बड़ा करें"
+        >अ<sup>+</sup></button>
+      </footer>
+    </div>
+
+    <!-- Settings Overlay + Bottom Sheet Panel -->
+    <div class="settings-overlay" id="settings-overlay" aria-hidden="true"></div>
+    <div
+      class="settings-panel"
+      id="settings-panel"
+      role="dialog"
+      aria-label="पठन विकल्प"
+      aria-modal="true"
+    >
+      <div class="panel-handle" aria-hidden="true"></div>
+
+      <!-- Lipi / Script Selection -->
+      <div class="settings-section">
+        <p class="settings-section-label">📜 लिपि चयन (Script)</p>
+        <select id="script-select" class="control-select" aria-label="लिपि चुनें">
+          <option value="devanagari">देवनागरी (Devanagari)</option>
+          <option value="iast">IAST (English/Roman Diacritics)</option>
+          <option value="itrans">ITRANS (English Phonetic)</option>
+        </select>
+      </div>
+
+      <!-- Font Size Slider -->
+      <div class="settings-section">
+        <p class="settings-section-label">🔤 अक्षर का आकार (Font Size)</p>
+        <div class="control-row">
+          <span class="control-label" aria-hidden="true" style="font-family:var(--font-devanagari);font-weight:700;color:var(--color-accent);">अ</span>
+          <input
+            type="range"
+            id="font-size-slider"
+            class="control-slider"
+            min="0.9"
+            max="1.9"
+            step="0.05"
+            value="1.2"
+            aria-label="अक्षर आकार"
+          />
+          <span class="control-value" id="font-size-value" aria-live="polite" style="font-family:var(--font-devanagari);font-weight:700;color:var(--color-accent);">१.२</span>
+        </div>
+      </div>
+
+      <!-- Line Height Slider -->
+      <div class="settings-section">
+        <p class="settings-section-label">↕️ पंक्ति अंतर (Line Spacing)</p>
+        <div class="control-row">
+          <span class="control-label" aria-hidden="true" style="font-weight:700;color:var(--color-accent);">≡</span>
+          <input
+            type="range"
+            id="line-height-slider"
+            class="control-slider"
+            min="1.5"
+            max="3.0"
+            step="0.1"
+            value="2.15"
+            aria-label="पंक्ति अंतर"
+          />
+          <span class="control-value" id="line-height-value" aria-live="polite" style="font-family:var(--font-devanagari);font-weight:700;color:var(--color-accent);">२.१</span>
+        </div>
+      </div>
+
+      <!-- Chanting Mode Toggle -->
+      <div class="settings-section">
+        <p class="settings-section-label">🕉️ पठन शैली</p>
+        <div class="toggle-row">
+          <span class="toggle-row-label">पाठ मोड <small style="color:var(--color-text-faint)">(केवल मूल श्लोक / अर्थ छिपाएं)</small></span>
+          <label class="toggle-switch" aria-label="पाठ मोड">
+            <input type="checkbox" id="chanting-checkbox" />
+            <span class="toggle-knob"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         Client-Side Gita Press Page-Flip Engine
+         ══════════════════════════════════════════════════════ -->
+
+    <script define:vars={{ slug, bookTitle: title }}>
+      const ROOT = document.documentElement;
+      const PREF_KEY = 'gyankosh_prefs';
+      const PROGRESS_KEY = `gyankosh_progress_${slug}`;
+
+      function toHindiDigits(num) {
+        const digits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+        return num.toString().split('').map(d => digits[parseInt(d, 10)] || d).join('');
+      }
+
+      function loadPrefs() {
+        try { return JSON.parse(localStorage.getItem(PREF_KEY) || '{}'); }
+        catch { return {}; }
+      }
+
+      function savePrefs(updates) {
+        const prefs = { ...loadPrefs(), ...updates };
+        localStorage.setItem(PREF_KEY, JSON.stringify(prefs));
+        return prefs;
+      }
+
+      /* ── Gita Press Vertical Page Flip Engine ── */
+      class GitaPressReader {
+        constructor() {
+          this.stage = document.getElementById('reader-stage');
+          this.rawSource = document.getElementById('reader-raw-source');
+          this.viewport = document.getElementById('reader-viewport');
+          this.pageInfo = document.getElementById('page-info');
+          this.progressBar = document.getElementById('reading-progress');
+          
+          this.pages = [];
+          this.currentPageIndex = 0;
+          this.isFlipping = false;
+
+          this.init();
+        }
+
+        init() {
+          this.buildPages();
+          this.setupEvents();
+          this.restorePosition();
+        }
+
+        /* Build authentic Gita Press book pages without splitting shlokas */
+        buildPages() {
+          if (!this.rawSource || !this.stage) return;
+          
+          this.stage.innerHTML = '';
+          this.pages = [];
+
+          const childElements = Array.from(this.rawSource.children).filter(
+            el => !el.classList.contains('sr-only')
+          );
+
+          if (childElements.length === 0) return;
+
+          // Measurement box
+          const measureBox = document.createElement('div');
+          measureBox.style.cssText = 'position:absolute; visibility:hidden; width:' + 
+            (this.stage.clientWidth || window.innerWidth) + 'px; font-size:var(--reader-font-size); line-height:var(--reader-line-height);';
+          document.body.appendChild(measureBox);
+
+          // Reserve space for Gita Press header and footer
+          const maxPageHeight = Math.max(260, this.stage.clientHeight - 90);
+
+          let currentPageNodes = [];
+          let currentHeight = 0;
+
+          childElements.forEach((node) => {
+            const clone = node.cloneNode(true);
+            measureBox.appendChild(clone);
+            const nodeHeight = clone.offsetHeight + 18;
+            measureBox.removeChild(clone);
+
+            if (currentHeight + nodeHeight > maxPageHeight && currentPageNodes.length > 0) {
+              this.pages.push(currentPageNodes);
+              currentPageNodes = [node.cloneNode(true)];
+              currentHeight = nodeHeight;
+            } else {
+              currentPageNodes.push(node.cloneNode(true));
+              currentHeight += nodeHeight;
+            }
+          });
+
+          if (currentPageNodes.length > 0) {
+            this.pages.push(currentPageNodes);
+          }
+
+          document.body.removeChild(measureBox);
+
+          const totalPages = this.pages.length || 1;
+
+          // Render authentic Gita Press folio pages
+          this.pageElements = this.pages.map((nodeList, idx) => {
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
+            pageDiv.setAttribute('data-page-index', idx);
+            pageDiv.setAttribute('role', 'group');
+            pageDiv.setAttribute('aria-label', `पृष्ठ ${idx + 1} कुल ${totalPages}`);
+
+            // Gita Press Running Header: ॥ श्रीहरिः ॥
+            const pageHeader = document.createElement('div');
+            pageHeader.className = 'page-header-invocation';
+            pageHeader.innerHTML = '॥ श्रीहरिः ॥';
+            pageDiv.appendChild(pageHeader);
+
+            // Page Content Body
+            const contentWrap = document.createElement('div');
+            contentWrap.className = 'reader-content';
+            contentWrap.style.padding = '0';
+            contentWrap.style.margin = '0 auto';
+
+            nodeList.forEach(n => contentWrap.appendChild(n));
+            pageDiv.appendChild(contentWrap);
+
+            // Gita Press Running Footer: Title + Page Number
+            const pageFooter = document.createElement('div');
+            pageFooter.className = 'page-footer-bar';
+            pageFooter.innerHTML = `<span>${bookTitle}</span><span class="page-corner-num">॥ ${toHindiDigits(idx + 1)} ॥</span>`;
+            pageDiv.appendChild(pageFooter);
+
+            this.stage.appendChild(pageDiv);
+            return pageDiv;
+          });
+
+          // Re-apply transliteration if active
+          if (window.__currentTransliterationScheme && window.__currentTransliterationScheme !== 'devanagari') {
+            window.applyTransliterationGlobal(window.__currentTransliterationScheme);
+          }
+
+          this.updateUI();
+        }
+
+        /* 3D Vertical Page Turn */
+        flipToPage(newIndex, direction = 'down') {
+          if (newIndex < 0 || newIndex >= this.pages.length || this.isFlipping) return;
+          if (newIndex === this.currentPageIndex) return;
+
+          this.isFlipping = true;
+          const oldIndex = this.currentPageIndex;
+          const oldPage = this.pageElements[oldIndex];
+          const newPage = this.pageElements[newIndex];
+
+          const isForward = direction === 'down' || newIndex > oldIndex;
+
+          if (isForward) {
+            // Turning down to next leaf
+            newPage.className = 'reader-page flip-enter-down';
+            void newPage.offsetWidth;
+
+            oldPage.className = 'reader-page flip-exit-up';
+            newPage.className = 'reader-page active-page';
+          } else {
+            // Turning up to previous leaf
+            newPage.className = 'reader-page flip-enter-up';
+            void newPage.offsetWidth;
+
+            oldPage.className = 'reader-page flip-exit-down';
+            newPage.className = 'reader-page active-page';
+          }
+
+          this.currentPageIndex = newIndex;
+          this.updateUI();
+
+          setTimeout(() => {
+            if (oldPage && oldPage !== this.pageElements[this.currentPageIndex]) {
+              oldPage.className = 'reader-page';
+            }
+            this.isFlipping = false;
+            this.savePosition();
+          }, 530);
+        }
+
+        nextPage() {
+          this.flipToPage(this.currentPageIndex + 1, 'down');
+        }
+
+        prevPage() {
+          this.flipToPage(this.currentPageIndex - 1, 'up');
+        }
+
+        updateUI() {
+          const total = this.pages.length || 1;
+          const current = this.currentPageIndex + 1;
+          const pct = Math.round((current / total) * 100);
+
+          if (this.pageInfo) {
+            this.pageInfo.textContent = `पृष्ठ ${toHindiDigits(current)} / ${toHindiDigits(total)}`;
+          }
+
+          if (this.progressBar) {
+            this.progressBar.style.width = pct + '%';
+            this.progressBar.setAttribute('aria-valuenow', pct);
+          }
+
+          const btnUp = document.getElementById('btn-page-up');
+          const btnDown = document.getElementById('btn-page-down');
+          const btnBottomPrev = document.getElementById('btn-bottom-prev');
+          const btnBottomNext = document.getElementById('btn-bottom-next');
+
+          if (btnUp) btnUp.disabled = this.currentPageIndex === 0;
+          if (btnBottomPrev) btnBottomPrev.disabled = this.currentPageIndex === 0;
+          
+          if (btnDown) btnDown.disabled = this.currentPageIndex >= total - 1;
+          if (btnBottomNext) btnBottomNext.disabled = this.currentPageIndex >= total - 1;
+        }
+
+        savePosition() {
+          const total = this.pages.length || 1;
+          const percent = ((this.currentPageIndex + 1) / total) * 100;
+          try {
+            localStorage.setItem(PROGRESS_KEY, JSON.stringify({
+              pageIndex: this.currentPageIndex,
+              percent,
+              ts: Date.now()
+            }));
+          } catch {}
+        }
+
+        restorePosition() {
+          try {
+            const saved = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
+            if (typeof saved.pageIndex === 'number' && saved.pageIndex < this.pages.length) {
+              this.currentPageIndex = saved.pageIndex;
+              this.pageElements.forEach((el, idx) => {
+                el.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
+              });
+              this.updateUI();
+            }
+          } catch {}
+        }
+
+        setupEvents() {
+          // Navigation Buttons
+          document.getElementById('btn-page-up')?.addEventListener('click', () => this.prevPage());
+          document.getElementById('btn-page-down')?.addEventListener('click', () => this.nextPage());
+          document.getElementById('btn-bottom-prev')?.addEventListener('click', () => this.prevPage());
+          document.getElementById('btn-bottom-next')?.addEventListener('click', () => this.nextPage());
+
+          // Tap Zones
+          document.getElementById('tap-prev')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.prevPage();
+          });
+          document.getElementById('tap-next')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.nextPage();
+          });
+
+          // Touch Gestures
+          let touchStartY = 0;
+          let touchStartX = 0;
+
+          this.viewport?.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+          }, { passive: true });
+
+          this.viewport?.addEventListener('touchend', (e) => {
+            const diffY = touchStartY - e.changedTouches[0].clientY;
+            const diffX = touchStartX - e.changedTouches[0].clientX;
+
+            if (Math.abs(diffY) > 35 && Math.abs(diffY) > Math.abs(diffX)) {
+              if (diffY > 0) this.nextPage();
+              else this.prevPage();
+            }
+          }, { passive: true });
+
+          // Mouse Wheel (throttled)
+          let wheelTimeout = null;
+          this.viewport?.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (wheelTimeout || this.isFlipping) return;
+
+            if (e.deltaY > 20) this.nextPage();
+            else if (e.deltaY < -20) this.prevPage();
+
+            wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 420);
+          }, { passive: false });
+
+          // Keyboard
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'j') {
+              e.preventDefault();
+              this.nextPage();
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'k') {
+              e.preventDefault();
+              this.prevPage();
+            } else if (e.key === ' ' && !e.target.matches('input, select, textarea')) {
+              e.preventDefault();
+              if (e.shiftKey) this.prevPage();
+              else this.nextPage();
+            }
+          });
+
+          // Responsive Resize
+          let resizeTimeout = null;
+          window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+              const prevPage = this.currentPageIndex;
+              this.buildPages();
+              this.currentPageIndex = Math.min(prevPage, this.pages.length - 1);
+              this.pageElements.forEach((el, idx) => {
+                el.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
+              });
+              this.updateUI();
+            }, 200);
+          });
+        }
+      }
+
+      let gitaPressReaderInstance = null;
+      document.addEventListener('DOMContentLoaded', () => {
+        gitaPressReaderInstance = new GitaPressReader();
+      });
+
+      /* ── Apply Saved Preferences (Font, Chanting) ── */
+      function applyPrefs(prefs) {
+        const fs = prefs.fontSize || '1.2';
+        ROOT.style.setProperty('--reader-font-size', fs + 'rem');
+        const fsSlider = document.getElementById('font-size-slider');
+        if (fsSlider) fsSlider.value = fs;
+        const fsVal = document.getElementById('font-size-value');
+        if (fsVal) fsVal.textContent = toHindiDigits(fs);
+
+        const lh = prefs.lineHeight || '2.15';
+        ROOT.style.setProperty('--reader-line-height', lh);
+        const lhSlider = document.getElementById('line-height-slider');
+        if (lhSlider) lhSlider.value = lh;
+        const lhVal = document.getElementById('line-height-value');
+        if (lhVal) lhVal.textContent = toHindiDigits(lh);
+
+        if (prefs.chanting) {
+          document.body.classList.add('chanting-mode');
+          const cb = document.getElementById('chanting-checkbox');
+          if (cb) cb.checked = true;
+          const btn = document.getElementById('chanting-toggle');
+          if (btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); }
+        }
+      }
+
+      applyPrefs(loadPrefs());
+
+      /* ── Settings Panel Controls ── */
+      const overlay = document.getElementById('settings-overlay');
+      const panel = document.getElementById('settings-panel');
+      const openBtn = document.getElementById('settings-open');
+
+      function openSettings() {
+        overlay.classList.add('open');
+        panel.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        openBtn.setAttribute('aria-expanded', 'true');
+        panel.focus();
+      }
+
+      function closeSettings() {
+        overlay.classList.remove('open');
+        panel.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        openBtn.setAttribute('aria-expanded', 'false');
+      }
+
+      openBtn?.addEventListener('click', openSettings);
+      overlay?.addEventListener('click', closeSettings);
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && panel.classList.contains('open')) closeSettings();
+      });
+
+      /* ── Font Size & Line Height ── */
+      const fsSlider = document.getElementById('font-size-slider');
+      fsSlider?.addEventListener('input', () => {
+        const val = parseFloat(fsSlider.value).toFixed(2);
+        ROOT.style.setProperty('--reader-font-size', val + 'rem');
+        const fsVal = document.getElementById('font-size-value');
+        if (fsVal) fsVal.textContent = toHindiDigits(val);
+        savePrefs({ fontSize: val });
+        gitaPressReaderInstance?.buildPages();
+      });
+
+      document.getElementById('font-increase')?.addEventListener('click', () => {
+        const cur = parseFloat(getComputedStyle(ROOT).getPropertyValue('--reader-font-size')) || 1.2;
+        const next = Math.min(1.9, cur + 0.1).toFixed(2);
+        ROOT.style.setProperty('--reader-font-size', next + 'rem');
+        if (fsSlider) fsSlider.value = next;
+        const fsVal = document.getElementById('font-size-value');
+        if (fsVal) fsVal.textContent = toHindiDigits(next);
+        savePrefs({ fontSize: next });
+        gitaPressReaderInstance?.buildPages();
+      });
+
+      document.getElementById('font-decrease')?.addEventListener('click', () => {
+        const cur = parseFloat(getComputedStyle(ROOT).getPropertyValue('--reader-font-size')) || 1.2;
+        const next = Math.max(0.9, cur - 0.1).toFixed(2);
+        ROOT.style.setProperty('--reader-font-size', next + 'rem');
+        if (fsSlider) fsSlider.value = next;
+        const fsVal = document.getElementById('font-size-value');
+        if (fsVal) fsVal.textContent = toHindiDigits(next);
+        savePrefs({ fontSize: next });
+        gitaPressReaderInstance?.buildPages();
+      });
+
+      const lhSlider = document.getElementById('line-height-slider');
+      lhSlider?.addEventListener('input', () => {
+        const val = parseFloat(lhSlider.value).toFixed(2);
+        ROOT.style.setProperty('--reader-line-height', val);
+        const lhVal = document.getElementById('line-height-value');
+        if (lhVal) lhVal.textContent = toHindiDigits(val);
+        savePrefs({ lineHeight: val });
+        gitaPressReaderInstance?.buildPages();
+      });
+
+      /* ── Chanting Mode (पाठ मोड) ── */
+      function setChanting(on) {
+        document.body.classList.toggle('chanting-mode', on);
+        const cb = document.getElementById('chanting-checkbox');
+        if (cb) cb.checked = on;
+        const btn = document.getElementById('chanting-toggle');
+        if (btn) { btn.classList.toggle('active', on); btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+        savePrefs({ chanting: on });
+        gitaPressReaderInstance?.buildPages();
+      }
+
+      document.getElementById('chanting-toggle')?.addEventListener('click', () => {
+        setChanting(!document.body.classList.contains('chanting-mode'));
+      });
+
+      document.getElementById('chanting-checkbox')?.addEventListener('change', e => {
+        setChanting(e.target.checked);
+      });
+    </script>
+
+    <!-- Global Transliteration Script -->
+    <script is:inline>
+      window.__currentTransliterationScheme = 'devanagari';
+
+      window.applyTransliterationGlobal = function(toScheme) {
+        if (typeof Sanscript === 'undefined') return;
+        window.__currentTransliterationScheme = toScheme;
+
+        const nodes = document.querySelectorAll('[data-transliterable="true"]');
+        nodes.forEach(node => {
+          if (!node.dataset.original) {
+            node.dataset.original = node.textContent || '';
+          }
+
+          const sourceText = node.dataset.original || '';
+          if (!sourceText.trim()) return;
+
+          if (toScheme === 'devanagari') {
+            node.textContent = sourceText;
+          } else {
+            try {
+              node.textContent = Sanscript.t(sourceText, 'devanagari', toScheme);
+            } catch (err) {
+              console.error('Transliteration error:', err);
+            }
+          }
+        });
+
+        try {
+          const prefs = JSON.parse(localStorage.getItem('gyankosh_prefs') || '{}');
+          localStorage.setItem('gyankosh_prefs', JSON.stringify({ ...prefs, script: toScheme }));
+        } catch {}
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const scriptSelect = document.getElementById('script-select');
+        try {
+          const prefs = JSON.parse(localStorage.getItem('gyankosh_prefs') || '{}');
+          if (prefs.script && scriptSelect) {
+            scriptSelect.value = prefs.script;
+            if (prefs.script !== 'devanagari') {
+              setTimeout(() => window.applyTransliterationGlobal(prefs.script), 150);
+            }
+          }
+        } catch {}
+
+        scriptSelect?.addEventListener('change', () => {
+          window.applyTransliterationGlobal(scriptSelect.value);
+        });
+      });
+    </script>
+  </body>
+</html>

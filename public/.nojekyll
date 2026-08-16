@@ -1,0 +1,4 @@
+# .nojekyll
+# This file tells GitHub Pages to serve all files as-is,
+# without running the Jekyll static site generator.
+# Required because Astro generates directories starting with underscore (e.g. _astro/).
