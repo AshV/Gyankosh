@@ -34,9 +34,10 @@ const categoryIcons: Record<string, string> = {
   Other: '📜',
 };
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const icon = categoryIcons[category] ?? '📜';
-const readUrl = `/read/${slug}`;
-const categoryUrl = `/category/${category.toLowerCase()}`;
+const readUrl = `${base}/read/${slug}`;
+const categoryUrl = `${base}/category/${category.toLowerCase()}`;
 ---
 
 <a

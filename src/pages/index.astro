@@ -41,12 +41,14 @@ const categoryMeta: Record<string, { icon: string; nameHindi: string; descriptio
   Other:   { icon: '📜', nameHindi: 'अन्य धर्मग्रंथ', description: 'विशिष्ट धार्मिक एवं दार्शनिक ग्रन्थ' },
 };
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   'name': 'ज्ञानकोश — Sanskrit Digital Library',
   'description': 'Free online library of Sanskrit and Hindu sacred texts in authentic Gita Press format.',
-  'url': 'https://gyankosh.in',
+  'url': 'https://ashv.github.io/Gyankosh',
 };
 ---
 
@@ -73,7 +75,7 @@ const jsonLd = {
         aria-label="ग्रंथ श्रेणियां"
       >
         {CATEGORIES.map(cat => grouped[cat] && (
-          <a href={`/category/${cat.toLowerCase()}`} role="listitem" style="text-decoration:none;">
+          <a href={`${base}/category/${cat.toLowerCase()}`} role="listitem" style="text-decoration:none;">
             <div style="padding:0.4rem 1rem; border:1px solid var(--color-border); border-radius:var(--radius-sm); background:var(--color-bg-card); display:flex; align-items:center; gap:0.5rem; box-shadow:var(--shadow-card);">
               <span style="font-size:1.2rem;">{categoryMeta[cat]?.icon}</span>
               <span style="font-family:var(--font-devanagari); font-weight:700; color:var(--color-accent); font-size:0.95rem;">{categoryMeta[cat]?.nameHindi || cat}</span>
@@ -93,7 +95,7 @@ const jsonLd = {
           <span aria-hidden="true">{categoryMeta[cat]?.icon}</span>
           <span>{categoryMeta[cat]?.nameHindi || cat}</span>
           <span style="font-family:var(--font-devanagari);font-size:0.9rem;font-weight:600;margin-left:auto;">
-            <a href={`/category/${cat.toLowerCase()}`} style="color:var(--color-accent);">
+            <a href={`${base}/category/${cat.toLowerCase()}`} style="color:var(--color-accent);">
               सम्पूर्ण देखें →
             </a>
           </span>

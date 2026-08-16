@@ -4,9 +4,9 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // GitHub Pages: set to your repo URL, e.g. 'https://yourusername.github.io'
-  // For a custom domain, use that domain. For subdirectory deploy, add base: '/repo-name'
-  site: 'https://gyankosh.in',
+  // GitHub Pages deployment URL and repository base path
+  site: 'https://ashv.github.io',
+  base: '/Gyankosh',
 
   output: 'static',
 
@@ -14,7 +14,6 @@ export default defineConfig({
     sitemap(),
   ],
 
-  // Disable Markdown remark/rehype plugins — we use our own parser
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: [],

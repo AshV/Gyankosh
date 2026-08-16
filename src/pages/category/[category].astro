@@ -34,12 +34,14 @@ const categoryMeta: Record<string, { icon: string; description: string }> = {
 
 const meta = categoryMeta[category] ?? { icon: '📜', description: `Sacred texts in the ${category} category.` };
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   'name': `${category} — ज्ञानकोश`,
   'description': meta.description,
-  'url': `https://gyankosh.in/category/${category.toLowerCase()}`,
+  'url': `https://ashv.github.io/Gyankosh/category/${category.toLowerCase()}`,
 };
 ---
 
@@ -53,7 +55,7 @@ const jsonLd = {
     <div class="category-header" aria-labelledby="category-title">
       <nav aria-label="Breadcrumb">
         <ol style="display:flex;gap:0.5rem;list-style:none;font-family:var(--font-ui);font-size:0.8rem;color:var(--color-text-muted);margin-bottom:1rem;">
-          <li><a href="/" style="color:var(--color-accent);">Library</a></li>
+          <li><a href={`${base}/`} style="color:var(--color-accent);">Library</a></li>
           <li aria-hidden="true">/</li>
           <li aria-current="page">{category}</li>
         </ol>
