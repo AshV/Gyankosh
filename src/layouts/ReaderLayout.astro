@@ -109,6 +109,24 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             aria-expanded="false"
             aria-controls="settings-panel"
           >⚙️</button>
+
+          <!-- Fullscreen Toggle / Close Button -->
+          <button
+            id="fullscreen-toggle"
+            class="icon-btn"
+            aria-label="पूर्ण स्क्रीन (Fullscreen)"
+            title="पूर्ण स्क्रीन"
+            aria-pressed="false"
+          >
+            <!-- Enter Fullscreen Icon -->
+            <svg class="icon-fullscreen-enter" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+            <!-- Exit / Close Fullscreen Icon -->
+            <svg class="icon-fullscreen-exit" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" style="display:none;">
+              <path d="M4 14h6v6m10-10h-6V4m0 6 7-7M9 15l-7 7"/>
+            </svg>
+          </button>
         </div>
       </header>
 
@@ -738,6 +756,95 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       document.getElementById('chanting-checkbox')?.addEventListener('change', e => {
         setChanting(e.target.checked);
       });
+
+      /* ── Fullscreen Controls & Mobile Auto-Fullscreen ── */
+      function isFullscreenActive() {
+        return !!(
+          document.fullscreenElement ||
+          document.webkitFullscreenElement ||
+          document.mozFullScreenElement ||
+          document.msFullscreenElement
+        );
+      }
+
+      function enterFullscreen() {
+        const elem = document.documentElement;
+        try {
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(() => {});
+          } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+          } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+          } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+          }
+        } catch (e) {}
+      }
+
+      function exitFullscreen() {
+        try {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        } catch (e) {}
+      }
+
+      const fsBtn = document.getElementById('fullscreen-toggle');
+      const enterIcon = fsBtn?.querySelector('.icon-fullscreen-enter');
+      const exitIcon = fsBtn?.querySelector('.icon-fullscreen-exit');
+
+      function updateFullscreenUI() {
+        const isFs = isFullscreenActive();
+        if (fsBtn) {
+          fsBtn.classList.toggle('active', isFs);
+          fsBtn.setAttribute('aria-pressed', isFs ? 'true' : 'false');
+          fsBtn.title = isFs ? 'पूर्ण स्क्रीन बंद करें (Close Fullscreen)' : 'पूर्ण स्क्रीन (Fullscreen)';
+          fsBtn.setAttribute('aria-label', isFs ? 'पूर्ण स्क्रीन बंद करें' : 'पूर्ण स्क्रीन');
+        }
+        if (enterIcon) enterIcon.style.display = isFs ? 'none' : 'block';
+        if (exitIcon) exitIcon.style.display = isFs ? 'block' : 'none';
+      }
+
+      fsBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isFullscreenActive()) {
+          exitFullscreen();
+        } else {
+          enterFullscreen();
+        }
+      });
+
+      document.addEventListener('fullscreenchange', updateFullscreenUI);
+      document.addEventListener('webkitfullscreenchange', updateFullscreenUI);
+      document.addEventListener('mozfullscreenchange', updateFullscreenUI);
+      document.addEventListener('MSFullscreenChange', updateFullscreenUI);
+
+      // On mobile screens, automatically enter fullscreen on opening document to read
+      const isMobileScreen = window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+      if (isMobileScreen) {
+        // Attempt on load
+        setTimeout(() => {
+          if (!isFullscreenActive()) enterFullscreen();
+        }, 120);
+
+        // Also trigger on first user tap if mobile browser requires a user gesture
+        const tryFullscreenOnce = () => {
+          if (!isFullscreenActive()) {
+            enterFullscreen();
+          }
+          document.removeEventListener('touchstart', tryFullscreenOnce, { capture: true });
+          document.removeEventListener('click', tryFullscreenOnce, { capture: true });
+        };
+        document.addEventListener('touchstart', tryFullscreenOnce, { capture: true, once: true });
+        document.addEventListener('click', tryFullscreenOnce, { capture: true, once: true });
+      }
     </script>
 
     <!-- Global Transliteration Script -->
