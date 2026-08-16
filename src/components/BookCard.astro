@@ -100,5 +100,21 @@ const categoryUrl = `${base}/category/${category.toLowerCase()}`;
         }
       }
     });
+
+    // Request fullscreen on user tap when opening any book on mobile
+    document.querySelectorAll<HTMLAnchorElement>('.book-card').forEach(card => {
+      card.addEventListener('click', () => {
+        if (window.innerWidth <= 768 || 'ontouchstart' in window) {
+          try {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+              elem.requestFullscreen().catch(() => {});
+            } else if ((elem as any).webkitRequestFullscreen) {
+              (elem as any).webkitRequestFullscreen();
+            }
+          } catch (err) {}
+        }
+      });
+    });
   });
 </script>

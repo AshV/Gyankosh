@@ -829,21 +829,29 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       // On mobile screens, automatically enter fullscreen on opening document to read
       const isMobileScreen = window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
       if (isMobileScreen) {
-        // Attempt on load
-        setTimeout(() => {
-          if (!isFullscreenActive()) enterFullscreen();
-        }, 120);
+        // Attempt immediate entry if allowed by browser context
+        enterFullscreen();
 
-        // Also trigger on first user tap if mobile browser requires a user gesture
-        const tryFullscreenOnce = () => {
+        // Automatically enter fullscreen on the first tap/touch anywhere on the reader
+        let hasTriggeredAutoFs = false;
+        const autoEnterFullscreenOnTouch = () => {
+          if (hasTriggeredAutoFs) return;
+          hasTriggeredAutoFs = true;
           if (!isFullscreenActive()) {
             enterFullscreen();
           }
-          document.removeEventListener('touchstart', tryFullscreenOnce, { capture: true });
-          document.removeEventListener('click', tryFullscreenOnce, { capture: true });
         };
-        document.addEventListener('touchstart', tryFullscreenOnce, { capture: true, once: true });
-        document.addEventListener('click', tryFullscreenOnce, { capture: true, once: true });
+
+        ['pointerup', 'touchend', 'click'].forEach(evtType => {
+          document.addEventListener(evtType, autoEnterFullscreenOnTouch, { capture: true, once: true });
+        });
+
+        // Also ensure tap zones and page navigation buttons trigger fullscreen if not active
+        ['tap-prev', 'tap-next', 'tap-center', 'btn-bottom-prev', 'btn-bottom-next'].forEach(id => {
+          document.getElementById(id)?.addEventListener('click', () => {
+            if (!isFullscreenActive()) enterFullscreen();
+          }, { passive: true });
+        });
       }
     </script>
 
