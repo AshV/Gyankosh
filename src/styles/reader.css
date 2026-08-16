@@ -89,17 +89,17 @@
   flex: 1;
   overflow: hidden;
   position: relative;
-  perspective: 1800px;
-  perspective-origin: 50% 50%;
-  background: #ede3cb; /* Deeper wooden book-stand background */
+  perspective: 2200px;
+  perspective-origin: 50% 25%;
+  background: radial-gradient(ellipse at 50% 35%, #f5ebd8 0%, #e6d8ba 60%, #cebc95 100%);
   user-select: none;
   -webkit-user-select: none;
   touch-action: pan-x;
-  padding: 12px 8px;
+  padding: 14px 10px;
   box-sizing: border-box;
 }
 
-/* Folio Stage (The Book Page Box) */
+/* Folio Stage (The Book Page Box with Realistic Stacked Paper Depth) */
 .reader-stage {
   position: relative;
   width: 100%;
@@ -107,6 +107,32 @@
   max-width: 72ch;
   margin: 0 auto;
   transform-style: preserve-3d;
+}
+
+/* Bottom stacked pages depth effect (thickness of paper stack) */
+.reader-stage::before {
+  content: '';
+  position: absolute;
+  inset: 5px 6px -6px 6px;
+  background: #e2d2b4;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(130, 95, 60, 0.25);
+  box-shadow: 
+    0 12px 35px rgba(50, 30, 15, 0.25),
+    0 3px 10px rgba(50, 30, 15, 0.12);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.reader-stage::after {
+  content: '';
+  position: absolute;
+  inset: 2px 3px -3px 3px;
+  background: #ede0c6;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(130, 95, 60, 0.2);
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Authentic Gita Press Paper Book Page */
@@ -120,21 +146,26 @@
   flex-direction: column;
   justify-content: flex-start;
   background: var(--color-bg-card);
+  background-image: 
+    radial-gradient(ellipse at 50% 15%, rgba(255, 252, 245, 0.95), rgba(246, 238, 222, 0.98)),
+    linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(0,0,0,0.02));
   
-  /* Traditional Gita Press double-line border */
+  /* Traditional Gita Press double-line border with authentic paper edges */
   border: 3px double var(--color-border);
+  border-radius: 3px;
   box-shadow: 
-    0 4px 20px rgba(70, 50, 30, 0.15),
-    0 1px 4px rgba(70, 50, 30, 0.08),
-    inset 0 0 40px rgba(217, 203, 178, 0.25);
+    0 6px 28px rgba(60, 40, 20, 0.22),
+    0 1px 5px rgba(60, 40, 20, 0.1),
+    inset 0 0 45px rgba(210, 190, 155, 0.28);
   
   transform-origin: 50% 0%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  will-change: transform, opacity;
-  transition: transform 0.52s cubic-bezier(0.25, 1, 0.5, 1), 
-              opacity 0.45s ease, 
-              box-shadow 0.52s ease;
+  will-change: transform, opacity, box-shadow;
+  transition: 
+    transform 0.56s cubic-bezier(0.22, 1, 0.36, 1), 
+    opacity 0.48s ease, 
+    box-shadow 0.56s ease;
   z-index: 1;
   opacity: 0;
   pointer-events: none;
@@ -147,6 +178,27 @@
   inset: 4px;
   border: 1px solid var(--color-border-subtle);
   pointer-events: none;
+  z-index: 1;
+}
+
+/* Dynamic Paper Curl Lighting & Specular Sheen (Real Paper Reflection & Shadow) */
+.reader-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.04) 30%,
+    rgba(255, 255, 255, 0.5) 48%,
+    rgba(255, 255, 255, 0.2) 54%,
+    rgba(40, 20, 5, 0.18) 72%,
+    rgba(20, 10, 5, 0.38) 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 20;
 }
 
 /* Gita Press Running Header at Top of Page: ॥ श्रीहरिः ॥ */
@@ -165,6 +217,8 @@
   justify-content: center;
   gap: 0.75rem;
   flex-shrink: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .page-header-invocation::before,
@@ -179,35 +233,61 @@
   opacity: 1;
   pointer-events: auto;
   z-index: 10;
-  transform: translateY(0) rotateX(0deg) scale(1);
+  transform: translateY(0) rotateX(0deg) translateZ(0) scale(1);
+  box-shadow: 
+    0 8px 30px rgba(60, 40, 20, 0.2),
+    0 2px 6px rgba(60, 40, 20, 0.08),
+    inset 0 0 45px rgba(210, 190, 155, 0.24);
 }
 
-/* 3D Vertical Turn Up (Next Page) */
+.reader-page.active-page::after {
+  opacity: 0;
+}
+
+/* 3D Vertical Turn Up (Next Page Flip - Leaf arches & turns over top) */
 .reader-page.flip-exit-up {
   opacity: 0;
-  z-index: 12;
-  transform: translateY(-90%) rotateX(65deg) scale(0.94);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  z-index: 15;
+  transform: translateY(-98%) rotateX(82deg) translateZ(35px) scale(0.92);
+  box-shadow: 
+    0 40px 80px rgba(45, 25, 10, 0.45),
+    0 12px 25px rgba(0, 0, 0, 0.25);
+}
+
+.reader-page.flip-exit-up::after {
+  opacity: 1;
 }
 
 .reader-page.flip-enter-down {
-  opacity: 0;
+  opacity: 0.85;
   z-index: 9;
-  transform: translateY(60px) rotateX(-25deg) scale(0.96);
+  transform: translateY(20px) scale(0.98);
+  box-shadow: 
+    inset 0 25px 50px rgba(45, 25, 10, 0.32),
+    0 4px 15px rgba(50, 30, 15, 0.15);
 }
 
-/* 3D Vertical Turn Down (Prev Page) */
+/* 3D Vertical Turn Down (Prev Page Flip - Leaf unfolds from top and lands flat) */
 .reader-page.flip-exit-down {
   opacity: 0;
-  z-index: 12;
-  transform: translateY(80%) rotateX(-55deg) scale(0.94);
-  box-shadow: 0 -25px 50px rgba(0, 0, 0, 0.25);
+  z-index: 15;
+  transform: translateY(75%) rotateX(-65deg) translateZ(30px) scale(0.93);
+  box-shadow: 
+    0 -35px 70px rgba(45, 25, 10, 0.4),
+    0 -10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.reader-page.flip-exit-down::after {
+  opacity: 1;
 }
 
 .reader-page.flip-enter-up {
-  opacity: 0;
-  z-index: 9;
-  transform: translateY(-60px) rotateX(25deg) scale(0.96);
+  opacity: 0.85;
+  z-index: 14;
+  transform: translateY(-88%) rotateX(75deg) translateZ(30px) scale(0.93);
+  box-shadow: 
+    0 35px 70px rgba(45, 25, 10, 0.4),
+    0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Page Number in traditional Gita Press footer */
