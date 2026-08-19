@@ -123,7 +123,9 @@ const resolvedCoverImage = coverImage
       if (saved) {
         try {
           const data = JSON.parse(saved);
-          if (data.percent && data.percent > 2) {
+          if (data.isCompleted || data.percent >= 99.5) {
+            badge.style.display = 'none';
+          } else if (data.percent && data.percent > 2) {
             badge.style.display = 'flex';
             const label = badge.querySelector('.progress-label');
             if (label) label.textContent = `${toHindiDigits(Math.round(data.percent))}% पठित`;

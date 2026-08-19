@@ -487,11 +487,13 @@ const resolvedCoverImage = coverImage
 
         savePosition() {
           const total = this.pages.length || 1;
+          const isCompleted = (this.currentPageIndex >= total - 1);
           const percent = ((this.currentPageIndex + 1) / total) * 100;
           try {
             localStorage.setItem(PROGRESS_KEY, JSON.stringify({
               pageIndex: this.currentPageIndex,
               percent,
+              isCompleted,
               ts: Date.now()
             }));
           } catch {}
@@ -500,12 +502,26 @@ const resolvedCoverImage = coverImage
         restorePosition() {
           try {
             const saved = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
-            if (typeof saved.pageIndex === 'number' && saved.pageIndex < this.pages.length) {
-              this.currentPageIndex = saved.pageIndex;
-              this.pageElements?.forEach((el, idx) => {
-                el.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
-              });
-              this.updateUI();
+            if (saved) {
+              const isAtEnd = saved.isCompleted || saved.percent >= 99.5 || (typeof saved.pageIndex === 'number' && saved.pageIndex >= this.pages.length - 1);
+              if (isAtEnd) {
+                // Reader had reached the end in the previous session: reset progress for the new session
+                this.currentPageIndex = 0;
+                localStorage.removeItem(PROGRESS_KEY);
+                this.pageElements?.forEach((el, idx) => {
+                  el.className = 'reader-page' + (idx === 0 ? ' active-page' : '');
+                });
+                this.updateUI();
+                return;
+              }
+
+              if (typeof saved.pageIndex === 'number' && saved.pageIndex < this.pages.length) {
+                this.currentPageIndex = saved.pageIndex;
+                this.pageElements?.forEach((el, idx) => {
+                  el.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
+                });
+                this.updateUI();
+              }
             }
           } catch {}
         }
