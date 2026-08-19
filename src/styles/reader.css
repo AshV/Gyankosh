@@ -1,5 +1,5 @@
 /* ============================================================
-   reader.css — Gita Press Gorakhpur E-Reader Styles
+   reader.css — Gyankosh Indic E-Reader Styles
    Authentic Sacred Hindu Paper Book Aesthetic
    ============================================================ */
 
@@ -63,7 +63,7 @@ html.is-fullscreen .reader-viewport,
   padding: 4px 4px !important;
 }
 
-/* ─── Top Bar (Traditional Gita Press Header) ─────────────── */
+/* ─── Top Bar (Traditional Header) ────────────────────────── */
 .reader-topbar {
   flex-shrink: 0;
   display: flex;
@@ -139,6 +139,42 @@ html.is-fullscreen .reader-viewport,
   color: #fffdf7;
 }
 
+/* ─── Chanting Mode Button (पाठ मोड — केवल मूल श्लोक) ──────── */
+.topbar-btn--chanting {
+  height: 36px;
+  width: 36px;
+  min-width: 36px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  color: var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.topbar-btn--chanting:hover {
+  background: #f0dfc0;
+  border-color: var(--color-accent);
+}
+
+.topbar-btn--chanting.active {
+  background: var(--color-accent);
+  color: #fffdf7;
+  border-color: var(--color-gold);
+  box-shadow: 0 2px 8px rgba(142, 27, 20, 0.3);
+}
+
+.topbar-btn--chanting .icon-prayer-beads {
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
 /* ─── 3D True Vertical Book/Folio Page-Turn Viewport ────── */
 .reader-viewport {
   flex: 1;
@@ -196,7 +232,7 @@ html.is-fullscreen .reader-viewport,
   pointer-events: none;
 }
 
-/* Authentic Gita Press Paper Book Page (with organic corner wave & paper curvature) */
+/* Authentic Sacred Paper Book Page (with organic corner wave & paper curvature) */
 .reader-page {
   position: absolute;
   inset: 0;
@@ -221,7 +257,7 @@ html.is-fullscreen .reader-viewport,
     /* Top gutter fold shadow */
     linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.01) 3%, transparent 8%);
   
-  /* Traditional Gita Press double-line border with softer organic bottom corners */
+  /* Traditional double-line border with softer organic bottom corners */
   border: 3px double var(--color-border);
   border-radius: 3px 3px 7px 6px / 3px 3px 10px 9px;
   box-shadow: 
@@ -472,7 +508,7 @@ html.is-fullscreen .reader-viewport,
   }
 }
 
-/* Page Number in traditional Gita Press footer */
+/* Page Number in traditional pothi footer */
 .page-footer-bar {
   margin-top: auto;
   padding-top: 0.5rem;
@@ -493,7 +529,7 @@ html.is-fullscreen .reader-viewport,
   color: var(--color-accent);
 }
 
-/* ─── Reader Content Area (Gita Press Typography) ────────── */
+/* ─── Reader Content Area (Sacred Indic Typography) ──────── */
 .reader-content {
   font-feature-settings: "cjct" on, "pres" on, "abvs" on, "blws" on, "half" on, "vatu" on;
   -webkit-font-feature-settings: "cjct" on, "pres" on, "abvs" on, "blws" on;
@@ -616,7 +652,7 @@ body.hide-numbering .verse-block {
   font-weight: 600;
 }
 
-/* Gita Press Sacred Speaker Heading: ॥ श्रीभगवानुवाच ॥ */
+/* Sacred Speaker Heading: ॥ श्रीभगवानुवाच ॥ */
 .speaker-block {
   text-align: center;
   margin: 0.45rem 0 0.2rem;
@@ -634,7 +670,7 @@ body.hide-numbering .verse-block {
   letter-spacing: 0.04em;
 }
 
-/* Gita Press Bhavarth / Translation Box: भावार्थ : ... */
+/* Bhavarth / Translation Box: भावार्थ : ... */
 .translation-block {
   margin: 0.3rem 0 0.45rem;
   padding: 0.35rem 0.55rem;
@@ -658,7 +694,7 @@ body.hide-numbering .verse-block {
   color: var(--color-text-muted);
 }
 
-/* Gita Press Invocations / Instructions: ॥ श्रीगणेशाय नमः ॥ */
+/* Sacred Invocations / Instructions: ॥ श्रीगणेशाय नमः ॥ */
 .instruction-block {
   text-align: center;
   margin: 0.4rem 0;
@@ -673,14 +709,19 @@ body.hide-numbering .verse-block {
   font-style: normal;
 }
 
-/* Chanting Mode: hide translations */
+/* Chanting Mode: hide translations & show only original sacred verses */
+html.chanting-mode .translation-block,
+html.chanting-mode .block--translation,
+html.chanting-mode .block--bhavarth,
+html.chanting-mode .verse-translation,
 body.chanting-mode .translation-block,
 body.chanting-mode .block--translation,
-body.chanting-mode .block--bhavarth {
+body.chanting-mode .block--bhavarth,
+body.chanting-mode .verse-translation {
   display: none !important;
 }
 
-/* ─── Bottom Bar (Gita Press Navigation) ─────────────────── */
+/* ─── Bottom Bar (Reader Navigation) ─────────────────────── */
 .reader-bottombar {
   flex-shrink: 0;
   display: flex;
@@ -764,15 +805,16 @@ body.chanting-mode .block--bhavarth {
   justify-content: center;
   padding: 1rem;
   box-sizing: border-box;
-  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s ease;
+  transition: opacity 0.4s ease, transform 0.45s ease, visibility 0.4s ease;
   overflow-y: auto;
+  cursor: pointer;
 }
 
 .reader-cover-screen.cover-dismissed {
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(1.04) translateY(-12px);
-  pointer-events: none;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: scale(1.04) translateY(-12px) !important;
+  pointer-events: none !important;
 }
 
 .cover-card {
@@ -795,6 +837,8 @@ body.chanting-mode .block--bhavarth {
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: default;
+  pointer-events: auto;
   animation: coverCardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -914,9 +958,14 @@ body.chanting-mode .block--bhavarth {
     0 6px 20px rgba(142, 27, 20, 0.35),
     inset 0 1px 1px rgba(255, 255, 255, 0.3);
   cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   width: 75%;
   max-width: 220px;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .btn-aarambh:hover {

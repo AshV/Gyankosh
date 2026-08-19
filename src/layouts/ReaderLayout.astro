@@ -1,12 +1,12 @@
 ---
 /**
  * ReaderLayout.astro
- * Authentic Gita Press Gorakhpur Sacred Paper Book E-Reader
+ * Gyankosh Sacred Pothi Paper Book E-Reader
  *
  * Visual & Typographic Identity:
- * - Single authentic Gita Press paper book theme (off-white warm paper, red border frames, rich black ink).
+ * - Single authentic sacred paper book theme (off-white warm paper, red border frames, rich black ink).
  * - 3D Vertical Page-Flip Animation (पन्ना पलट).
- * - Running page header: ॥ श्रीहरिः ॥
+ * - Running page header: ॥ ग्रंथ शीर्षक ॥
  * - Devanagari numerals and traditional sacred speaker / verse markers.
  * - Sacred Aarambh cover screen with album artwork and fullscreen entry on start.
  */
@@ -84,11 +84,17 @@ const resolvedCoverImage = coverImage
         } else {
           document.documentElement.classList.remove('hide-numbering');
         }
+        var isChanting = prefs.chanting !== undefined ? prefs.chanting : true;
+        if (isChanting) {
+          document.documentElement.classList.add('chanting-mode');
+        } else {
+          document.documentElement.classList.remove('chanting-mode');
+        }
       })();
     </script>
   </head>
 
-  <body class={!showNumbering ? 'hide-numbering' : ''}>
+  <body class={`${!showNumbering ? 'hide-numbering' : ''} chanting-mode`}>
     <!-- Sacred Red/Gold Reading Progress Bar -->
     <div id="reading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="पठन प्रगति"></div>
 
@@ -105,6 +111,22 @@ const resolvedCoverImage = coverImage
         </a>
 
         <div class="topbar-actions">
+          <!-- Chanting / Recitation Mode Button (पाठ मोड) with Prayer Beads Icon Only -->
+          <button
+            id="chanting-toggle"
+            class="icon-btn topbar-btn--chanting"
+            aria-label="पाठ मोड (केवल मूल श्लोक)"
+            title="पाठ मोड — केवल मूल श्लोक (अर्थ छिपाएं)"
+            aria-pressed="false"
+          >
+            <!-- Sacred Prayer Beads / Japa Mala Icon -->
+            <svg class="icon-prayer-beads" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="9" r="6.5" stroke-dasharray="2.5 2.5" stroke-width="2.2" />
+              <circle cx="12" cy="16.5" r="1.6" fill="currentColor" />
+              <path d="M12 18.1v3.5M10.2 21.6h3.6" />
+            </svg>
+          </button>
+
           <!-- Fullscreen Toggle / Close Button -->
           <button
             id="fullscreen-toggle"
@@ -125,12 +147,12 @@ const resolvedCoverImage = coverImage
         </div>
       </header>
 
-      <!-- Reading Viewport (Gita Press 3D Folio Stage) -->
+      <!-- Reading Viewport (3D Pothi Folio Stage) -->
       <main
         class="reader-viewport"
         id="reader-viewport"
         role="region"
-        aria-label="गीता प्रेस पुस्तक पृष्ठ"
+        aria-label="सनातन धर्मग्रंथ पुस्तक पृष्ठ"
       >
         <!-- Sacred Aarambh Cover Screen (आरम्भ आवरण) -->
         <div class="reader-cover-screen" id="reader-cover-screen" role="region" aria-label="ग्रंथ आवरण">
@@ -181,9 +203,9 @@ const resolvedCoverImage = coverImage
           </button>
         </div>
 
-        <!-- Dynamic 3D Gita Press Folio Stage -->
+        <!-- Dynamic 3D Pothi Folio Stage -->
         <div class="reader-stage" id="reader-stage" aria-live="polite">
-          <!-- Virtual Gita Press pages injected here -->
+          <!-- Virtual book pages injected here -->
         </div>
 
         <!-- Raw source content (parsed at build time) -->
@@ -261,7 +283,7 @@ const resolvedCoverImage = coverImage
     </div>
 
     <!-- ══════════════════════════════════════════════════════
-         Client-Side Gita Press Page-Flip Engine
+         Client-Side 3D Pothi Page-Flip Engine
          ══════════════════════════════════════════════════════ -->
 
     <script define:vars={{ slug, bookTitle: title, defaultShowNumbering: showNumbering }}>
@@ -283,8 +305,8 @@ const resolvedCoverImage = coverImage
         catch { return {}; }
       }
 
-      /* ── Gita Press Vertical Page Flip Engine ── */
-      class GitaPressReader {
+      /* ── Gyankosh Vertical Pothi Page Flip Engine ── */
+      class GyankoshReader {
         constructor() {
           this.stage = document.getElementById('reader-stage');
           this.rawSource = document.getElementById('reader-raw-source');
@@ -305,15 +327,17 @@ const resolvedCoverImage = coverImage
           this.restorePosition();
         }
 
-        /* Build authentic Gita Press book pages without splitting shlokas */
+        /* Build authentic sacred book pages without splitting shlokas */
         buildPages() {
           if (!this.rawSource || !this.stage) return;
           
           this.stage.innerHTML = '';
           this.pages = [];
 
+          const isChanting = document.documentElement.classList.contains('chanting-mode') || document.body.classList.contains('chanting-mode');
+
           const childElements = Array.from(this.rawSource.children).filter(
-            el => !el.classList.contains('sr-only')
+            el => !el.classList.contains('sr-only') && (!isChanting || (!el.classList.contains('translation-block') && !el.classList.contains('block--translation') && !el.classList.contains('block--bhavarth')))
           );
 
           if (childElements.length === 0) return;
@@ -359,7 +383,7 @@ const resolvedCoverImage = coverImage
             (this.stage.clientWidth || window.innerWidth) + 'px; font-size:var(--reader-font-size); line-height:var(--reader-line-height);';
           document.body.appendChild(measureBox);
 
-          // Reserve space for compact Gita Press header (no page footer)
+          // Reserve space for compact sacred header (no page footer)
           const maxPageHeight = Math.max(260, this.stage.clientHeight - 30);
 
           let currentPageNodes = [];
@@ -389,7 +413,7 @@ const resolvedCoverImage = coverImage
 
           const totalPages = this.pages.length || 1;
 
-          // Render authentic Gita Press folio pages (without redundant page footer)
+          // Render authentic pothi folio pages (without redundant page footer)
           this.pageElements = this.pages.map((nodeList, idx) => {
             const pageDiv = document.createElement('div');
             pageDiv.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
@@ -782,7 +806,7 @@ const resolvedCoverImage = coverImage
         }
       }
 
-      let gitaPressReaderInstance = null;
+      let gyankoshReaderInstance = null;
 
       /* ── Fullscreen Controls ── */
       function isFullscreenActive() {
@@ -857,6 +881,51 @@ const resolvedCoverImage = coverImage
       document.addEventListener('mozfullscreenchange', updateFullscreenUI);
       document.addEventListener('MSFullscreenChange', updateFullscreenUI);
 
+      /* ── Chanting / Paath Mode (पाठ मोड — केवल मूल श्लोक) ── */
+      const chantingBtn = document.getElementById('chanting-toggle');
+      const hasTranslations = Boolean(document.querySelector('#reader-raw-source .translation-block, #reader-raw-source .block--translation, #reader-raw-source .block--bhavarth'));
+
+      if (chantingBtn) {
+        if (!hasTranslations) {
+          // If document has no translations, hide the पाठ button completely
+          chantingBtn.style.display = 'none';
+        } else {
+          chantingBtn.style.display = 'inline-flex';
+        }
+      }
+
+      function updateChantingUI(isChanting) {
+        document.documentElement.classList.toggle('chanting-mode', isChanting);
+        document.body.classList.toggle('chanting-mode', isChanting);
+        if (chantingBtn) {
+          chantingBtn.classList.toggle('active', isChanting);
+          chantingBtn.setAttribute('aria-pressed', isChanting ? 'true' : 'false');
+          chantingBtn.title = isChanting ? 'पाठ मोड सक्रिय (अर्थ छिपा है) — अर्थ देखने हेतु क्लिक करें' : 'पाठ मोड — केवल मूल श्लोक (अर्थ छिपाएं)';
+        }
+      }
+
+      // Default state is translations hidden (chanting = true) unless user explicitly toggled it off
+      const initialPrefs = loadPrefs();
+      const defaultChanting = initialPrefs.chanting !== undefined ? initialPrefs.chanting : true;
+      updateChantingUI(defaultChanting);
+
+      chantingBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const curChanting = document.documentElement.classList.contains('chanting-mode') || document.body.classList.contains('chanting-mode');
+        const nextChanting = !curChanting;
+        savePrefs({ chanting: nextChanting });
+        updateChantingUI(nextChanting);
+        if (gyankoshReaderInstance) {
+          const prevPageIndex = gyankoshReaderInstance.currentPageIndex;
+          gyankoshReaderInstance.buildPages();
+          gyankoshReaderInstance.currentPageIndex = Math.min(prevPageIndex, gyankoshReaderInstance.pages.length - 1);
+          gyankoshReaderInstance.pageElements?.forEach((el, idx) => {
+            el.className = 'reader-page' + (idx === gyankoshReaderInstance.currentPageIndex ? ' active-page' : '');
+          });
+          gyankoshReaderInstance.updateUI();
+        }
+      });
+
       /* ── Font Size Controls (अक्षर आकार छोटा/बड़ा करें) ── */
       function adjustFontSize(delta) {
         const cur = parseFloat(getComputedStyle(ROOT).getPropertyValue('--reader-font-size')) || 1.15;
@@ -866,7 +935,7 @@ const resolvedCoverImage = coverImage
           const prefs = loadPrefs();
           localStorage.setItem(PREF_KEY, JSON.stringify({ ...prefs, fontSize: next }));
         } catch {}
-        gitaPressReaderInstance?.buildPages();
+        gyankoshReaderInstance?.buildPages();
       }
 
       document.getElementById('font-decrease')?.addEventListener('click', (e) => {
@@ -886,22 +955,47 @@ const resolvedCoverImage = coverImage
       function startReading() {
         if (coverScreen) {
           coverScreen.classList.add('cover-dismissed');
+          setTimeout(() => {
+            coverScreen.style.display = 'none';
+          }, 450);
         }
-        if (isSmallScreen()) {
+        if (isSmallScreen() && !isFullscreenActive()) {
           enterFullscreen();
         }
-        if (!gitaPressReaderInstance) {
-          gitaPressReaderInstance = new GitaPressReader();
+        if (!gyankoshReaderInstance) {
+          gyankoshReaderInstance = new GyankoshReader();
         }
       }
 
+      // Pre-initialize reader engine on load so book pages are rendered immediately
+      function initReaderEngine() {
+        if (!gyankoshReaderInstance) {
+          gyankoshReaderInstance = new GyankoshReader();
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initReaderEngine);
+      } else {
+        initReaderEngine();
+      }
+
       btnAarambh?.addEventListener('click', (e) => {
+        e.preventDefault();
         e.stopPropagation();
         startReading();
       });
 
-      coverScreen?.addEventListener('click', () => {
+      btnAarambh?.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         startReading();
+      });
+
+      coverScreen?.addEventListener('click', (e) => {
+        if (!e.target.closest('a')) {
+          startReading();
+        }
       });
     </script>
   </body>

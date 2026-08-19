@@ -1,19 +1,19 @@
 /* ============================================================
-   global.css — Gita Press Gorakhpur Design System
+   global.css — Gyankosh Indic Design System
    Authentic Sacred Hindu Paper Book Aesthetic
    ============================================================ */
 
 /* Classical Sanskrit & Hindi Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Martel:wght@400;600;700;800&family=Rozha+One&family=Yantramanav:wght@400;500;700&family=Inter:wght@400;500;600&display=swap');
 
-/* ─── Gita Press Design Tokens (Single Sacred Paper Theme) ──── */
+/* ─── Gyankosh Design Tokens (Single Sacred Paper Theme) ──── */
 :root {
-  /* Authentic Gita Press Paper Texture & Colors */
+  /* Authentic Sacred Paper Texture & Colors */
   --color-bg:               #fcf8ee;       /* Natural warm antique book paper */
   --color-bg-elevated:      #f5eedd;       /* Slightly deeper paper tone for panels */
   --color-bg-card:          #fffdf7;       /* Clean book leaf */
   --color-surface:          #ede2cb;       /* Paper edge / gutter */
-  --color-border:           #8e1b14;       /* Gita Press signature sacred red */
+  --color-border:           #8e1b14;       /* Traditional sacred red */
   --color-border-subtle:    #d9cbb2;       /* Subtle paper border */
   
   /* Traditional Printing Inks */
@@ -22,8 +22,8 @@
   --color-text-muted:       #4a3f35;       /* Secondary prose text */
   --color-text-faint:       #7d6e5e;       /* Footnotes & metadata */
   
-  /* Sacred Gita Press Accents */
-  --color-accent:           #8e1b14;       /* Gita Press sacred vermillion red */
+  /* Sacred Accents */
+  --color-accent:           #8e1b14;       /* Sacred vermillion red */
   --color-accent-soft:      #faecea;       /* Soft red highlight */
   --color-gold:             #b87e28;       /* Auspicious golden rule */
   --color-verse-num:        #8e1b14;       /* Sacred red for verse numbers */
@@ -181,13 +181,14 @@ a:hover { opacity: 0.8; }
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
-/* ─── Catalog Hero (Gita Press Traditional Header) ───────── */
+/* ─── Catalog Hero (Traditional Header) ──────────────────── */
 .catalog-hero {
   text-align: center;
   padding: var(--space-2xl) var(--space-md) var(--space-xl);
   position: relative;
 }
 
+.sacred-hero-invocation,
 .gita-press-invocation {
   display: inline-block;
   font-family: var(--font-devanagari);
@@ -239,7 +240,7 @@ a:hover { opacity: 0.8; }
   gap: var(--space-lg);
 }
 
-/* ─── Book Card (Traditional Gita Press Book Cover Style) ─── */
+/* ─── Book Card (Traditional Sacred Book Cover Style) ────── */
 .book-card {
   display: flex;
   flex-direction: column;

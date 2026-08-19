@@ -2,7 +2,7 @@
 /**
  * src/pages/index.astro
  * Home Page — Library Catalog
- * Gita Press Gorakhpur Sacred Paper Book Theme
+ * Gyankosh Sacred Indic Paper Book Theme
  */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -60,13 +60,13 @@ const jsonLd = {
 
 <BaseLayout
   title="ज्ञानकोश — सनातन वैदिक एवं पौराणिक धर्मग्रंथ"
-  description={`पढ़िए ${toHindiDigits(totalTexts)}+ सनातन धर्मग्रंथ ऑनलाइन — वेद, श्रीमद्भगवद्गीता, हनुमान चालीसा, पुराण। गीता प्रेस शैली का डिजिटल पाठक।`}
+  description={`पढ़िए ${toHindiDigits(totalTexts)}+ सनातन धर्मग्रंथ ऑनलाइन — वेद, श्रीमद्भगवद्गीता, हनुमान चालीसा, पुराण। पारम्परिक पौथी शैली का डिजिटल पाठक।`}
   jsonLd={jsonLd}
 >
-  <!-- Gita Press Hero Invocation Section -->
+  <!-- Sacred Hero Invocation Section -->
   <section class="catalog-hero" aria-labelledby="hero-heading">
     <div class="container">
-      <div class="gita-press-invocation">॥ श्रीहरिः ॥</div>
+      <div class="sacred-hero-invocation">॥ श्रीहरिः ॥</div>
       
       <h1 id="hero-heading">ज्ञानकोश</h1>
       <p>

@@ -1,10 +1,10 @@
 /**
  * indicParser.ts
  * Build-time Indic Markdown parser for Gyankosh.
- * Formats texts with authentic Gita Press Gorakhpur paper book typography:
+ * Formats texts with authentic traditional Sanskrit/Hindi paper book typography:
  * - Sacred red speaker tags: ॥ श्रीभगवानुवाच ॥
  * - Traditional verse numbering: ॥ १ ॥
- * - Gita Press Bhavarth/Translation styling: भावार्थ :
+ * - Traditional Bhavarth/Translation styling: भावार्थ :
  * - Sacred invocations: ॥ श्रीहरिः ॥ / ॥ अथ प्रथमोऽध्यायः ॥
  *
  * All processing happens at build-time — zero client JS overhead.
@@ -37,7 +37,7 @@ const VERSE_BLOCKS: ReadonlySet<BlockType> = new Set([
 // Tag regex: matches [TagName] at start of a trimmed block
 const TAG_REGEX = /^\[([A-Za-z]+)\]\s*/;
 
-// Hindi numerals for Gita Press feel
+// Hindi numerals for authentic Devanagari typography
 function toHindiNumerals(num: number): string {
   const digits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
   return num.toString().split('').map(d => digits[parseInt(d, 10)] || d).join('');
@@ -100,7 +100,7 @@ function renderVerseLines(lines: string[]): string {
     .join('\n');
 }
 
-// ─── Render a single block into Gita Press HTML ──────────────────────────
+// ─── Render a single block into Gyankosh HTML ──────────────────────────
 function renderBlock(
   tag: BlockType,
   lines: string[],
@@ -147,7 +147,7 @@ function renderBlock(
 </div>`;
   }
 
-  // [Translation] / [Bhavarth] — Gita Press translation paragraph
+  // [Translation] / [Bhavarth] — Hindi translation paragraph
   if (tag === 'Translation' || tag === 'Bhavarth') {
     const html = lines.map(l => renderInline(l)).join(' ');
     const prefix = tag === 'Bhavarth' ? 'भावार्थ :' : 'अर्थ :';
@@ -157,7 +157,7 @@ function renderBlock(
 </div>`;
   }
 
-  // [Speaker] / [Uvacha] — Gita Press sacred speaker tag
+  // [Speaker] / [Uvacha] — Sacred speaker tag
   if (tag === 'Speaker' || tag === 'Uvacha') {
     const cleanText = lines.join(' ').replace(/^॥\s*|\s*॥$/g, '').trim();
     return `<div class="speaker-block ${cssClass}" data-block-type="${tag.toLowerCase()}">
