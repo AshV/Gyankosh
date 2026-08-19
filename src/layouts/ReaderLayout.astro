@@ -104,8 +104,6 @@ const resolvedCoverImage = coverImage
           <span>ज्ञानकोश</span>
         </a>
 
-        <span class="book-title-bar" aria-label={`पठन: ${title}`}>{title}</span>
-
         <div class="topbar-actions">
           <!-- Fullscreen Toggle / Close Button -->
           <button
@@ -395,10 +393,10 @@ const resolvedCoverImage = coverImage
             pageDiv.setAttribute('role', 'group');
             pageDiv.setAttribute('aria-label', `पृष्ठ ${idx + 1} कुल ${totalPages}`);
 
-            // Gita Press Running Header: ॥ श्रीहरिः ॥
+            // Running Page Header: Document Title
             const pageHeader = document.createElement('div');
             pageHeader.className = 'page-header-invocation';
-            pageHeader.innerHTML = '॥ श्रीहरिः ॥';
+            pageHeader.innerHTML = `॥ ${bookTitle} ॥`;
             pageDiv.appendChild(pageHeader);
 
             // Page Content Body
@@ -711,11 +709,17 @@ const resolvedCoverImage = coverImage
       const coverScreen = document.getElementById('reader-cover-screen');
       const btnAarambh = document.getElementById('btn-aarambh');
 
+      function isSmallScreen() {
+        return window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches || (window.matchMedia('(pointer: coarse)').matches && window.innerWidth <= 1024);
+      }
+
       function startReading() {
         if (coverScreen) {
           coverScreen.classList.add('cover-dismissed');
         }
-        enterFullscreen();
+        if (isSmallScreen()) {
+          enterFullscreen();
+        }
         if (!gitaPressReaderInstance) {
           gitaPressReaderInstance = new GitaPressReader();
         }
