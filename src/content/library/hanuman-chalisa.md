@@ -14,44 +14,133 @@ coverColor: "hsl(22, 85%, 45%)"
 अस्य श्री हनुमान चालीसा स्तोत्रस्य श्री गोस्वामी तुलसीदासः कर्ता। श्री हनुमान् देवता। हनूमान् ईति बीजम्। श्री सीताराम ईति शक्तिः। सर्वार्थसाधने जपे विनियोगः।
 
 [Doha]
-श्री गुरु चरन सरोज रज । निज मनु मुकुरु सुधारि।
-बरनऊँ रघुबर बिमल जसु । जो दायकु फल चारि॥
+श्रीगुरु चरन सरोज रज, निजमन मुकुरु सुधारि।
+बरनउं रघुबर बिमल जसु, जो दायक फल चारि।।
 
 [Doha]
-बुद्धिहीन तनु जानिके । सुमिरौं पवन-कुमार।
-बल बुद्धि विद्या देहु मोहि । हरहु कलेस विकार॥
-
-[Translation]
-I cleanse the mirror of my mind with the dust of my Guru's lotus feet, and then narrate the pure glory of Rama — the best among Raghus — the bestower of the four fruits of life.
-Knowing myself to be ignorant, I remember the Son of Pawan (Wind); grant me strength, wisdom and knowledge, and remove my afflictions and blemishes.
+बुद्धिहीन तनु जानिके, सुमिरौं पवन-कुमार।
+बल बुधि बिद्या देहु मोहिं, हरहु कलेस बिकार।।
 
 [Chaupai]
-जय हनुमान ज्ञान गुन सागर । जय कपीस तिहुँ लोक उजागर।
-राम दूत अतुलित बल धामा । अंजनि-पुत्र पवनसुत नामा॥
-
-[Translation]
-Victory to Hanuman, the ocean of wisdom and virtue! Victory to the Lord of monkeys, illuminator of the three worlds.
-You are Ram's emissary, an abode of matchless strength, known as the son of Anjani, the son of the Wind.
+जय हनुमान ज्ञान गुन सागर। जय कपीस तिहुं लोक उजागर।।
 
 [Chaupai]
-महाबीर बिक्रम बजरंगी। कुमति निवार सुमति के संगी॥
-कंचन बरन बिराज सुबेसा। कानन कुण्डल कुंचित केसा॥
-
-[Translation]
-You are the greatest hero, courageous, with a body hard as a thunderbolt. You remove evil thoughts and are the companion of the wise.
-You shine with a golden complexion, dressed beautifully, with earrings in your ears and curly locks of hair.
+राम दूत अतुलित बल धामा। अंजनि-पुत्र पवनसुत नामा।।
 
 [Chaupai]
-हाथ बज्र औ ध्वजा बिराजै । काँधे मूँज जनेऊ साजै।
-संकर सुवन केसरीनंदन । तेज प्रताप महा जगबंदन॥
+महाबीर बिक्रम बजरंगी। कुमति निवार सुमति के संगी।।
 
-[Translation]
-You hold a thunderbolt and a flag in your hands, and the sacred thread of munja-grass graces your shoulder.
-You are the son of Shankar, the delight of Kesari; your glory is immense and you are revered throughout the world.
+[Chaupai]
+कंचन बरन बिराज सुबेसा। कानन कुण्डल कुँचित केसा।।
+
+[Chaupai]
+हाथ बज्र औ ध्वजा बिराजे। कांधे मूंज जनेउ साजे।।
+
+[Chaupai]
+शंकर सुवन केसरी नंदन। तेज प्रताप महा जग वंदन।।
+
+[Chaupai]
+बिद्यावान गुनी अति चातुर। राम काज करिबे को आतुर।।
+
+[Chaupai]
+प्रभु चरित्र सुनिबे को रसिया। राम लखन सीता मन बसिया।।
+
+[Chaupai]
+सूक्ष्म रूप धरि सियहिं दिखावा। बिकट रूप धरि लंक जरावा।।
+
+[Chaupai]
+भीम रूप धरि असुर संहारे। रामचन्द्र के काज संवारे।।
+
+[Chaupai]
+लाय सजीवन लखन जियाये। श्री रघुबीर हरषि उर लाये।।
+
+[Chaupai]
+रघुपति कीन्ही बहुत बड़ाई। तुम मम प्रिय भरतहि सम भाई।।
+
+[Chaupai]
+सहस बदन तुम्हरो जस गावैं। अस कहि श्रीपति कण्ठ लगावैं।।
+
+[Chaupai]
+सनकादिक ब्रह्मादि मुनीसा। नारद सारद सहित अहीसा।।
+
+[Chaupai]
+जम कुबेर दिगपाल जहां ते। कबि कोबिद कहि सके कहां ते।।
+
+[Chaupai]
+तुम उपकार सुग्रीवहिं कीन्हा। राम मिलाय राज पद दीन्हा।।
+
+[Chaupai]
+तुम्हरो मंत्र बिभीषन माना। लंकेश्वर भए सब जग जाना।।
+
+[Chaupai]
+जुग सहस्र जोजन पर भानु। लील्यो ताहि मधुर फल जानू।।
+
+[Chaupai]
+प्रभु मुद्रिका मेलि मुख माहीं। जलधि लांघि गये अचरज नाहीं।।
+
+[Chaupai]
+दुर्गम काज जगत के जेते। सुगम अनुग्रह तुम्हरे तेते।।
+
+[Chaupai]
+राम दुआरे तुम रखवारे। होत न आज्ञा बिनु पैसारे।।
+
+[Chaupai]
+सब सुख लहै तुम्हारी सरना। तुम रच्छक काहू को डर ना।।
+
+[Chaupai]
+आपन तेज सम्हारो आपै। तीनों लोक हांक तें कांपै।।
+
+[Chaupai]
+भूत पिसाच निकट नहिं आवै। महाबीर जब नाम सुनावै।।
+
+[Chaupai]
+नासै रोग हरे सब पीरा। जपत निरन्तर हनुमत बीरा।।
+
+[Chaupai]
+संकट तें हनुमान छुड़ावै। मन क्रम बचन ध्यान जो लावै।।
+
+[Chaupai]
+सब पर राम तपस्वी राजा। तिन के काज सकल तुम साजा।।
+
+[Chaupai]
+और मनोरथ जो कोई लावै। सोई अमित जीवन फल पावै।।
+
+[Chaupai]
+चारों जुग परताप तुम्हारा। है परसिद्ध जगत उजियारा।।
+
+[Chaupai]
+साधु संत के तुम रखवारे। असुर निकन्दन राम दुलारे।।
+
+[Chaupai]
+अष्टसिद्धि नौ निधि के दाता। अस बर दीन जानकी माता।।
+
+[Chaupai]
+राम रसायन तुम्हरे पासा। सदा रहो रघुपति के दासा।।
+
+[Chaupai]
+तुह्मरे भजन राम को पावै। जनम जनम के दुख बिसरावै।।
+
+[Chaupai]
+अंत काल रघुबर पुर जाई। जहां जन्म हरिभक्त कहाई।।
+
+[Chaupai]
+और देवता चित्त न धरई। हनुमत सेइ सर्ब सुख करई।।
+
+[Chaupai]
+संकट कटै मिटै सब पीरा। जो सुमिरै हनुमत बलबीरा।।
+
+[Chaupai]
+जय जय जय हनुमान गोसाईं। कृपा करहु गुरुदेव की नाईं।।
+
+[Chaupai]
+जो सत बार पाठ कर कोई। छूटहि बन्दि महा सुख होई।।
+
+[Chaupai]
+जो यह पढ़ै हनुमान चालीसा। होय सिद्धि साखी गौरीसा।।
+
+[Chaupai]
+तुलसीदास सदा हरि चेरा। कीजै नाथ हृदय महं डेरा।।
 
 [Doha]
-पवन तनय संकट हरन । मंगल मूरति रूप।
-राम लखन सीता सहित । हृदय बसहु सुर भूप॥
-
-[Translation]
-O Son of the Wind, dispeller of dangers, embodiment of auspiciousness — along with Ram, Lakshman, and Sita, dwell in my heart, O King of the gods.
+पवन तनय संकट हरन, मंगल मूरति रूप।
+राम लखन सीता सहित, हृदय बसहु सुर भूप।।
