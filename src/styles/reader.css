@@ -416,8 +416,8 @@
   flex-wrap: nowrap;
   align-items: baseline;
   justify-content: flex-start;
-  column-gap: 0.85rem;
-  row-gap: 0.2rem;
+  column-gap: 0.35em;
+  row-gap: 0.15rem;
   width: 100%;
 }
 

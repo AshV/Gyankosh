@@ -332,7 +332,7 @@ const resolvedCoverImage = coverImage
                 const padas = line.querySelectorAll('.pada');
                 if (padas.length > 1) {
                   const clone = line.cloneNode(true);
-                  clone.style.cssText = 'position:absolute; visibility:hidden; display:inline-flex; flex-wrap:nowrap; width:max-content; column-gap:0.85rem; font-family:var(--reader-font-family); font-size:var(--reader-font-size); line-height:var(--reader-line-height);';
+                  clone.style.cssText = 'position:absolute; visibility:hidden; display:inline-flex; flex-wrap:nowrap; width:max-content; column-gap:0.35em; font-family:var(--reader-font-family); font-size:var(--reader-font-size); line-height:var(--reader-line-height);';
                   document.body.appendChild(clone);
                   const neededWidth = clone.offsetWidth;
                   document.body.removeChild(clone);
