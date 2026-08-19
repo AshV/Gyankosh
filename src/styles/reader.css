@@ -458,6 +458,15 @@
   line-height: 1.2;
 }
 
+/* Hide verse numbering when toggled off */
+body.hide-numbering .verse-num {
+  display: none;
+}
+
+body.hide-numbering .verse-block {
+  padding-left: 0.75rem;
+}
+
 /* Shloka styling */
 .block--shloka .pada {
   font-size: calc(var(--reader-font-size) * 1.05);

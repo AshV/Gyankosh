@@ -68,6 +68,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         var lineHeight = prefs.lineHeight || '2.15';
         document.documentElement.style.setProperty('--reader-font-size', fontSize + 'rem');
         document.documentElement.style.setProperty('--reader-line-height', lineHeight);
+        if (prefs.hideNumbering) document.body.classList.add('hide-numbering');
       })();
     </script>
   </head>
@@ -277,6 +278,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <span class="toggle-row-label">पाठ मोड <small style="color:var(--color-text-faint)">(केवल मूल श्लोक / अर्थ छिपाएं)</small></span>
           <label class="toggle-switch" aria-label="पाठ मोड">
             <input type="checkbox" id="chanting-checkbox" />
+            <span class="toggle-knob"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Verse Numbering Toggle -->
+      <div class="settings-section">
+        <p class="settings-section-label">🔢 क्रमांक (Numbering)</p>
+        <div class="toggle-row">
+          <span class="toggle-row-label">श्लोक क्रमांक दिखाएं <small style="color:var(--color-text-faint)">(॥ १ ॥ verse numbers)</small></span>
+          <label class="toggle-switch" aria-label="क्रमांक दिखाएं">
+            <input type="checkbox" id="numbering-checkbox" checked />
             <span class="toggle-knob"></span>
           </label>
         </div>
@@ -759,6 +772,27 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
       document.getElementById('chanting-checkbox')?.addEventListener('change', e => {
         setChanting(e.target.checked);
+      });
+
+      /* ── Verse Numbering Toggle (क्रमांक) ── */
+      function setNumbering(show) {
+        document.body.classList.toggle('hide-numbering', !show);
+        const cb = document.getElementById('numbering-checkbox');
+        if (cb) cb.checked = show;
+        savePrefs({ hideNumbering: !show });
+        gitaPressReaderInstance?.buildPages();
+      }
+
+      // Restore numbering preference
+      {
+        const numPrefs = loadPrefs();
+        if (numPrefs.hideNumbering) {
+          setNumbering(false);
+        }
+      }
+
+      document.getElementById('numbering-checkbox')?.addEventListener('change', e => {
+        setNumbering(e.target.checked);
       });
 
       /* ── Fullscreen Controls & Mobile Auto-Fullscreen ── */
