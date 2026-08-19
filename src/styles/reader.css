@@ -12,6 +12,57 @@
   background: var(--color-bg);
 }
 
+/* ─── True Edge-to-Edge Fullscreen (No Notch / Letterboxing Gap) ─ */
+:fullscreen,
+:-webkit-full-screen,
+html.is-fullscreen,
+html:fullscreen,
+body.is-fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-width: 100vw !important;
+  max-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: var(--color-bg) !important;
+  overflow: hidden !important;
+}
+
+html.is-fullscreen .reader-shell,
+:fullscreen .reader-shell,
+:-webkit-full-screen .reader-shell {
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html.is-fullscreen .reader-topbar,
+:fullscreen .reader-topbar,
+:-webkit-full-screen .reader-topbar {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+html.is-fullscreen .reader-bottombar,
+:fullscreen .reader-bottombar,
+:-webkit-full-screen .reader-bottombar {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+html.is-fullscreen .reader-viewport,
+:fullscreen .reader-viewport,
+:-webkit-full-screen .reader-viewport {
+  padding: 4px 4px !important;
+}
+
 /* ─── Top Bar (Traditional Gita Press Header) ─────────────── */
 .reader-topbar {
   flex-shrink: 0;

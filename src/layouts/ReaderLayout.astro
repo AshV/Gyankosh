@@ -798,7 +798,9 @@ const resolvedCoverImage = coverImage
         const elem = document.documentElement;
         try {
           if (elem.requestFullscreen) {
-            elem.requestFullscreen().catch(() => {});
+            elem.requestFullscreen({ navigationUI: 'hide' }).catch(() => {
+              elem.requestFullscreen().catch(() => {});
+            });
           } else if (elem.webkitRequestFullscreen) {
             elem.webkitRequestFullscreen();
           } else if (elem.mozRequestFullScreen) {
@@ -829,6 +831,8 @@ const resolvedCoverImage = coverImage
 
       function updateFullscreenUI() {
         const isFs = isFullscreenActive();
+        document.documentElement.classList.toggle('is-fullscreen', isFs);
+        document.body.classList.toggle('is-fullscreen', isFs);
         if (fsBtn) {
           fsBtn.classList.toggle('active', isFs);
           fsBtn.setAttribute('aria-pressed', isFs ? 'true' : 'false');

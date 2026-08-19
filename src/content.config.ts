@@ -12,6 +12,7 @@ const librarySchema = z.object({
   category: z.enum(CATEGORIES),
   coverColor: z.string().optional(),
   coverImage: z.string().optional(),
+  tags: z.array(z.string()).default([]),
   showNumbering: z.boolean().default(true),
 });
 
