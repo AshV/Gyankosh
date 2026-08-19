@@ -5,6 +5,7 @@ description: "Hanuman Chalisa by Goswami Tulsidas — forty verses in praise of 
 language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(22, 85%, 45%)"
+showNumbering: false
 ---
 
 [Instruction]

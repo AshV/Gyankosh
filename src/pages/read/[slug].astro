@@ -24,7 +24,7 @@ const { data } = entry;
 // entry.body is the raw Markdown string (no frontmatter).
 // We pass it through our custom parser to get semantic HTML.
 // Zero client-side parsing cost — all done at build time.
-const parsedHtml = parseIndicMarkdown(entry.body);
+const parsedHtml = parseIndicMarkdown(entry.body, { showNumbering: data.showNumbering });
 
 // ── JSON-LD Schema (Book) ────────────────────────────────────
 const canonicalUrl = `https://ashv.github.io/Gyankosh/read/${entry.id}`;
@@ -59,6 +59,7 @@ if (data.chapter !== undefined) {
   language={data.language}
   slug={entry.id}
   jsonLd={jsonLd}
+  showNumbering={data.showNumbering}
 >
   <!--
     The parsed HTML is injected here via set:html.

@@ -19,9 +19,14 @@ type BlockType =
   | 'Instruction' | 'Viniyoga'
   | 'Name';
 
+export interface IndicParserOptions {
+  showNumbering?: boolean;
+}
+
 interface ParseState {
   verseCounter: number;   // 1-based, auto-increments for verse blocks
   nameCounter: number;    // 1-based, separate counter for [Name] blocks
+  showNumbering?: boolean;
 }
 
 // Block types that get the verse counter
@@ -174,10 +179,14 @@ function renderBlock(
 }
 
 // ─── Main export ──────────────────────────────────────────────────────────
-export function parseIndicMarkdown(body: string): string {
+export function parseIndicMarkdown(body: string, options: IndicParserOptions = {}): string {
   if (!body || body.trim() === '') return '';
 
-  const state: ParseState = { verseCounter: 0, nameCounter: 0 };
+  const state: ParseState = {
+    verseCounter: 0,
+    nameCounter: 0,
+    showNumbering: options.showNumbering !== false,
+  };
   const htmlParts: string[] = [];
 
   const rawBlocks = body.split(/\n\n+/).map(b => b.trim()).filter(Boolean);

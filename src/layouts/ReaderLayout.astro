@@ -21,6 +21,7 @@ export interface Props {
   language?: string;
   slug: string;
   jsonLd?: Record<string, unknown>;
+  showNumbering?: boolean;
 }
 
 const {
@@ -31,13 +32,14 @@ const {
   language = 'Sanskrit',
   slug,
   jsonLd,
+  showNumbering = true,
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
-<html lang="hi" dir="ltr">
+<html lang="hi" dir="ltr" class={!showNumbering ? 'hide-numbering' : ''}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -60,7 +62,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     />
 
     <!-- Restore user font preferences immediately before paint -->
-    <script is:inline>
+    <script is:inline define:vars={{ defaultShowNumbering: showNumbering }}>
       (function () {
         var prefs = {};
         try { prefs = JSON.parse(localStorage.getItem('gyankosh_prefs') || '{}'); } catch(e) {}
@@ -68,12 +70,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         var lineHeight = prefs.lineHeight || '2.15';
         document.documentElement.style.setProperty('--reader-font-size', fontSize + 'rem');
         document.documentElement.style.setProperty('--reader-line-height', lineHeight);
-        if (prefs.hideNumbering) document.body.classList.add('hide-numbering');
+        var hide = prefs.hideNumbering !== undefined ? prefs.hideNumbering : !defaultShowNumbering;
+        if (hide) {
+          document.documentElement.classList.add('hide-numbering');
+        } else {
+          document.documentElement.classList.remove('hide-numbering');
+        }
       })();
     </script>
   </head>
 
-  <body>
+  <body class={!showNumbering ? 'hide-numbering' : ''}>
     <!-- Sacred Red/Gold Reading Progress Bar -->
     <div id="reading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Reading progress"></div>
 
@@ -289,7 +296,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <div class="toggle-row">
           <span class="toggle-row-label">श्लोक क्रमांक दिखाएं <small style="color:var(--color-text-faint)">(॥ १ ॥ verse numbers)</small></span>
           <label class="toggle-switch" aria-label="क्रमांक दिखाएं">
-            <input type="checkbox" id="numbering-checkbox" checked />
+            <input type="checkbox" id="numbering-checkbox" checked={showNumbering} />
             <span class="toggle-knob"></span>
           </label>
         </div>
@@ -300,7 +307,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
          Client-Side Gita Press Page-Flip Engine
          ══════════════════════════════════════════════════════ -->
 
-    <script define:vars={{ slug, bookTitle: title }}>
+    <script define:vars={{ slug, bookTitle: title, defaultShowNumbering: showNumbering }}>
       const ROOT = document.documentElement;
       const PREF_KEY = 'gyankosh_prefs';
       const PROGRESS_KEY = `gyankosh_progress_${slug}`;
@@ -777,18 +784,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       /* ── Verse Numbering Toggle (क्रमांक) ── */
       function setNumbering(show) {
         document.body.classList.toggle('hide-numbering', !show);
+        document.documentElement.classList.toggle('hide-numbering', !show);
         const cb = document.getElementById('numbering-checkbox');
         if (cb) cb.checked = show;
         savePrefs({ hideNumbering: !show });
         gitaPressReaderInstance?.buildPages();
       }
 
-      // Restore numbering preference
+      // Restore numbering preference (defaults to frontmatter configuration if not explicitly toggled by user)
       {
         const numPrefs = loadPrefs();
-        if (numPrefs.hideNumbering) {
-          setNumbering(false);
-        }
+        const shouldShow = numPrefs.hideNumbering !== undefined ? !numPrefs.hideNumbering : defaultShowNumbering;
+        setNumbering(shouldShow);
       }
 
       document.getElementById('numbering-checkbox')?.addEventListener('change', e => {
