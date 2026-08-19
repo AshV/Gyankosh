@@ -1,11 +1,12 @@
 ---
 title: "श्रीमद्भगवद्गीता — अध्याय १"
 author: "वेदव्यास"
-description: "Bhagavad Gita Chapter 1 — Arjuna Vishada Yoga. Sanskrit shlokas with Hindi translation. Read online with Devanagari and IAST scripts."
+description: "श्रीमद्भगवद्गीता प्रथम अध्याय — अर्जुनविषादयोग। मूल संस्कृत श्लोक एवं प्रामाणिक हिन्दी भावार्थ सहित।"
 chapter: 1
 language: "Sanskrit"
 category: "Gita"
 coverColor: "hsl(210, 75%, 35%)"
+coverImage: "/covers/bhagavad-gita-ch1.jpg"
 ---
 
 [Instruction]

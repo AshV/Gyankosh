@@ -11,6 +11,7 @@ const librarySchema = z.object({
   language: z.string().default('Sanskrit'),
   category: z.enum(CATEGORIES),
   coverColor: z.string().optional(),
+  coverImage: z.string().optional(),
   showNumbering: z.boolean().default(true),
 });
 

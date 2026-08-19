@@ -95,8 +95,14 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: pan-x;
-  padding: 12px 10px;
+  padding: 6px 8px;
   box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .reader-viewport {
+    padding: 4px 4px;
+  }
 }
 
 /* Book Folio Stage (With realistic stacked paper block depth) */
@@ -104,7 +110,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  max-width: 72ch;
+  max-width: 82ch;
   margin: 0 auto;
   transform-style: preserve-3d;
 }
@@ -113,13 +119,13 @@
 .reader-stage::before {
   content: '';
   position: absolute;
-  inset: 5px 6px -7px 6px;
+  inset: 4px 4px -5px 4px;
   background: #ded0b2;
   border-radius: 4px;
   border: 1px solid rgba(120, 85, 50, 0.25);
   box-shadow: 
-    0 15px 40px rgba(50, 30, 15, 0.25),
-    0 4px 12px rgba(50, 30, 15, 0.15);
+    0 12px 35px rgba(50, 30, 15, 0.22),
+    0 4px 10px rgba(50, 30, 15, 0.12);
   z-index: 0;
   pointer-events: none;
 }
@@ -127,7 +133,7 @@
 .reader-stage::after {
   content: '';
   position: absolute;
-  inset: 2px 3px -3px 3px;
+  inset: 2px 2px -2px 2px;
   background: #eae0c7;
   border-radius: 3px;
   border: 1px solid rgba(120, 85, 50, 0.2);
@@ -139,7 +145,7 @@
 .reader-page {
   position: absolute;
   inset: 0;
-  padding: 1.25rem 1.5rem;
+  padding: 0.65rem 0.85rem;
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
@@ -154,9 +160,9 @@
   border: 3px double var(--color-border);
   border-radius: 3px;
   box-shadow: 
-    0 8px 30px rgba(50, 30, 15, 0.2),
-    0 2px 6px rgba(50, 30, 15, 0.08),
-    inset 0 0 45px rgba(210, 190, 155, 0.25);
+    0 8px 25px rgba(50, 30, 15, 0.18),
+    0 2px 5px rgba(50, 30, 15, 0.08),
+    inset 0 0 35px rgba(210, 190, 155, 0.2);
   
   transform-origin: 50% 0%;
   backface-visibility: hidden;
@@ -168,11 +174,17 @@
   pointer-events: none;
 }
 
+@media (max-width: 640px) {
+  .reader-page {
+    padding: 0.45rem 0.55rem;
+  }
+}
+
 /* Inner decorative frame line (traditional Indian press ornament) */
 .reader-page::before {
   content: '';
   position: absolute;
-  inset: 4px;
+  inset: 3px;
   border: 1px solid var(--color-border-subtle);
   pointer-events: none;
   z-index: 1;
@@ -202,17 +214,17 @@
 .page-header-invocation {
   text-align: center;
   font-family: var(--font-devanagari);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--color-accent);
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.35rem;
+  margin-bottom: 0.35rem;
+  padding-bottom: 0.2rem;
   border-bottom: 1px solid var(--color-border);
   letter-spacing: 0.05em;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   flex-shrink: 0;
   position: relative;
   z-index: 2;
@@ -434,8 +446,8 @@
 /* Verse Blocks */
 .verse-block {
   position: relative;
-  margin: 0.75rem 0;
-  padding: 0.4rem 0.5rem 0.4rem 2.8rem;
+  margin: 0.35rem 0;
+  padding: 0.2rem 0.35rem 0.2rem 2.2rem;
   break-inside: avoid;
   -webkit-column-break-inside: avoid;
   page-break-inside: avoid;
@@ -450,9 +462,9 @@
 .verse-num {
   position: absolute;
   left: 0;
-  top: 0.4rem;
+  top: 0.2rem;
   font-family: var(--font-devanagari);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--color-verse-num);
   line-height: 1.2;
@@ -466,7 +478,7 @@ body.hide-numbering .verse-num {
 
 html.hide-numbering .verse-block,
 body.hide-numbering .verse-block {
-  padding-left: 0.75rem;
+  padding-left: 0.45rem;
 }
 
 /* Shloka styling */
@@ -479,7 +491,7 @@ body.hide-numbering .verse-block {
 .block--mantra {
   border-left: 3px solid var(--color-accent);
   background: var(--color-accent-soft);
-  padding: 0.5rem 0.75rem 0.5rem 2.8rem;
+  padding: 0.35rem 0.5rem 0.35rem 2.2rem;
   border-radius: var(--radius-sm);
 }
 
@@ -502,16 +514,16 @@ body.hide-numbering .verse-block {
 /* Gita Press Sacred Speaker Heading: ॥ श्रीभगवानुवाच ॥ */
 .speaker-block {
   text-align: center;
-  margin: 0.85rem 0 0.4rem;
+  margin: 0.45rem 0 0.2rem;
 }
 
 .speaker-title {
   display: inline-block;
   font-family: var(--font-devanagari);
-  font-size: calc(var(--reader-font-size) * 1.02);
+  font-size: calc(var(--reader-font-size) * 0.98);
   font-weight: 700;
   color: var(--color-speaker);
-  padding: 0.15rem 0.75rem;
+  padding: 0.1rem 0.6rem;
   border-top: 1px solid var(--color-accent);
   border-bottom: 1px solid var(--color-accent);
   letter-spacing: 0.04em;
@@ -519,14 +531,14 @@ body.hide-numbering .verse-block {
 
 /* Gita Press Bhavarth / Translation Box: भावार्थ : ... */
 .translation-block {
-  margin: 0.5rem 0 0.75rem;
-  padding: 0.5rem 0.75rem;
+  margin: 0.3rem 0 0.45rem;
+  padding: 0.35rem 0.55rem;
   background: var(--color-translation-bg);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: calc(var(--reader-font-size) * 0.9);
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--color-text-muted);
 }
 
@@ -544,8 +556,8 @@ body.hide-numbering .verse-block {
 /* Gita Press Invocations / Instructions: ॥ श्रीगणेशाय नमः ॥ */
 .instruction-block {
   text-align: center;
-  margin: 0.6rem 0;
-  padding: 0.35rem 0.5rem;
+  margin: 0.4rem 0;
+  padding: 0.25rem 0.45rem;
 }
 
 .instruction-content {
@@ -569,20 +581,34 @@ body.chanting-mode .block--bhavarth {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem var(--space-md);
+  padding: 0.4rem 0.75rem;
   background: var(--color-bg);
   border-top: 2px solid var(--color-border);
   z-index: 50;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   box-shadow: 0 -1px 4px rgba(142, 27, 20, 0.08);
+}
+
+.bottombar-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.bottombar-separator {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border);
+  margin: 0 0.2rem;
 }
 
 .reader-page-info {
   font-family: var(--font-devanagari);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--color-accent);
   text-align: center;
+  min-width: 60px;
 }
 
 /* Floating Navigation Buttons */
@@ -622,177 +648,205 @@ body.chanting-mode .block--bhavarth {
   cursor: not-allowed;
 }
 
-/* ─── Settings Panel (Streamlined for Gita Press) ────────── */
-.settings-overlay {
-  position: fixed;
+/* ─── Sacred Aarambh Cover Screen (आरम्भ आवरण) ───────── */
+.reader-cover-screen {
+  position: absolute;
   inset: 0;
-  background: rgba(40, 25, 15, 0.45);
-  z-index: 200;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--transition-med);
-}
-
-.settings-overlay.open {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.settings-panel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--color-bg-card);
-  border-top: 3px double var(--color-border);
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-  padding: var(--space-md) var(--space-lg) calc(var(--space-lg) + env(safe-area-inset-bottom));
-  z-index: 201;
-  transform: translateY(100%);
-  transition: transform var(--transition-med);
-  box-shadow: 0 -8px 40px rgba(70, 40, 20, 0.2);
-  max-height: 80dvh;
+  z-index: 100;
+  background: radial-gradient(ellipse at 50% 20%, #fef8ee 0%, #f4e8d0 60%, #e2ceaa 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s ease;
   overflow-y: auto;
 }
 
-.settings-panel.open {
-  transform: translateY(0);
+.reader-cover-screen.cover-dismissed {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.04) translateY(-12px);
+  pointer-events: none;
 }
 
-.settings-panel .panel-handle {
-  width: 44px;
-  height: 4px;
-  background: var(--color-border);
-  border-radius: var(--radius-pill);
-  margin: 0 auto var(--space-md);
+.cover-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-bg-card);
+  background-image: 
+    radial-gradient(ellipse at 50% 15%, rgba(255, 252, 245, 0.98), rgba(248, 241, 226, 0.98)),
+    linear-gradient(to bottom, rgba(0,0,0,0.03) 0%, transparent 10%);
+  border: 4px double var(--color-border);
+  border-radius: 6px;
+  box-shadow: 
+    0 16px 45px rgba(60, 35, 15, 0.25),
+    0 4px 12px rgba(60, 35, 15, 0.12),
+    inset 0 0 45px rgba(210, 190, 155, 0.25);
+  padding: 1.25rem 1.1rem 1.5rem;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: coverCardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.settings-section {
-  margin-bottom: var(--space-md);
+@keyframes coverCardEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
-.settings-section-label {
+.cover-invocation {
   font-family: var(--font-devanagari);
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--color-accent);
-  margin-bottom: var(--space-xs);
+  margin-bottom: 0.65rem;
+  letter-spacing: 0.08em;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.control-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
+.cover-invocation::before,
+.cover-invocation::after {
+  content: '❖';
+  font-size: 0.7rem;
+  color: var(--color-gold);
 }
 
-.control-slider {
-  flex: 1;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 6px;
-  background: var(--color-border-subtle);
-  border-radius: var(--radius-pill);
-  outline: none;
-  cursor: pointer;
-}
-
-.control-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  cursor: pointer;
-  border: 2px solid #fffdf7;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-}
-
-.control-select {
+.cover-art-frame {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--radius-sm);
-  border: 1.5px solid var(--color-border);
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-devanagari);
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
+  max-width: 240px;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid var(--color-border);
+  box-shadow: 
+    0 8px 24px rgba(45, 25, 10, 0.2),
+    inset 0 0 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.85rem;
+  position: relative;
+  background: #ecdcb9;
 }
 
-.toggle-row {
+.cover-art-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cover-art-fallback {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--space-xs) 0;
+  justify-content: center;
 }
 
-.toggle-row-label {
+.cover-fallback-char {
   font-family: var(--font-devanagari);
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-text);
+  font-size: 4rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-.toggle-switch {
-  position: relative;
-  width: 46px;
-  height: 26px;
+.cover-title {
+  font-family: var(--font-devanagari);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 0 0 0.25rem;
+  line-height: 1.3;
+}
+
+.cover-author {
+  font-family: var(--font-devanagari);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin: 0 0 0.45rem;
+}
+
+.cover-category-badge {
+  display: inline-block;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-family: var(--font-devanagari);
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid rgba(142, 27, 20, 0.2);
+  margin-bottom: 1rem;
+}
+
+.btn-aarambh {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1.75rem;
+  font-family: var(--font-devanagari);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fffdf8;
+  background: linear-gradient(135deg, #8e1b14 0%, #b8261c 100%);
+  border: 1px solid #6e140f;
+  border-radius: 30px;
+  box-shadow: 
+    0 6px 20px rgba(142, 27, 20, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
   cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 75%;
+  max-width: 220px;
 }
 
-.toggle-switch input {
-  opacity: 0;
-  width: 0; height: 0;
+.btn-aarambh:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 
+    0 10px 25px rgba(142, 27, 20, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, #a11f17 0%, #c82d22 100%);
 }
 
-.toggle-knob {
-  position: absolute;
-  inset: 0;
-  background: var(--color-surface);
-  border-radius: var(--radius-pill);
-  transition: background var(--transition-fast);
-  border: 1px solid var(--color-border);
-}
-
-.toggle-knob::after {
-  content: '';
-  position: absolute;
-  width: 20px; height: 20px;
-  left: 2px; top: 2px;
-  background: #fffdf7;
-  border-radius: 50%;
-  transition: transform var(--transition-fast);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
-}
-
-.toggle-switch input:checked + .toggle-knob {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
-.toggle-switch input:checked + .toggle-knob::after {
-  transform: translateX(20px);
+.btn-aarambh:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 /* ─── Responsive ─────────────────────────────────────────── */
 @media (max-width: 640px) {
   .reader-viewport {
-    padding: 6px 4px;
+    padding: 4px 4px;
   }
 
   .reader-page {
-    padding: 0.85rem 0.85rem;
+    padding: 0.45rem 0.55rem;
   }
 
   .verse-block {
-    padding-left: 2.2rem;
+    padding-left: 2.1rem;
+  }
+
+  html.hide-numbering .verse-block,
+  body.hide-numbering .verse-block {
+    padding-left: 0.35rem;
   }
 
   .flip-floating-nav {
     display: none; /* Rely on bottom bar and tap zones on mobile */
   }
 }
+

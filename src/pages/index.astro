@@ -20,6 +20,7 @@ type CategoryEntry = {
     category: string;
     language: string;
     coverColor?: string;
+    coverImage?: string;
   };
 };
 
@@ -31,6 +32,11 @@ for (const text of allTexts) {
 }
 
 const totalTexts = allTexts.length;
+
+function toHindiDigits(num: number): string {
+  const digits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  return num.toString().split('').map(d => digits[parseInt(d, 10)] || d).join('');
+}
 
 const categoryMeta: Record<string, { icon: string; nameHindi: string; description: string }> = {
   Veda:    { icon: '🔥', nameHindi: 'वेद', description: 'सनातन वैदिक ऋचाएं एवं मन्त्र' },
@@ -46,15 +52,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  'name': 'ज्ञानकोश — Sanskrit Digital Library',
-  'description': 'Free online library of Sanskrit and Hindu sacred texts in authentic Gita Press format.',
+  'name': 'ज्ञानकोश — सनातन वैदिक एवं पौराणिक धर्मग्रंथ संग्रह',
+  'description': 'सनातन वैदिक एवं पौराणिक धर्मग्रंथों का पावन डिजिटल पुस्तकालय — वेद, श्रीमद्भगवद्गीता, हनुमान चालीसा, पुराण।',
   'url': 'https://ashv.github.io/Gyankosh',
 };
 ---
 
 <BaseLayout
   title="ज्ञानकोश — सनातन वैदिक एवं पौराणिक धर्मग्रंथ"
-  description={`पढ़िए ${totalTexts}+ सनातन धर्मग्रंथ ऑनलाइन — वेद, श्रीमद्भगवद्गीता, हनुमान चालीसा, पुराण। गीता प्रेस शैली का डिजिटल पाठक।`}
+  description={`पढ़िए ${toHindiDigits(totalTexts)}+ सनातन धर्मग्रंथ ऑनलाइन — वेद, श्रीमद्भगवद्गीता, हनुमान चालीसा, पुराण। गीता प्रेस शैली का डिजिटल पाठक।`}
   jsonLd={jsonLd}
 >
   <!-- Gita Press Hero Invocation Section -->
@@ -79,7 +85,7 @@ const jsonLd = {
             <div style="padding:0.4rem 1rem; border:1px solid var(--color-border); border-radius:var(--radius-sm); background:var(--color-bg-card); display:flex; align-items:center; gap:0.5rem; box-shadow:var(--shadow-card);">
               <span style="font-size:1.2rem;">{categoryMeta[cat]?.icon}</span>
               <span style="font-family:var(--font-devanagari); font-weight:700; color:var(--color-accent); font-size:0.95rem;">{categoryMeta[cat]?.nameHindi || cat}</span>
-              <span style="font-family:var(--font-devanagari); font-size:0.8rem; color:var(--color-text-faint);">({grouped[cat].length})</span>
+              <span style="font-family:var(--font-devanagari); font-size:0.8rem; color:var(--color-text-faint);">({toHindiDigits(grouped[cat].length)})</span>
             </div>
           </a>
         ))}
@@ -100,7 +106,7 @@ const jsonLd = {
             </a>
           </span>
         </h2>
-        <div class="book-grid" role="list" aria-label={`${cat} ग्रंथ`}>
+        <div class="book-grid" role="list" aria-label={`${categoryMeta[cat]?.nameHindi || cat} ग्रंथ`}>
           {grouped[cat].map(text => (
             <div role="listitem">
               <BookCard
@@ -111,6 +117,7 @@ const jsonLd = {
                 category={text.data.category}
                 language={text.data.language}
                 coverColor={text.data.coverColor}
+                coverImage={text.data.coverImage}
               />
             </div>
           ))}

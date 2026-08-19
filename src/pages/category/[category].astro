@@ -23,58 +23,63 @@ export async function getStaticPaths() {
 
 const { category, texts } = Astro.props;
 
-const categoryMeta: Record<string, { icon: string; description: string }> = {
-  Veda:    { icon: '🔥', description: 'The foundational hymns of Vedic civilization — Rigveda, Samaveda, Yajurveda, and Atharvaveda.' },
-  Gita:    { icon: '🎵', description: 'The Bhagavad Gita — Lord Krishna\'s divine discourse to Arjuna on the battlefield of Kurukshetra.' },
-  Chalisa: { icon: '🪔', description: 'Chalisas are forty-verse devotional hymns in praise of Hindu deities, often recited daily.' },
-  Purana:  { icon: '📖', description: 'The Puranas are ancient texts containing myths, cosmology, genealogies, and devotional teachings.' },
-  Stotra:  { icon: '🌸', description: 'Stotras are Sanskrit hymns of praise composed by sages and saints.' },
-  Other:   { icon: '📜', description: 'Additional sacred texts from the Hindu and Sanskrit tradition.' },
+function toHindiDigits(num: number): string {
+  const digits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  return num.toString().split('').map(d => digits[parseInt(d, 10)] || d).join('');
+}
+
+const categoryMeta: Record<string, { icon: string; nameHindi: string; description: string }> = {
+  Veda:    { icon: '🔥', nameHindi: 'वेद', description: 'सनातन वैदिक ऋचाएं, संहिताएं एवं मन्त्र — ऋग्वेद, सामवेद, यजुर्वेद एवं अथर्ववेद।' },
+  Gita:    { icon: '🎵', nameHindi: 'श्रीमद्भगवद्गीता', description: 'कुरुक्षेत्र के पावन रणक्षेत्र में भगवान श्रीकृष्ण का पावन दिव्य उपदेश।' },
+  Chalisa: { icon: '🪔', nameHindi: 'चालीसा', description: 'चालीस पावन पदों वाले देवी-देवताओं के स्तोत्र एवं नित्य पाठ।' },
+  Purana:  { icon: '📖', nameHindi: 'पुराण', description: 'अठारह महापुराण एवं उपपुराण — सनातन इतिहास, सृष्टि-वर्णन एवं भक्ति-गाथा।' },
+  Stotra:  { icon: '🌸', nameHindi: 'स्तोत्र', description: 'ऋषि-मुनियों एवं सन्तों द्वारा रचित देवी-देवताओं की पावन स्तुतियां।' },
+  Other:   { icon: '📜', nameHindi: 'अन्य धर्मग्रंथ', description: 'विशिष्ट धार्मिक, दार्शनिक एवं आध्यात्मिक धर्मग्रंथ।' },
 };
 
-const meta = categoryMeta[category] ?? { icon: '📜', description: `Sacred texts in the ${category} category.` };
+const meta = categoryMeta[category] ?? { icon: '📜', nameHindi: category, description: `${category} श्रेणी के पावन धर्मग्रंथ।` };
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  'name': `${category} — ज्ञानकोश`,
+  'name': `${meta.nameHindi} — ज्ञानकोश`,
   'description': meta.description,
   'url': `https://ashv.github.io/Gyankosh/category/${category.toLowerCase()}`,
 };
 ---
 
 <BaseLayout
-  title={`${category} Texts`}
-  description={`Browse ${texts.length} ${category} texts on Gyankosh — ${meta.description}`}
+  title={`${meta.nameHindi} — ज्ञानकोश`}
+  description={`${meta.nameHindi} श्रेणी के ${toHindiDigits(texts.length)} ग्रंथ — ${meta.description}`}
   jsonLd={jsonLd}
 >
   <!-- Category Header -->
   <div class="container">
     <div class="category-header" aria-labelledby="category-title">
-      <nav aria-label="Breadcrumb">
-        <ol style="display:flex;gap:0.5rem;list-style:none;font-family:var(--font-ui);font-size:0.8rem;color:var(--color-text-muted);margin-bottom:1rem;">
-          <li><a href={`${base}/`} style="color:var(--color-accent);">Library</a></li>
+      <nav aria-label="मार्गदर्शक">
+        <ol style="display:flex;gap:0.5rem;list-style:none;font-family:var(--font-devanagari);font-size:0.9rem;color:var(--color-text-muted);margin-bottom:1rem;">
+          <li><a href={`${base}/`} style="color:var(--color-accent);text-decoration:none;">मुख्य सूची</a></li>
           <li aria-hidden="true">/</li>
-          <li aria-current="page">{category}</li>
+          <li aria-current="page" style="color:var(--color-ink);font-weight:700;">{meta.nameHindi}</li>
         </ol>
       </nav>
 
-      <h1 id="category-title">
-        <span aria-hidden="true">{meta.icon}</span> {category}
+      <h1 id="category-title" style="font-family:var(--font-devanagari);">
+        <span aria-hidden="true">{meta.icon}</span> {meta.nameHindi}
       </h1>
-      <p style="font-family:var(--font-ui);color:var(--color-text-muted);margin-top:0.5rem;max-width:55ch;">
+      <p style="font-family:var(--font-devanagari);color:var(--color-text-muted);margin-top:0.5rem;max-width:55ch;font-size:1.05rem;">
         {meta.description}
       </p>
-      <p style="font-family:var(--font-ui);font-size:0.85rem;color:var(--color-text-faint);margin-top:0.75rem;">
-        {texts.length} text{texts.length !== 1 ? 's' : ''} available
+      <p style="font-family:var(--font-devanagari);font-size:0.9rem;color:var(--color-text-faint);margin-top:0.75rem;font-weight:600;">
+        {toHindiDigits(texts.length)} ग्रंथ उपलब्ध
       </p>
     </div>
 
     <!-- Texts Grid -->
     {texts.length > 0 ? (
-      <div class="book-grid" role="list" aria-label={`${category} texts`}>
+      <div class="book-grid" role="list" aria-label={`${meta.nameHindi} ग्रंथ`}>
         {texts.map(text => (
           <div role="listitem">
             <BookCard
@@ -85,13 +90,14 @@ const jsonLd = {
               category={text.data.category}
               language={text.data.language}
               coverColor={text.data.coverColor}
+              coverImage={text.data.coverImage}
             />
           </div>
         ))}
       </div>
     ) : (
-      <p style="font-family:var(--font-ui);color:var(--color-text-muted);padding:2rem 0;">
-        No texts available in this category yet. Check back soon!
+      <p style="font-family:var(--font-devanagari);color:var(--color-text-muted);padding:2rem 0;font-size:1.05rem;">
+        इस श्रेणी में अभी कोई ग्रंथ उपलब्ध नहीं है।
       </p>
     )}
   </div>

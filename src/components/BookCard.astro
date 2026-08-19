@@ -12,6 +12,7 @@ export interface Props {
   category: string;
   language: string;
   coverColor?: string;
+  coverImage?: string;
 }
 
 const {
@@ -22,37 +23,49 @@ const {
   category,
   language,
   coverColor = 'hsl(22, 70%, 45%)',
+  coverImage,
 } = Astro.props;
 
-// Category → emoji icon mapping
-const categoryIcons: Record<string, string> = {
-  Veda: '🔥',
-  Purana: '📖',
-  Chalisa: '🪔',
-  Stotra: '🌸',
-  Gita: '🎵',
-  Other: '📜',
+// Category → emoji & Hindi name mapping
+const categoryMeta: Record<string, { icon: string; nameHindi: string }> = {
+  Veda:    { icon: '🔥', nameHindi: 'वेद' },
+  Purana:  { icon: '📖', nameHindi: 'पुराण' },
+  Chalisa: { icon: '🪔', nameHindi: 'चालीसा' },
+  Stotra:  { icon: '🌸', nameHindi: 'स्तोत्र' },
+  Gita:    { icon: '🎵', nameHindi: 'गीता' },
+  Other:   { icon: '📜', nameHindi: 'अन्य' },
 };
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const icon = categoryIcons[category] ?? '📜';
+const meta = categoryMeta[category] ?? { icon: '📜', nameHindi: category };
 const readUrl = `${base}/read/${slug}`;
 const categoryUrl = `${base}/category/${category.toLowerCase()}`;
+const resolvedCoverImage = coverImage
+  ? (coverImage.startsWith('http') ? coverImage : `${base}${coverImage.startsWith('/') ? '' : '/'}${coverImage}`)
+  : `${base}/covers/${slug}.jpg`;
 ---
 
 <a
   href={readUrl}
   class="book-card"
   data-slug={slug}
-  aria-label={`Read ${title}`}
+  aria-label={`पठन: ${title}`}
 >
-  <!-- Generated Cover Art -->
+  <!-- Generated / Album Cover Art -->
   <div
     class="book-card-cover"
     style={`background: linear-gradient(135deg, ${coverColor}, color-mix(in hsl, ${coverColor}, black 30%));`}
   >
-    <div class="book-card-cover-pattern" aria-hidden="true"></div>
-    <span class="book-card-cover-title" aria-hidden="true">{title.charAt(0)}</span>
+    <img 
+      src={resolvedCoverImage} 
+      alt={title} 
+      class="book-card-cover-img"
+      loading="lazy"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+    />
+    <div class="book-card-cover-pattern" aria-hidden="true">
+      <span class="book-card-cover-title" aria-hidden="true">{title.charAt(0)}</span>
+    </div>
   </div>
 
   <!-- Card Body -->
@@ -65,16 +78,16 @@ const categoryUrl = `${base}/category/${category.toLowerCase()}`;
         href={categoryUrl}
         class="chip"
         onclick="event.stopPropagation()"
-        aria-label={`Browse ${category} texts`}
+        aria-label={`${meta.nameHindi} श्रेणी देखें`}
       >
-        {icon} {category}
+        {meta.icon} {meta.nameHindi}
       </a>
       <!-- Progress badge — populated client-side from localStorage -->
       <span
         class="book-card-progress"
         data-progress-badge={slug}
         style="display:none"
-        aria-label="Reading progress"
+        aria-label="पठन प्रगति"
       >
         <span class="progress-dot" aria-hidden="true"></span>
         <span class="progress-label"></span>
@@ -83,7 +96,23 @@ const categoryUrl = `${base}/category/${category.toLowerCase()}`;
   </div>
 </a>
 
+<style>
+  .book-card-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+</style>
+
 <script>
+  function toHindiDigits(num: number): string {
+    const digits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+    return num.toString().split('').map(d => digits[parseInt(d, 10)] || d).join('');
+  }
+
   // Populate reading progress badges from localStorage (runs client-side)
   document.addEventListener('DOMContentLoaded', () => {
     const badges = document.querySelectorAll<HTMLElement>('[data-progress-badge]');
@@ -92,35 +121,15 @@ const categoryUrl = `${base}/category/${category.toLowerCase()}`;
       const key = `gyankosh_progress_${slug}`;
       const saved = localStorage.getItem(key);
       if (saved) {
-        const data = JSON.parse(saved);
-        if (data.percent && data.percent > 2) {
-          badge.style.display = 'flex';
-          const label = badge.querySelector('.progress-label');
-          if (label) label.textContent = `${Math.round(data.percent)}% read`;
-        }
+        try {
+          const data = JSON.parse(saved);
+          if (data.percent && data.percent > 2) {
+            badge.style.display = 'flex';
+            const label = badge.querySelector('.progress-label');
+            if (label) label.textContent = `${toHindiDigits(Math.round(data.percent))}% पठित`;
+          }
+        } catch {}
       }
-    });
-
-    // Request fullscreen on user tap when opening any book only on mobile phones
-    function isMobilePhone() {
-      const isSmallScreen = window.innerWidth <= 640 || window.matchMedia('(max-width: 640px)').matches;
-      const isTouch = window.matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPod|Mobile/i.test(navigator.userAgent);
-      return isSmallScreen && isTouch;
-    }
-
-    document.querySelectorAll<HTMLAnchorElement>('.book-card').forEach(card => {
-      card.addEventListener('click', () => {
-        if (isMobilePhone()) {
-          try {
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-              elem.requestFullscreen().catch(() => {});
-            } else if ((elem as any).webkitRequestFullscreen) {
-              (elem as any).webkitRequestFullscreen();
-            }
-          } catch (err) {}
-        }
-      });
     });
   });
 </script>

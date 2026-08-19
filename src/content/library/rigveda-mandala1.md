@@ -1,11 +1,12 @@
 ---
 title: "ऋग्वेद — मण्डल १, सूक्त १"
 author: "ऋषि मधुच्छन्दस् वैश्वामित्र"
-description: "Rigveda Mandala 1, Sukta 1 — The Agni Sukta. Ancient Sanskrit Vedic hymns to Agni (fire deity) with viniyoga and translation."
+description: "ऋग्वेद मण्डल १, सूक्त १ — अग्निसूक्त। ऋषि मधुच्छन्दस् द्वारा दृष्ट पावन वैदिक ऋचाएं, विनियोग एवं हिन्दी अर्थ सहित।"
 chapter: 1
 language: "Vedic Sanskrit"
 category: "Veda"
 coverColor: "hsl(340, 70%, 40%)"
+coverImage: "/covers/rigveda-mandala1.jpg"
 ---
 
 [Instruction]

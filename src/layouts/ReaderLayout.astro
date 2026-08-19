@@ -8,6 +8,7 @@
  * - 3D Vertical Page-Flip Animation (पन्ना पलट).
  * - Running page header: ॥ श्रीहरिः ॥
  * - Devanagari numerals and traditional sacred speaker / verse markers.
+ * - Sacred Aarambh cover screen with album artwork and fullscreen entry on start.
  */
 import '../styles/global.css';
 import '../styles/reader.css';
@@ -19,6 +20,9 @@ export interface Props {
   canonical?: string;
   author?: string;
   language?: string;
+  category?: string;
+  coverColor?: string;
+  coverImage?: string;
   slug: string;
   jsonLd?: Record<string, unknown>;
   showNumbering?: boolean;
@@ -30,12 +34,19 @@ const {
   canonical = Astro.url.href,
   author,
   language = 'Sanskrit',
+  category,
+  coverColor = 'hsl(22, 85%, 45%)',
+  coverImage,
   slug,
   jsonLd,
   showNumbering = true,
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const resolvedCoverImage = coverImage
+  ? (coverImage.startsWith('http') ? coverImage : `${base}${coverImage.startsWith('/') ? '' : '/'}${coverImage}`)
+  : `${base}/covers/${slug}.jpg`;
 ---
 
 <!doctype html>
@@ -47,9 +58,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- Sanscript.js for client-side transliteration -->
-    <script src="https://cdn.jsdelivr.net/npm/@sanskrit-coders/sanscript@1.2.8/sanscript.min.js" is:inline></script>
 
     <SEO
       title={title}
@@ -66,8 +74,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       (function () {
         var prefs = {};
         try { prefs = JSON.parse(localStorage.getItem('gyankosh_prefs') || '{}'); } catch(e) {}
-        var fontSize = prefs.fontSize || '1.2';
-        var lineHeight = prefs.lineHeight || '2.15';
+        var fontSize = prefs.fontSize || '1.15';
+        var lineHeight = prefs.lineHeight || '2.0';
         document.documentElement.style.setProperty('--reader-font-size', fontSize + 'rem');
         document.documentElement.style.setProperty('--reader-line-height', lineHeight);
         var hide = prefs.hideNumbering !== undefined ? prefs.hideNumbering : !defaultShowNumbering;
@@ -82,14 +90,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <body class={!showNumbering ? 'hide-numbering' : ''}>
     <!-- Sacred Red/Gold Reading Progress Bar -->
-    <div id="reading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Reading progress"></div>
+    <div id="reading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="पठन प्रगति"></div>
 
     <!-- Reader Shell -->
     <div class="reader-shell">
 
       <!-- Top Bar -->
       <header class="reader-topbar" role="banner">
-        <a href={`${base}/`} class="back-link" aria-label="मुख्य सूची">
+        <a href={`${base}/`} class="back-link" aria-label="मुख्य सूची पर वापस जाएं">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
             <path d="M19 12H5M12 5l-7 7 7 7"/>
           </svg>
@@ -99,30 +107,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <span class="book-title-bar" aria-label={`पठन: ${title}`}>{title}</span>
 
         <div class="topbar-actions">
-          <!-- Chanting Mode Toggle (पाठ मोड) -->
-          <button
-            id="chanting-toggle"
-            class="icon-btn"
-            aria-label="पाठ मोड (केवल मूल श्लोक)"
-            title="पाठ मोड — केवल मूल श्लोक (अर्थ छिपाएं)"
-            aria-pressed="false"
-          >🕉️ पाठ</button>
-
-          <!-- Settings Button -->
-          <button
-            id="settings-open"
-            class="icon-btn"
-            aria-label="पठन विकल्प"
-            title="पठन सेटिंग्स"
-            aria-expanded="false"
-            aria-controls="settings-panel"
-          >⚙️</button>
-
           <!-- Fullscreen Toggle / Close Button -->
           <button
             id="fullscreen-toggle"
             class="icon-btn"
-            aria-label="पूर्ण स्क्रीन (Fullscreen)"
+            aria-label="पूर्ण स्क्रीन"
             title="पूर्ण स्क्रीन"
             aria-pressed="false"
           >
@@ -145,10 +134,44 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         role="region"
         aria-label="गीता प्रेस पुस्तक पृष्ठ"
       >
+        <!-- Sacred Aarambh Cover Screen (आरम्भ आवरण) -->
+        <div class="reader-cover-screen" id="reader-cover-screen" role="region" aria-label="ग्रंथ आवरण">
+          <div class="cover-card">
+            <div class="cover-invocation">॥ श्रीहरिः ॥</div>
+            
+            <div class="cover-art-frame">
+              <img 
+                src={resolvedCoverImage} 
+                alt={title} 
+                class="cover-art-img"
+                loading="eager"
+                onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';"
+              />
+              <div class="cover-art-fallback" style={`background: linear-gradient(135deg, ${coverColor}, color-mix(in hsl, ${coverColor}, black 35%)); display:none;`}>
+                <span class="cover-fallback-char">{title.charAt(0)}</span>
+              </div>
+            </div>
+
+            <h1 class="cover-title">{title}</h1>
+            {author && <p class="cover-author">{author}</p>}
+            {category && <span class="cover-category-badge">{category}</span>}
+
+            <button 
+              id="btn-aarambh" 
+              class="btn-aarambh" 
+              aria-label="पठन आरम्भ करें"
+              type="button"
+            >
+              <span>📖</span>
+              <span>आरम्भ करें</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Tap zones for quick thumb-tap navigation -->
-        <div class="tap-zone tap-zone--prev" id="tap-prev" title="पिछला पृष्ठ (ऊपर टैप करें)" aria-label="पिछला पृष्ठ"></div>
+        <div class="tap-zone tap-zone--prev" id="tap-prev" title="पिछला पृष्ठ" aria-label="पिछला पृष्ठ"></div>
         <div class="tap-zone tap-zone--center" id="tap-center" title="पठन क्षेत्र" aria-label="पठन क्षेत्र"></div>
-        <div class="tap-zone tap-zone--next" id="tap-next" title="अगला पृष्ठ (नीचे टैप करें)" aria-label="अगला पृष्ठ"></div>
+        <div class="tap-zone tap-zone--next" id="tap-next" title="अगला पृष्ठ" aria-label="अगला पृष्ठ"></div>
 
         <!-- Floating Navigation Buttons -->
         <div class="flip-floating-nav" id="flip-floating-nav" aria-label="पृष्ठ नियंत्रण">
@@ -172,135 +195,71 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </article>
       </main>
 
-      <!-- Bottom Bar (Gita Press Style Navigation) -->
+      <!-- Bottom Bar (Navigation with Restart, Up/Down Arrows, and Font Controls) -->
       <footer class="reader-bottombar" role="navigation" aria-label="पठन नियंत्रण">
-        <!-- Previous Page Button -->
-        <button
-          id="btn-bottom-prev"
-          class="icon-btn"
-          aria-label="पिछला पृष्ठ"
-          title="पिछला पृष्ठ पलटें"
-          style="padding:0 0.75rem; gap:0.35rem;"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
-          <span>पिछला</span>
-        </button>
+        <div class="bottombar-group bottombar-group--nav">
+          <!-- Restart from Beginning Button -->
+          <button
+            id="btn-restart"
+            class="icon-btn"
+            aria-label="प्रारम्भ से पढ़ें"
+            title="प्रारम्भ से पढ़ें"
+            style="padding:0.4rem 0.65rem;"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M1 4v6h6"/>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+            </svg>
+          </button>
 
-        <!-- Page Indicator -->
-        <span class="reader-page-info" id="page-info" aria-live="polite">पृष्ठ १</span>
+          <!-- Previous Page Button (Arrow Up) -->
+          <button
+            id="btn-bottom-prev"
+            class="icon-btn"
+            aria-label="पिछला पृष्ठ"
+            title="पिछला पृष्ठ"
+            style="padding:0.4rem 0.65rem;"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+          </button>
+        </div>
 
-        <!-- Next Page Button -->
-        <button
-          id="btn-bottom-next"
-          class="icon-btn"
-          aria-label="अगला पृष्ठ"
-          title="अगला पृष्ठ पलटें"
-          style="padding:0 0.75rem; gap:0.35rem;"
-        >
-          <span>अगला</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
+        <!-- Page Indicator (Clean numerals without 'पृष्ठ' label) -->
+        <span class="reader-page-info" id="page-info" aria-live="polite">१ / १</span>
 
-        <div style="width: 1px; height: 22px; background: var(--color-border-subtle); margin: 0 0.25rem;"></div>
+        <div class="bottombar-group bottombar-group--controls">
+          <!-- Next Page Button (Arrow Down) -->
+          <button
+            id="btn-bottom-next"
+            class="icon-btn"
+            aria-label="अगला पृष्ठ"
+            title="अगला पृष्ठ"
+            style="padding:0.4rem 0.65rem;"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
 
-        <!-- Font controls -->
-        <button
-          id="font-decrease"
-          class="icon-btn"
-          aria-label="अक्षर छोटा करें"
-          title="अक्षर छोटा करें"
-        >अ<sup>-</sup></button>
-        <button
-          id="font-increase"
-          class="icon-btn"
-          aria-label="अक्षर बड़ा करें"
-          title="अक्षर बड़ा करें"
-        >अ<sup>+</sup></button>
+          <div class="bottombar-separator" aria-hidden="true"></div>
+
+          <!-- Font Size Decrease Control -->
+          <button
+            id="font-decrease"
+            class="icon-btn"
+            aria-label="अक्षर छोटा करें"
+            title="अक्षर छोटा करें"
+            style="padding:0.4rem 0.65rem;"
+          >अ<sup>-</sup></button>
+
+          <!-- Font Size Increase Control -->
+          <button
+            id="font-increase"
+            class="icon-btn"
+            aria-label="अक्षर बड़ा करें"
+            title="अक्षर बड़ा करें"
+            style="padding:0.4rem 0.65rem;"
+          >अ<sup>+</sup></button>
+        </div>
       </footer>
-    </div>
-
-    <!-- Settings Overlay + Bottom Sheet Panel -->
-    <div class="settings-overlay" id="settings-overlay" aria-hidden="true"></div>
-    <div
-      class="settings-panel"
-      id="settings-panel"
-      role="dialog"
-      aria-label="पठन विकल्प"
-      aria-modal="true"
-    >
-      <div class="panel-handle" aria-hidden="true"></div>
-
-      <!-- Lipi / Script Selection -->
-      <div class="settings-section">
-        <p class="settings-section-label">📜 लिपि चयन (Script)</p>
-        <select id="script-select" class="control-select" aria-label="लिपि चुनें">
-          <option value="devanagari">देवनागरी (Devanagari)</option>
-          <option value="iast">IAST (English/Roman Diacritics)</option>
-          <option value="itrans">ITRANS (English Phonetic)</option>
-        </select>
-      </div>
-
-      <!-- Font Size Slider -->
-      <div class="settings-section">
-        <p class="settings-section-label">🔤 अक्षर का आकार (Font Size)</p>
-        <div class="control-row">
-          <span class="control-label" aria-hidden="true" style="font-family:var(--font-devanagari);font-weight:700;color:var(--color-accent);">अ</span>
-          <input
-            type="range"
-            id="font-size-slider"
-            class="control-slider"
-            min="0.9"
-            max="1.9"
-            step="0.05"
-            value="1.2"
-            aria-label="अक्षर आकार"
-          />
-          <span class="control-value" id="font-size-value" aria-live="polite" style="font-family:var(--font-devanagari);font-weight:700;color:var(--color-accent);">१.२</span>
-        </div>
-      </div>
-
-      <!-- Line Height Slider -->
-      <div class="settings-section">
-        <p class="settings-section-label">↕️ पंक्ति अंतर (Line Spacing)</p>
-        <div class="control-row">
-          <span class="control-label" aria-hidden="true" style="font-weight:700;color:var(--color-accent);">≡</span>
-          <input
-            type="range"
-            id="line-height-slider"
-            class="control-slider"
-            min="1.5"
-            max="3.0"
-            step="0.1"
-            value="2.15"
-            aria-label="पंक्ति अंतर"
-          />
-          <span class="control-value" id="line-height-value" aria-live="polite" style="font-family:var(--font-devanagari);font-weight:700;color:var(--color-accent);">२.१</span>
-        </div>
-      </div>
-
-      <!-- Chanting Mode Toggle -->
-      <div class="settings-section">
-        <p class="settings-section-label">🕉️ पठन शैली</p>
-        <div class="toggle-row">
-          <span class="toggle-row-label">पाठ मोड <small style="color:var(--color-text-faint)">(केवल मूल श्लोक / अर्थ छिपाएं)</small></span>
-          <label class="toggle-switch" aria-label="पाठ मोड">
-            <input type="checkbox" id="chanting-checkbox" />
-            <span class="toggle-knob"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Verse Numbering Toggle -->
-      <div class="settings-section">
-        <p class="settings-section-label">🔢 क्रमांक (Numbering)</p>
-        <div class="toggle-row">
-          <span class="toggle-row-label">श्लोक क्रमांक दिखाएं <small style="color:var(--color-text-faint)">(॥ १ ॥ verse numbers)</small></span>
-          <label class="toggle-switch" aria-label="क्रमांक दिखाएं">
-            <input type="checkbox" id="numbering-checkbox" checked={showNumbering} />
-            <span class="toggle-knob"></span>
-          </label>
-        </div>
-      </div>
     </div>
 
     <!-- ══════════════════════════════════════════════════════
@@ -320,12 +279,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       function loadPrefs() {
         try { return JSON.parse(localStorage.getItem(PREF_KEY) || '{}'); }
         catch { return {}; }
-      }
-
-      function savePrefs(updates) {
-        const prefs = { ...loadPrefs(), ...updates };
-        localStorage.setItem(PREF_KEY, JSON.stringify(prefs));
-        return prefs;
       }
 
       /* ── Gita Press Vertical Page Flip Engine ── */
@@ -363,15 +316,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
           if (childElements.length === 0) return;
 
-          // Available width for verse text (accounting for page padding and verse number margin)
+          // Available width for verse text (accounting for compact page padding and verse margin)
           const stageWidth = this.stage.clientWidth || window.innerWidth;
           const isMobile = window.innerWidth <= 640;
-          const horizontalOffset = isMobile ? 70 : 100;
+          const horizontalOffset = isMobile ? 35 : 55;
           const availableTextWidth = Math.max(120, stageWidth - horizontalOffset);
 
-          // Evaluate stacking STRICTLY VERSE-BY-VERSE:
-          // For each individual verse block, if any line in THAT verse overflows, ONLY that verse gets stacked.
-          // Other shorter verses in the document remain side-by-side!
+          // Evaluate stacking strictly verse-by-verse
           childElements.forEach((node) => {
             if (node.classList.contains('verse-block')) {
               const lines = node.querySelectorAll('.verse-line');
@@ -406,8 +357,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             (this.stage.clientWidth || window.innerWidth) + 'px; font-size:var(--reader-font-size); line-height:var(--reader-line-height);';
           document.body.appendChild(measureBox);
 
-          // Reserve space for Gita Press header and footer
-          const maxPageHeight = Math.max(260, this.stage.clientHeight - 90);
+          // Reserve space for compact Gita Press header (no page footer)
+          const maxPageHeight = Math.max(260, this.stage.clientHeight - 30);
 
           let currentPageNodes = [];
           let currentHeight = 0;
@@ -415,7 +366,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           childElements.forEach((node) => {
             const clone = node.cloneNode(true);
             measureBox.appendChild(clone);
-            const nodeHeight = clone.offsetHeight + 18;
+            const nodeHeight = clone.offsetHeight + 8;
             measureBox.removeChild(clone);
 
             if (currentHeight + nodeHeight > maxPageHeight && currentPageNodes.length > 0) {
@@ -436,7 +387,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
           const totalPages = this.pages.length || 1;
 
-          // Render authentic Gita Press folio pages
+          // Render authentic Gita Press folio pages (without redundant page footer)
           this.pageElements = this.pages.map((nodeList, idx) => {
             const pageDiv = document.createElement('div');
             pageDiv.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
@@ -459,20 +410,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             nodeList.forEach(n => contentWrap.appendChild(n));
             pageDiv.appendChild(contentWrap);
 
-            // Gita Press Running Footer: Title + Page Number
-            const pageFooter = document.createElement('div');
-            pageFooter.className = 'page-footer-bar';
-            pageFooter.innerHTML = `<span>${bookTitle}</span><span class="page-corner-num">॥ ${toHindiDigits(idx + 1)} ॥</span>`;
-            pageDiv.appendChild(pageFooter);
-
             this.stage.appendChild(pageDiv);
             return pageDiv;
           });
-
-          // Re-apply transliteration if active
-          if (window.__currentTransliterationScheme && window.__currentTransliterationScheme !== 'devanagari') {
-            window.applyTransliterationGlobal(window.__currentTransliterationScheme);
-          }
 
           this.updateUI();
         }
@@ -490,11 +430,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           const isForward = direction === 'down' || direction === 'next' || newIndex > oldIndex;
 
           if (isForward) {
-            // Forward Turn: old page curls and turns over spine; new page is revealed underneath
             newPage.className = 'reader-page flip-turn-forward-enter';
             oldPage.className = 'reader-page flip-turn-forward-exit';
           } else {
-            // Backward Turn: previous page sweeps from left back onto the stack
             newPage.className = 'reader-page flip-turn-backward-enter';
             oldPage.className = 'reader-page flip-turn-backward-exit';
           }
@@ -525,7 +463,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           const pct = Math.round((current / total) * 100);
 
           if (this.pageInfo) {
-            this.pageInfo.textContent = `पृष्ठ ${toHindiDigits(current)} / ${toHindiDigits(total)}`;
+            this.pageInfo.textContent = `${toHindiDigits(current)} / ${toHindiDigits(total)}`;
           }
 
           if (this.progressBar) {
@@ -537,7 +475,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           const btnDown = document.getElementById('btn-page-down');
           const btnBottomPrev = document.getElementById('btn-bottom-prev');
           const btnBottomNext = document.getElementById('btn-bottom-next');
+          const btnRestart = document.getElementById('btn-restart');
 
+          if (btnRestart) btnRestart.disabled = this.currentPageIndex === 0;
           if (btnUp) btnUp.disabled = this.currentPageIndex === 0;
           if (btnBottomPrev) btnBottomPrev.disabled = this.currentPageIndex === 0;
           
@@ -562,7 +502,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             const saved = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
             if (typeof saved.pageIndex === 'number' && saved.pageIndex < this.pages.length) {
               this.currentPageIndex = saved.pageIndex;
-              this.pageElements.forEach((el, idx) => {
+              this.pageElements?.forEach((el, idx) => {
                 el.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
               });
               this.updateUI();
@@ -576,8 +516,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           document.getElementById('btn-page-down')?.addEventListener('click', () => this.nextPage());
           document.getElementById('btn-bottom-prev')?.addEventListener('click', () => this.prevPage());
           document.getElementById('btn-bottom-next')?.addEventListener('click', () => this.nextPage());
+          document.getElementById('btn-restart')?.addEventListener('click', () => this.flipToPage(0, 'prev'));
 
-          // Tap Zones (Left = Prev, Right/Center = Next)
+          // Tap Zones (Top/Left = Prev, Bottom/Right = Next)
           document.getElementById('tap-prev')?.addEventListener('click', (e) => {
             e.stopPropagation();
             this.prevPage();
@@ -591,7 +532,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             this.nextPage();
           });
 
-          // Touch Gestures (Natural vertical scroll/swipe with horizontal fallback)
+          // Touch Gestures
           let touchStartY = 0;
           let touchStartX = 0;
 
@@ -604,13 +545,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             const diffY = touchStartY - e.changedTouches[0].clientY;
             const diffX = touchStartX - e.changedTouches[0].clientX;
 
-            // Vertical scroll/swipe (swipe up = scroll down to next page, swipe down = scroll up to prev page)
             if (Math.abs(diffY) > 28) {
               if (diffY > 0) this.nextPage();
               else this.prevPage();
-            }
-            // Horizontal swipe fallback (swipe left = next, swipe right = prev)
-            else if (Math.abs(diffX) > 30) {
+            } else if (Math.abs(diffX) > 30) {
               if (diffX > 0) this.nextPage();
               else this.prevPage();
             }
@@ -628,7 +566,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 420);
           }, { passive: false });
 
-          // Keyboard (Left/Right & Up/Down arrows)
+          // Keyboard
           document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'j') {
               e.preventDefault();
@@ -651,7 +589,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
               const prevPage = this.currentPageIndex;
               this.buildPages();
               this.currentPageIndex = Math.min(prevPage, this.pages.length - 1);
-              this.pageElements.forEach((el, idx) => {
+              this.pageElements?.forEach((el, idx) => {
                 el.className = 'reader-page' + (idx === this.currentPageIndex ? ' active-page' : '');
               });
               this.updateUI();
@@ -661,148 +599,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       }
 
       let gitaPressReaderInstance = null;
-      document.addEventListener('DOMContentLoaded', () => {
-        gitaPressReaderInstance = new GitaPressReader();
-      });
 
-      /* ── Apply Saved Preferences (Font, Chanting) ── */
-      function applyPrefs(prefs) {
-        const fs = prefs.fontSize || '1.2';
-        ROOT.style.setProperty('--reader-font-size', fs + 'rem');
-        const fsSlider = document.getElementById('font-size-slider');
-        if (fsSlider) fsSlider.value = fs;
-        const fsVal = document.getElementById('font-size-value');
-        if (fsVal) fsVal.textContent = toHindiDigits(fs);
-
-        const lh = prefs.lineHeight || '2.15';
-        ROOT.style.setProperty('--reader-line-height', lh);
-        const lhSlider = document.getElementById('line-height-slider');
-        if (lhSlider) lhSlider.value = lh;
-        const lhVal = document.getElementById('line-height-value');
-        if (lhVal) lhVal.textContent = toHindiDigits(lh);
-
-        if (prefs.chanting) {
-          document.body.classList.add('chanting-mode');
-          const cb = document.getElementById('chanting-checkbox');
-          if (cb) cb.checked = true;
-          const btn = document.getElementById('chanting-toggle');
-          if (btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); }
-        }
-      }
-
-      applyPrefs(loadPrefs());
-
-      /* ── Settings Panel Controls ── */
-      const overlay = document.getElementById('settings-overlay');
-      const panel = document.getElementById('settings-panel');
-      const openBtn = document.getElementById('settings-open');
-
-      function openSettings() {
-        overlay.classList.add('open');
-        panel.classList.add('open');
-        overlay.setAttribute('aria-hidden', 'false');
-        openBtn.setAttribute('aria-expanded', 'true');
-        panel.focus();
-      }
-
-      function closeSettings() {
-        overlay.classList.remove('open');
-        panel.classList.remove('open');
-        overlay.setAttribute('aria-hidden', 'true');
-        openBtn.setAttribute('aria-expanded', 'false');
-      }
-
-      openBtn?.addEventListener('click', openSettings);
-      overlay?.addEventListener('click', closeSettings);
-
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape' && panel.classList.contains('open')) closeSettings();
-      });
-
-      /* ── Font Size & Line Height ── */
-      const fsSlider = document.getElementById('font-size-slider');
-      fsSlider?.addEventListener('input', () => {
-        const val = parseFloat(fsSlider.value).toFixed(2);
-        ROOT.style.setProperty('--reader-font-size', val + 'rem');
-        const fsVal = document.getElementById('font-size-value');
-        if (fsVal) fsVal.textContent = toHindiDigits(val);
-        savePrefs({ fontSize: val });
-        gitaPressReaderInstance?.buildPages();
-      });
-
-      document.getElementById('font-increase')?.addEventListener('click', () => {
-        const cur = parseFloat(getComputedStyle(ROOT).getPropertyValue('--reader-font-size')) || 1.2;
-        const next = Math.min(1.9, cur + 0.1).toFixed(2);
-        ROOT.style.setProperty('--reader-font-size', next + 'rem');
-        if (fsSlider) fsSlider.value = next;
-        const fsVal = document.getElementById('font-size-value');
-        if (fsVal) fsVal.textContent = toHindiDigits(next);
-        savePrefs({ fontSize: next });
-        gitaPressReaderInstance?.buildPages();
-      });
-
-      document.getElementById('font-decrease')?.addEventListener('click', () => {
-        const cur = parseFloat(getComputedStyle(ROOT).getPropertyValue('--reader-font-size')) || 1.2;
-        const next = Math.max(0.9, cur - 0.1).toFixed(2);
-        ROOT.style.setProperty('--reader-font-size', next + 'rem');
-        if (fsSlider) fsSlider.value = next;
-        const fsVal = document.getElementById('font-size-value');
-        if (fsVal) fsVal.textContent = toHindiDigits(next);
-        savePrefs({ fontSize: next });
-        gitaPressReaderInstance?.buildPages();
-      });
-
-      const lhSlider = document.getElementById('line-height-slider');
-      lhSlider?.addEventListener('input', () => {
-        const val = parseFloat(lhSlider.value).toFixed(2);
-        ROOT.style.setProperty('--reader-line-height', val);
-        const lhVal = document.getElementById('line-height-value');
-        if (lhVal) lhVal.textContent = toHindiDigits(val);
-        savePrefs({ lineHeight: val });
-        gitaPressReaderInstance?.buildPages();
-      });
-
-      /* ── Chanting Mode (पाठ मोड) ── */
-      function setChanting(on) {
-        document.body.classList.toggle('chanting-mode', on);
-        const cb = document.getElementById('chanting-checkbox');
-        if (cb) cb.checked = on;
-        const btn = document.getElementById('chanting-toggle');
-        if (btn) { btn.classList.toggle('active', on); btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
-        savePrefs({ chanting: on });
-        gitaPressReaderInstance?.buildPages();
-      }
-
-      document.getElementById('chanting-toggle')?.addEventListener('click', () => {
-        setChanting(!document.body.classList.contains('chanting-mode'));
-      });
-
-      document.getElementById('chanting-checkbox')?.addEventListener('change', e => {
-        setChanting(e.target.checked);
-      });
-
-      /* ── Verse Numbering Toggle (क्रमांक) ── */
-      function setNumbering(show) {
-        document.body.classList.toggle('hide-numbering', !show);
-        document.documentElement.classList.toggle('hide-numbering', !show);
-        const cb = document.getElementById('numbering-checkbox');
-        if (cb) cb.checked = show;
-        savePrefs({ hideNumbering: !show });
-        gitaPressReaderInstance?.buildPages();
-      }
-
-      // Restore numbering preference (defaults to frontmatter configuration if not explicitly toggled by user)
-      {
-        const numPrefs = loadPrefs();
-        const shouldShow = numPrefs.hideNumbering !== undefined ? !numPrefs.hideNumbering : defaultShowNumbering;
-        setNumbering(shouldShow);
-      }
-
-      document.getElementById('numbering-checkbox')?.addEventListener('change', e => {
-        setNumbering(e.target.checked);
-      });
-
-      /* ── Fullscreen Controls & Mobile Auto-Fullscreen ── */
+      /* ── Fullscreen Controls ── */
       function isFullscreenActive() {
         return !!(
           document.fullscreenElement ||
@@ -850,7 +648,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         if (fsBtn) {
           fsBtn.classList.toggle('active', isFs);
           fsBtn.setAttribute('aria-pressed', isFs ? 'true' : 'false');
-          fsBtn.title = isFs ? 'पूर्ण स्क्रीन बंद करें (Close Fullscreen)' : 'पूर्ण स्क्रीन (Fullscreen)';
+          fsBtn.title = isFs ? 'पूर्ण स्क्रीन बंद करें' : 'पूर्ण स्क्रीन';
           fsBtn.setAttribute('aria-label', isFs ? 'पूर्ण स्क्रीन बंद करें' : 'पूर्ण स्क्रीन');
         }
         if (enterIcon) enterIcon.style.display = isFs ? 'none' : 'block';
@@ -871,89 +669,49 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       document.addEventListener('mozfullscreenchange', updateFullscreenUI);
       document.addEventListener('MSFullscreenChange', updateFullscreenUI);
 
-      // Auto full screen only on mobile phones
-      function isMobilePhone() {
-        const isSmallScreen = window.innerWidth <= 640 || window.matchMedia('(max-width: 640px)').matches;
-        const isTouch = window.matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPod|Mobile/i.test(navigator.userAgent);
-        return isSmallScreen && isTouch;
+      /* ── Font Size Controls (अक्षर आकार छोटा/बड़ा करें) ── */
+      function adjustFontSize(delta) {
+        const cur = parseFloat(getComputedStyle(ROOT).getPropertyValue('--reader-font-size')) || 1.15;
+        const next = Math.max(0.85, Math.min(1.85, (cur + delta))).toFixed(2);
+        ROOT.style.setProperty('--reader-font-size', next + 'rem');
+        try {
+          const prefs = loadPrefs();
+          localStorage.setItem(PREF_KEY, JSON.stringify({ ...prefs, fontSize: next }));
+        } catch {}
+        gitaPressReaderInstance?.buildPages();
       }
 
-      if (isMobilePhone()) {
-        // Attempt immediate entry if allowed by browser context
+      document.getElementById('font-decrease')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        adjustFontSize(-0.08);
+      });
+
+      document.getElementById('font-increase')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        adjustFontSize(0.08);
+      });
+
+      /* ── Aarambh (आरम्भ) Screen Trigger ── */
+      const coverScreen = document.getElementById('reader-cover-screen');
+      const btnAarambh = document.getElementById('btn-aarambh');
+
+      function startReading() {
+        if (coverScreen) {
+          coverScreen.classList.add('cover-dismissed');
+        }
         enterFullscreen();
-
-        // Automatically enter fullscreen on the first tap/touch anywhere on the reader
-        let hasTriggeredAutoFs = false;
-        const autoEnterFullscreenOnTouch = () => {
-          if (hasTriggeredAutoFs) return;
-          hasTriggeredAutoFs = true;
-          if (!isFullscreenActive()) {
-            enterFullscreen();
-          }
-        };
-
-        ['pointerup', 'touchend', 'click'].forEach(evtType => {
-          document.addEventListener(evtType, autoEnterFullscreenOnTouch, { capture: true, once: true });
-        });
-
-        // Also ensure tap zones and page navigation buttons trigger fullscreen if not active
-        ['tap-prev', 'tap-next', 'tap-center', 'btn-bottom-prev', 'btn-bottom-next'].forEach(id => {
-          document.getElementById(id)?.addEventListener('click', () => {
-            if (!isFullscreenActive()) enterFullscreen();
-          }, { passive: true });
-        });
+        if (!gitaPressReaderInstance) {
+          gitaPressReaderInstance = new GitaPressReader();
+        }
       }
-    </script>
 
-    <!-- Global Transliteration Script -->
-    <script is:inline>
-      window.__currentTransliterationScheme = 'devanagari';
+      btnAarambh?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        startReading();
+      });
 
-      window.applyTransliterationGlobal = function(toScheme) {
-        if (typeof Sanscript === 'undefined') return;
-        window.__currentTransliterationScheme = toScheme;
-
-        const nodes = document.querySelectorAll('[data-transliterable="true"]');
-        nodes.forEach(node => {
-          if (!node.dataset.original) {
-            node.dataset.original = node.textContent || '';
-          }
-
-          const sourceText = node.dataset.original || '';
-          if (!sourceText.trim()) return;
-
-          if (toScheme === 'devanagari') {
-            node.textContent = sourceText;
-          } else {
-            try {
-              node.textContent = Sanscript.t(sourceText, 'devanagari', toScheme);
-            } catch (err) {
-              console.error('Transliteration error:', err);
-            }
-          }
-        });
-
-        try {
-          const prefs = JSON.parse(localStorage.getItem('gyankosh_prefs') || '{}');
-          localStorage.setItem('gyankosh_prefs', JSON.stringify({ ...prefs, script: toScheme }));
-        } catch {}
-      };
-
-      document.addEventListener('DOMContentLoaded', () => {
-        const scriptSelect = document.getElementById('script-select');
-        try {
-          const prefs = JSON.parse(localStorage.getItem('gyankosh_prefs') || '{}');
-          if (prefs.script && scriptSelect) {
-            scriptSelect.value = prefs.script;
-            if (prefs.script !== 'devanagari') {
-              setTimeout(() => window.applyTransliterationGlobal(prefs.script), 150);
-            }
-          }
-        } catch {}
-
-        scriptSelect?.addEventListener('change', () => {
-          window.applyTransliterationGlobal(scriptSelect.value);
-        });
+      coverScreen?.addEventListener('click', () => {
+        startReading();
       });
     </script>
   </body>

@@ -1,10 +1,11 @@
 ---
 title: "हनुमान चालीसा"
 author: "गोस्वामी तुलसीदास"
-description: "Hanuman Chalisa by Goswami Tulsidas — forty verses in praise of Lord Hanuman. Read in Devanagari, IAST, or ITRANS with translation."
+description: "गोस्वामी तुलसीदास कृत श्री हनुमान चालीसा — पवनपुत्र श्री हनुमान जी की महिमा में चालीस पावन चौपाइयां एवं दोहे।"
 language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(22, 85%, 45%)"
+coverImage: "/covers/hanuman-chalisa.jpg"
 showNumbering: false
 ---
 
