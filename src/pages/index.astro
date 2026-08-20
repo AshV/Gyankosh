@@ -4,57 +4,77 @@
  * Home Page — Library Catalog
  * Gyankosh Sacred Indic Paper Book Theme
  */
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import BookCard from '../components/BookCard.astro';
-import { CATEGORIES } from '../content.config';
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BookCard from "../components/BookCard.astro";
+import { CATEGORIES } from "../content.config";
 
-const allTexts = await getCollection('library');
-
-type CategoryEntry = {
-  id: string;
-  data: {
-    title: string;
-    author?: string;
-    description: string;
-    category: string;
-    language: string;
-    coverColor?: string;
-    coverImage?: string;
-  };
-};
-
-const grouped: Record<string, CategoryEntry[]> = {};
-for (const text of allTexts) {
-  const cat = text.data.category as string;
-  if (!grouped[cat]) grouped[cat] = [];
-  grouped[cat].push(text);
-}
+const allTexts = await getCollection("library");
 
 const totalTexts = allTexts.length;
 
 function toHindiDigits(num: number): string {
-  const digits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-  return num.toString().split('').map(d => digits[parseInt(d, 10)] || d).join('');
+  const digits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+  return num
+    .toString()
+    .split("")
+    .map((d) => digits[parseInt(d, 10)] || d)
+    .join("");
 }
 
-const categoryMeta: Record<string, { icon: string; nameHindi: string; description: string }> = {
-  Veda:    { icon: '🔥', nameHindi: 'वेद', description: 'सनातन वैदिक ऋचाएं एवं मन्त्र' },
-  Gita:    { icon: '🎵', nameHindi: 'श्रीमद्भगवद्गीता', description: 'भगवान श्रीकृष्ण का दिव्य उपदेश' },
-  Chalisa: { icon: '🪔', nameHindi: 'चालीसा', description: 'चालीस पदों वाले पावन स्तोत्र' },
-  Purana:  { icon: '📖', nameHindi: 'पुराण', description: 'अठारह महापुराण एवं उपपुराण' },
-  Stotra:  { icon: '🌸', nameHindi: 'स्तोत्र', description: 'देवी-देवताओं की पावन स्तुतियां' },
-  Other:   { icon: '📜', nameHindi: 'अन्य धर्मग्रंथ', description: 'विशिष्ट धार्मिक एवं दार्शनिक ग्रन्थ' },
+const categoryMeta: Record<
+  string,
+  { icon: string; nameHindi: string; description: string }
+> = {
+  Veda: {
+    icon: "🔥",
+    nameHindi: "वेद",
+    description: "सनातन वैदिक ऋचाएं एवं मन्त्र",
+  },
+  Gita: {
+    icon: "🎵",
+    nameHindi: "श्रीमद्भगवद्गीता",
+    description: "भगवान श्रीकृष्ण का दिव्य उपदेश",
+  },
+  Chalisa: {
+    icon: "🪔",
+    nameHindi: "चालीसा",
+    description: "चालीस पदों वाले पावन स्तोत्र",
+  },
+  Purana: {
+    icon: "📖",
+    nameHindi: "पुराण",
+    description: "अठारह महापुराण एवं उपपुराण",
+  },
+  Stotra: {
+    icon: "🌸",
+    nameHindi: "स्तोत्र",
+    description: "देवी-देवताओं की पावन स्तुतियां",
+  },
+  Other: {
+    icon: "📜",
+    nameHindi: "अन्य धर्मग्रंथ",
+    description: "विशिष्ट धार्मिक एवं दार्शनिक ग्रन्थ",
+  },
 };
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const categoryCounts = CATEGORIES.reduce(
+  (acc, cat) => {
+    acc[cat] = allTexts.filter((t) => t.data.category === cat).length;
+    return acc;
+  },
+  {} as Record<string, number>,
+);
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  'name': 'ज्ञानकोश — सनातन वैदिक एवं पौराणिक धर्मग्रंथ संग्रह',
-  'description': 'सनातन वैदिक एवं पौराणिक धर्मग्रंथों का पावन डिजिटल पुस्तकालय — वेद, श्रीमद्भगवद्गीता, हनुमान चालीसा, पुराण।',
-  'url': 'https://ashv.github.io/Gyankosh',
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "ज्ञानकोश — सनातन वैदिक एवं पौराणिक धर्मग्रंथ संग्रह",
+  description:
+    "सनातन वैदिक एवं पौराणिक धर्मग्रंथों का पावन डिजिटल पुस्तकालय — वेद, श्रीमद्भगवद्गीता, हनुमान चालीसा, पुराण।",
+  url: "https://ashv.github.io/Gyankosh",
 };
 ---
 
@@ -67,62 +87,177 @@ const jsonLd = {
   <section class="catalog-hero" aria-labelledby="hero-heading">
     <div class="container">
       <div class="sacred-hero-invocation">॥ श्रीहरिः ॥</div>
-      
-      <h1 id="hero-heading">ज्ञानकोश</h1>
-      <p>
-        सनातन वैदिक एवं पौराणिक धर्मग्रंथों का पावन डिजिटल पुस्तकालय।<br />
-        वेद, उपनिषद्, गीता, रामायण, चालीसा एवं स्तोत्र — मूल पाठ एवं प्रामाणिक अर्थ सहित।
-      </p>
 
-      <!-- Category Badges -->
-      <div
-        style="display:flex;gap:1.5rem;justify-content:center;margin-top:1.75rem;flex-wrap:wrap;"
-        role="list"
-        aria-label="ग्रंथ श्रेणियां"
-      >
-        {CATEGORIES.map(cat => grouped[cat] && (
-          <a href={`${base}/category/${cat.toLowerCase()}`} role="listitem" style="text-decoration:none;">
-            <div style="padding:0.4rem 1rem; border:1px solid var(--color-border); border-radius:var(--radius-sm); background:var(--color-bg-card); display:flex; align-items:center; gap:0.5rem; box-shadow:var(--shadow-card);">
-              <span style="font-size:1.2rem;">{categoryMeta[cat]?.icon}</span>
-              <span style="font-family:var(--font-devanagari); font-weight:700; color:var(--color-accent); font-size:0.95rem;">{categoryMeta[cat]?.nameHindi || cat}</span>
-              <span style="font-family:var(--font-devanagari); font-size:0.8rem; color:var(--color-text-faint);">({toHindiDigits(grouped[cat].length)})</span>
-            </div>
-          </a>
-        ))}
-      </div>
+      <h1 id="hero-heading">ज्ञानकोश</h1>
+      <p>वैदिक एवं पौराणिक धर्मग्रंथों का डिजिटल पुस्तकालय।</p>
     </div>
   </section>
 
-  <!-- Catalog Sections -->
+  <!-- Main Unified Library Shelf Container -->
   <div class="container">
-    {CATEGORIES.map(cat => grouped[cat] && (
-      <section class="catalog-section" aria-labelledby={`section-${cat.toLowerCase()}`}>
-        <h2 class="catalog-section-title" id={`section-${cat.toLowerCase()}`}>
-          <span aria-hidden="true">{categoryMeta[cat]?.icon}</span>
-          <span>{categoryMeta[cat]?.nameHindi || cat}</span>
-          <span style="font-family:var(--font-devanagari);font-size:0.9rem;font-weight:600;margin-left:auto;">
-            <a href={`${base}/category/${cat.toLowerCase()}`} style="color:var(--color-accent);">
-              सम्पूर्ण देखें →
-            </a>
-          </span>
-        </h2>
-        <div class="book-grid" role="list" aria-label={`${categoryMeta[cat]?.nameHindi || cat} ग्रंथ`}>
-          {grouped[cat].map(text => (
-            <div role="listitem">
-              <BookCard
-                slug={text.id}
-                title={text.data.title}
-                author={text.data.author}
-                description={text.data.description}
-                category={text.data.category}
-                language={text.data.language}
-                coverColor={text.data.coverColor}
-                coverImage={text.data.coverImage}
-              />
-            </div>
-          ))}
-        </div>
-      </section>
-    ))}
+    <!-- Category Filter Controls -->
+    <section
+      class="search-filter-section"
+      aria-label="ग्रंथ श्रेणी छाननी"
+      style="display: none; padding: var(--space-md) var(--space-lg);"
+    >
+      <div
+        class="filter-container"
+        style="justify-content: center; margin: 0 auto;"
+      >
+        <span class="filter-label">श्रेणी:</span>
+        <button
+          class="filter-pill active"
+          data-category="all"
+          aria-pressed="true"
+        >
+          <span>सभी</span>
+          <span class="pill-count">{toHindiDigits(totalTexts)}</span>
+        </button>
+        {
+          CATEGORIES.map(
+            (cat) =>
+              categoryCounts[cat] > 0 && (
+                <button
+                  class="filter-pill"
+                  data-category={cat}
+                  aria-pressed="false"
+                >
+                  <span>
+                    {categoryMeta[cat]?.icon}{" "}
+                    {categoryMeta[cat]?.nameHindi || cat}
+                  </span>
+                  <span class="pill-count">
+                    {toHindiDigits(categoryCounts[cat])}
+                  </span>
+                </button>
+              ),
+          )
+        }
+      </div>
+    </section>
+
+    <!-- Library Shelf Header -->
+    <div class="results-bar" style="display: none;">
+      <div class="results-count-wrapper">
+        <span>उपलब्ध ग्रंथ: </span>
+        <span id="results-count" class="results-count"
+          >{toHindiDigits(totalTexts)}</span
+        >
+      </div>
+      <div style="font-size: 0.85rem; color: var(--color-text-faint);">
+        अवर्गीकृत सम्पूर्ण सूची
+      </div>
+    </div>
+
+    <!-- Unified Grid Layout -->
+    <div
+      class="book-grid"
+      id="book-grid"
+      role="list"
+      aria-label="सनातन धर्मग्रंथ सूची"
+    >
+      {
+        allTexts.map((text) => (
+          <div
+            role="listitem"
+            class="book-card-wrapper"
+            data-title={text.data.title}
+            data-author={text.data.author || ""}
+            data-description={text.data.description}
+            data-category={text.data.category}
+          >
+            <BookCard
+              slug={text.id}
+              title={text.data.title}
+              author={text.data.author}
+              description={text.data.description}
+              category={text.data.category}
+              language={text.data.language}
+              coverColor={text.data.coverColor}
+              coverImage={text.data.coverImage}
+            />
+          </div>
+        ))
+      }
+    </div>
   </div>
 </BaseLayout>
+
+<script>
+  function toHindiDigits(num: number): string {
+    const digits = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+    return num
+      .toString()
+      .split("")
+      .map((d) => digits[parseInt(d, 10)] || d)
+      .join("");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const filterPills = document.querySelectorAll(".filter-pill");
+    const bookWrappers = document.querySelectorAll(
+      ".book-card-wrapper",
+    ) as NodeListOf<HTMLElement>;
+    const resultsCount = document.getElementById("results-count");
+
+    if (!bookWrappers.length || !resultsCount) return;
+
+    let activeCategory = "all";
+
+    // Scroll reveal animation using IntersectionObserver
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "0px 0px -50px 0px",
+        threshold: 0.1,
+      },
+    );
+
+    bookWrappers.forEach((wrapper) => {
+      revealObserver.observe(wrapper);
+    });
+
+    function filterLibrary() {
+      let visibleCount = 0;
+
+      bookWrappers.forEach((wrapper) => {
+        const category = wrapper.dataset.category || "";
+        const matchesCategory =
+          activeCategory === "all" || category === activeCategory;
+
+        if (matchesCategory) {
+          wrapper.classList.remove("hidden");
+          visibleCount++;
+        } else {
+          wrapper.classList.add("hidden");
+        }
+      });
+
+      // Update count text
+      resultsCount.textContent = toHindiDigits(visibleCount);
+    }
+
+    // Category Pill Events
+    filterPills.forEach((pill) => {
+      pill.addEventListener("click", () => {
+        filterPills.forEach((p) => {
+          p.classList.remove("active");
+          p.setAttribute("aria-pressed", "false");
+        });
+        pill.classList.add("active");
+        pill.setAttribute("aria-pressed", "true");
+        activeCategory = pill.getAttribute("data-category") || "all";
+        filterLibrary();
+      });
+    });
+  });
+</script>

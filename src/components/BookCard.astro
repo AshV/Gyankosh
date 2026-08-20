@@ -36,6 +36,15 @@ const categoryMeta: Record<string, { icon: string; nameHindi: string }> = {
   Other:   { icon: '📜', nameHindi: 'अन्य' },
 };
 
+const languageNames: Record<string, string> = {
+  Sanskrit: 'संस्कृत',
+  Hindi: 'हिन्दी',
+  Awadhi: 'अवधी',
+  'Vedic Sanskrit': 'वैदिक संस्कृत',
+  'Hindi/Awadhi': 'हिन्दी/अवधी',
+};
+const resolvedLanguage = languageNames[language] ?? language;
+
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const meta = categoryMeta[category] ?? { icon: '📜', nameHindi: category };
 const readUrl = `${base}/read/${slug}`;
@@ -49,21 +58,23 @@ const resolvedCoverImage = coverImage
   href={readUrl}
   class="book-card"
   data-slug={slug}
+  data-category={category}
   aria-label={`पठन: ${title}`}
 >
   <!-- Generated / Album Cover Art -->
-  <div
-    class="book-card-cover"
-    style={`background: linear-gradient(135deg, ${coverColor}, color-mix(in hsl, ${coverColor}, black 30%));`}
-  >
+  <div class="book-card-cover">
     <img 
       src={resolvedCoverImage} 
       alt={title} 
       class="book-card-cover-img"
       loading="lazy"
-      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
     />
-    <div class="book-card-cover-pattern" aria-hidden="true">
+    <div 
+      class="book-card-cover-pattern" 
+      style={`background: linear-gradient(135deg, ${coverColor}, color-mix(in hsl, ${coverColor}, black 35%));`}
+      aria-hidden="true"
+    >
       <span class="book-card-cover-title" aria-hidden="true">{title.charAt(0)}</span>
     </div>
   </div>
@@ -71,17 +82,20 @@ const resolvedCoverImage = coverImage
   <!-- Card Body -->
   <div class="book-card-body">
     <p class="book-card-title">{title}</p>
-    {author && <p class="book-card-author">{author}</p>}
 
     <div class="book-card-footer">
-      <a
-        href={categoryUrl}
-        class="chip"
-        onclick="event.stopPropagation()"
-        aria-label={`${meta.nameHindi} श्रेणी देखें`}
-      >
-        {meta.icon} {meta.nameHindi}
-      </a>
+      <div class="book-card-badges">
+        <a
+          href={categoryUrl}
+          class="chip"
+          onclick="event.stopPropagation()"
+          aria-label={`${meta.nameHindi} श्रेणी देखें`}
+        >
+          {meta.icon} {meta.nameHindi}
+        </a>
+        <span class="language-badge">{resolvedLanguage}</span>
+      </div>
+      
       <!-- Progress badge — populated client-side from localStorage -->
       <span
         class="book-card-progress"
@@ -92,20 +106,11 @@ const resolvedCoverImage = coverImage
         <span class="progress-dot" aria-hidden="true"></span>
         <span class="progress-label"></span>
       </span>
+
+      <span class="book-card-cta" aria-hidden="true">पढ़ें →</span>
     </div>
   </div>
 </a>
-
-<style>
-  .book-card-cover-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    position: absolute;
-    inset: 0;
-  }
-</style>
 
 <script>
   function toHindiDigits(num: number): string {
