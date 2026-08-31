@@ -85,14 +85,12 @@ const resolvedCoverImage = coverImage
 
     <div class="book-card-footer">
       <div class="book-card-badges">
-        <a
-          href={categoryUrl}
+        <span
           class="chip"
-          onclick="event.stopPropagation()"
-          aria-label={`${meta.nameHindi} श्रेणी देखें`}
+          aria-label={`${meta.nameHindi} श्रेणी`}
         >
           {meta.icon} {meta.nameHindi}
-        </a>
+        </span>
         <span class="language-badge">{resolvedLanguage}</span>
       </div>
       
