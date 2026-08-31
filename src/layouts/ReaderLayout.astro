@@ -94,12 +94,12 @@ const resolvedCoverImage = coverImage
     </script>
   </head>
 
-  <body class={`${!showNumbering ? 'hide-numbering' : ''} chanting-mode`}>
+  <body class={`${!showNumbering ? 'hide-numbering' : ''} chanting-mode has-cover-screen`}>
     <!-- Sacred Red/Gold Reading Progress Bar -->
     <div id="reading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="पठन प्रगति"></div>
 
     <!-- Reader Shell -->
-    <div class="reader-shell">
+    <div class="reader-shell has-cover-screen">
 
       <!-- Top Bar -->
       <header class="reader-topbar" role="banner">
@@ -953,6 +953,8 @@ const resolvedCoverImage = coverImage
       const btnAarambh = document.getElementById('btn-aarambh');
 
       function startReading() {
+        document.querySelector('.reader-shell')?.classList.remove('has-cover-screen');
+        document.body.classList.remove('has-cover-screen');
         if (coverScreen) {
           coverScreen.classList.add('cover-dismissed');
           setTimeout(() => {
@@ -964,6 +966,8 @@ const resolvedCoverImage = coverImage
         }
         if (!gyankoshReaderInstance) {
           gyankoshReaderInstance = new GyankoshReader();
+        } else {
+          gyankoshReaderInstance.buildPages();
         }
       }
 
