@@ -41,19 +41,40 @@ const meta = categoryMeta[category] ?? { icon: '📜', nameHindi: category, desc
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const jsonLd = {
+const jsonLdCollection = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   'name': `${meta.nameHindi} — ज्ञानकोश`,
   'description': meta.description,
-  'url': `https://ashv.github.io/Gyankosh/category/${category.toLowerCase()}`,
+  'url': `https://www.ashishvishwakarma.com/Gyankosh/category/${category.toLowerCase()}`,
+  'inLanguage': 'hi',
+};
+
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': 'ज्ञानकोश',
+      'item': 'https://www.ashishvishwakarma.com/Gyankosh/',
+    },
+    {
+      '@type': 'ListItem',
+      'position': 2,
+      'name': meta.nameHindi,
+      'item': `https://www.ashishvishwakarma.com/Gyankosh/category/${category.toLowerCase()}`,
+    },
+  ],
 };
 ---
 
 <BaseLayout
   title={`${meta.nameHindi} — ज्ञानकोश`}
   description={`${meta.nameHindi} श्रेणी के ${toHindiDigits(texts.length)} ग्रंथ — ${meta.description}`}
-  jsonLd={jsonLd}
+  keywords={[meta.nameHindi, 'सनातन धर्म', 'हिन्दू धर्मग्रंथ', category]}
+  jsonLd={[jsonLdCollection, jsonLdBreadcrumb]}
 >
   <!-- Category Header -->
   <div class="container">

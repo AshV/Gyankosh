@@ -1,0 +1,101 @@
+---
+/**
+ * src/pages/404.astro
+ * Custom 404 Not Found page — better UX and SEO signal.
+ * Guides lost visitors back to the library.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout
+  title="पृष्ठ नहीं मिला — ४०४"
+  description="यह पृष्ठ उपलब्ध नहीं है। ज्ञानकोश के मुख्य संग्रह पर लौटें।"
+>
+  <section class="not-found" aria-labelledby="not-found-heading">
+    <div class="not-found-container">
+      <div class="not-found-icon" aria-hidden="true">📜</div>
+      <p class="not-found-code">४०४</p>
+      <h1 id="not-found-heading" class="not-found-title">यह पृष्ठ उपलब्ध नहीं है</h1>
+      <p class="not-found-body">
+        क्षमा करें, आपके द्वारा खोजा गया पृष्ठ इस संग्रह में नहीं मिला।<br />
+        कृपया मुख्य पुस्तकालय पर लौटें।
+      </p>
+      <a href={`${base}/`} class="not-found-cta">
+        <span aria-hidden="true">🏠</span> मुख्य सूची पर लौटें
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 2rem 1rem;
+    font-family: var(--font-devanagari);
+  }
+
+  .not-found-container {
+    text-align: center;
+    max-width: 480px;
+  }
+
+  .not-found-icon {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+  }
+
+  .not-found-code {
+    font-family: var(--font-title);
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .not-found-title {
+    font-family: var(--font-devanagari);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-bottom: 1rem;
+  }
+
+  .not-found-body {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .not-found-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-devanagari);
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+
+  .not-found-cta:hover {
+    background: color-mix(in hsl, var(--color-accent), black 15%);
+    transform: translateY(-1px);
+  }
+
+  .not-found-cta:active {
+    transform: translateY(0);
+  }
+</style>

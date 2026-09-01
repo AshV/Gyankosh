@@ -65,7 +65,7 @@ const resolvedCoverImage = coverImage
   <div class="book-card-cover">
     <img 
       src={resolvedCoverImage} 
-      alt={title} 
+      alt={`${title}${author ? ` — ${author}` : ''} पुस्तक आवरण`} 
       class="book-card-cover-img"
       loading="lazy"
       onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"

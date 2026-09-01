@@ -24,7 +24,9 @@ export interface Props {
   coverColor?: string;
   coverImage?: string;
   slug: string;
-  jsonLd?: Record<string, unknown>;
+  image?: string;
+  keywords?: string[];
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   showNumbering?: boolean;
 }
 
@@ -38,6 +40,8 @@ const {
   coverColor = 'hsl(22, 85%, 45%)',
   coverImage,
   slug,
+  image,
+  keywords = [],
   jsonLd,
   showNumbering = true,
 } = Astro.props;
@@ -66,6 +70,8 @@ const resolvedCoverImage = coverImage
       author={author}
       language={language}
       type="book"
+      image={image}
+      keywords={keywords}
       jsonLd={jsonLd}
     />
 

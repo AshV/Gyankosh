@@ -74,7 +74,16 @@ const jsonLd = {
   name: "ज्ञानकोश — सनातन वैदिक एवं पौराणिक धर्मग्रंथ संग्रह",
   description:
     "सनातन वैदिक एवं पौराणिक धर्मग्रंथों का पावन डिजिटल पुस्तकालय — वेद, श्रीमद्भगवद्गीता, हनुमान चालीसा, पुराण।",
-  url: "https://ashv.github.io/Gyankosh",
+  url: "https://www.ashishvishwakarma.com/Gyankosh",
+  inLanguage: "hi",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://www.ashishvishwakarma.com/Gyankosh/?q={search_term_string}",
+    },
+    "query-input": "required name=search_term_string",
+  },
 };
 ---
 
