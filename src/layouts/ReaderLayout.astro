@@ -919,7 +919,10 @@ const resolvedCoverImage = coverImage
         e.stopPropagation();
         const curChanting = document.documentElement.classList.contains('chanting-mode') || document.body.classList.contains('chanting-mode');
         const nextChanting = !curChanting;
-        savePrefs({ chanting: nextChanting });
+        try {
+          const prefs = loadPrefs();
+          localStorage.setItem(PREF_KEY, JSON.stringify({ ...prefs, chanting: nextChanting }));
+        } catch {}
         updateChantingUI(nextChanting);
         if (gyankoshReaderInstance) {
           const prevPageIndex = gyankoshReaderInstance.currentPageIndex;
