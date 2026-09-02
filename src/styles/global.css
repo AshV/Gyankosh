@@ -126,6 +126,12 @@ a:hover { opacity: 0.8; }
   padding: 0 var(--space-md);
 }
 
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1400px;
+  }
+}
+
 /* ─── Progress Bar (Sacred Red/Gold Line) ─────────────────── */
 #reading-progress {
   position: fixed;
@@ -236,7 +242,7 @@ a:hover { opacity: 0.8; }
 
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: var(--space-lg);
 }
 
@@ -556,3 +562,66 @@ a:hover { opacity: 0.8; }
   display: none !important;
 }
 
+/* ─── Tag Section (विषय टैग) — Homepage bottom ────────────── */
+
+.tag-section {
+  padding: var(--space-xl) 0 var(--space-lg);
+  margin-top: var(--space-lg);
+  border-top: 2px solid var(--color-border);
+}
+
+.tag-section-title {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  color: var(--color-accent);
+  margin-bottom: var(--space-md);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* ─── Tag Chip (reusable link pill) ──────────────────────── */
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.7rem;
+  font-family: var(--font-devanagari);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 1px 2px rgba(70, 50, 30, 0.04);
+  line-height: 1.4;
+}
+
+.tag-chip:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(142, 27, 20, 0.12);
+}
+
+.tag-chip .tag-count {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  background: rgba(70, 50, 30, 0.08);
+  padding: 0 5px;
+  border-radius: 8px;
+}

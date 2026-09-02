@@ -28,6 +28,7 @@ export interface Props {
   keywords?: string[];
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   showNumbering?: boolean;
+  tags?: string[];
 }
 
 const {
@@ -44,6 +45,7 @@ const {
   keywords = [],
   jsonLd,
   showNumbering = true,
+  tags = [],
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -51,6 +53,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const resolvedCoverImage = coverImage
   ? (coverImage.startsWith('http') ? coverImage : `${base}${coverImage.startsWith('/') ? '' : '/'}${coverImage}`)
   : `${base}/covers/${slug}.jpg`;
+
+function tagToSlug(tag: string): string {
+  return tag.toLowerCase().replace(/\s+/g, '-');
+}
 ---
 
 <!doctype html>
@@ -181,6 +187,14 @@ const resolvedCoverImage = coverImage
             <h1 class="cover-title">{title}</h1>
             {author && <p class="cover-author">{author}</p>}
             {category && <span class="cover-category-badge">{category}</span>}
+
+            {tags.length > 0 && (
+              <div class="cover-tags">
+                {tags.map(tag => (
+                  <a href={`${base}/tag/${tagToSlug(tag)}`} class="tag-chip">{tag}</a>
+                ))}
+              </div>
+            )}
 
             <button 
               id="btn-aarambh" 

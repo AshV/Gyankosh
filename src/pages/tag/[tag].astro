@@ -1,0 +1,156 @@
+---
+/**
+ * src/pages/tag/[tag].astro
+ * Tag collection page — lists all texts that share a given tag.
+ * One page generated per unique tag at build-time via getStaticPaths.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookCard from '../../components/BookCard.astro';
+
+function tagToSlug(tag: string): string {
+  return tag.toLowerCase().replace(/\s+/g, '-');
+}
+
+function toHindiDigits(num: number): string {
+  const digits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  return num.toString().split('').map(d => digits[parseInt(d, 10)] || d).join('');
+}
+
+export async function getStaticPaths() {
+  const allTexts = await getCollection('library');
+
+  function _tagToSlug(tag: string): string {
+    return tag.toLowerCase().replace(/\s+/g, '-');
+  }
+
+  // Collect all unique tags and their associated texts
+  const tagMap = new Map<string, typeof allTexts>();
+
+  for (const text of allTexts) {
+    for (const tag of text.data.tags ?? []) {
+      const slug = _tagToSlug(tag);
+      if (!tagMap.has(slug)) {
+        tagMap.set(slug, []);
+      }
+      // Avoid duplicates (same text appearing twice under same tag slug)
+      const existing = tagMap.get(slug)!;
+      if (!existing.some(t => t.id === text.id)) {
+        existing.push(text);
+      }
+    }
+  }
+
+  return Array.from(tagMap.entries()).map(([slug, texts]) => {
+    // Use the original-case version of the first occurrence as the display name
+    const originalTag = allTexts
+      .flatMap(t => t.data.tags ?? [])
+      .find(t => _tagToSlug(t) === slug) || slug;
+
+    return {
+      params: { tag: slug },
+      props: { tagName: originalTag, texts },
+    };
+  });
+}
+
+const { tagName, texts } = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const canonicalUrl = `https://www.ashishvishwakarma.com/Gyankosh/tag/${tagToSlug(tagName)}`;
+
+const jsonLdCollection = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  'name': `${tagName} — ज्ञानकोश`,
+  'description': `'${tagName}' विषय से संबंधित पावन धर्मग्रंथ।`,
+  'url': canonicalUrl,
+  'inLanguage': 'hi',
+};
+
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': 'ज्ञानकोश',
+      'item': 'https://www.ashishvishwakarma.com/Gyankosh/',
+    },
+    {
+      '@type': 'ListItem',
+      'position': 2,
+      'name': `टैग: ${tagName}`,
+      'item': canonicalUrl,
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={`${tagName} — ज्ञानकोश`}
+  description={`'${tagName}' विषय से संबंधित ${toHindiDigits(texts.length)} पावन धर्मग्रंथ — ज्ञानकोश डिजिटल पुस्तकालय।`}
+  keywords={[tagName, 'सनातन धर्म', 'हिन्दू धर्मग्रंथ', 'ज्ञानकोश']}
+  jsonLd={[jsonLdCollection, jsonLdBreadcrumb]}
+>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <div class="tag-page-header" aria-labelledby="tag-title">
+      <nav aria-label="मार्गदर्शक">
+        <ol style="display:flex;gap:0.5rem;list-style:none;font-family:var(--font-devanagari);font-size:0.9rem;color:var(--color-text-muted);margin-bottom:1rem;">
+          <li><a href={`${base}/`} style="color:var(--color-accent);text-decoration:none;">मुख्य सूची</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" style="color:var(--color-ink);font-weight:700;">🏷️ {tagName}</li>
+        </ol>
+      </nav>
+
+      <h1 id="tag-title" style="font-family:var(--font-devanagari);">
+        <span aria-hidden="true">🏷️</span> {tagName}
+      </h1>
+      <p style="font-family:var(--font-devanagari);color:var(--color-text-muted);margin-top:0.5rem;max-width:55ch;font-size:1.05rem;">
+        '{tagName}' विषय से संबंधित पावन धर्मग्रंथ।
+      </p>
+      <p style="font-family:var(--font-devanagari);font-size:0.9rem;color:var(--color-text-faint);margin-top:0.75rem;font-weight:600;">
+        {toHindiDigits(texts.length)} ग्रंथ उपलब्ध
+      </p>
+    </div>
+
+    <!-- Texts Grid -->
+    {texts.length > 0 ? (
+      <div class="book-grid" role="list" aria-label={`${tagName} ग्रंथ`}>
+        {texts.map(text => (
+          <div role="listitem">
+            <BookCard
+              slug={text.id}
+              title={text.data.title}
+              author={text.data.author}
+              description={text.data.description}
+              category={text.data.category}
+              language={text.data.language}
+              coverColor={text.data.coverColor}
+              coverImage={text.data.coverImage}
+            />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p style="font-family:var(--font-devanagari);color:var(--color-text-muted);padding:2rem 0;font-size:1.05rem;">
+        इस विषय में अभी कोई ग्रंथ उपलब्ध नहीं है।
+      </p>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-page-header {
+    padding: var(--space-xl) 0 var(--space-lg);
+  }
+
+  .tag-page-header h1 {
+    font-size: 1.75rem;
+    color: var(--color-accent);
+    margin: 0;
+  }
+</style>

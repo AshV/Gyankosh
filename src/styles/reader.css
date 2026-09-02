@@ -945,7 +945,24 @@ body.chanting-mode .verse-translation {
   font-size: 0.78rem;
   font-weight: 700;
   border: 1px solid rgba(142, 27, 20, 0.2);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.cover-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+  max-width: 100%;
+}
+
+.cover-tags .tag-chip {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.55rem;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
 }
 
 .btn-aarambh {

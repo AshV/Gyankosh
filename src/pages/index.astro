@@ -66,6 +66,25 @@ const categoryCounts = CATEGORIES.reduce(
   {} as Record<string, number>,
 );
 
+function tagToSlug(tag: string): string {
+  return tag.toLowerCase().replace(/\s+/g, '-');
+}
+
+// Collect unique tags with counts
+const tagCounts = new Map<string, { name: string; count: number }>();
+for (const text of allTexts) {
+  for (const tag of text.data.tags ?? []) {
+    const slug = tagToSlug(tag);
+    const existing = tagCounts.get(slug);
+    if (existing) {
+      existing.count++;
+    } else {
+      tagCounts.set(slug, { name: tag, count: 1 });
+    }
+  }
+}
+const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => a[1].name.localeCompare(b[1].name));
+
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 const jsonLd = {
@@ -190,6 +209,23 @@ const jsonLd = {
         ))
       }
     </div>
+
+    <!-- Tag Cloud Section (विषय टैग) -->
+    {sortedTags.length > 0 && (
+      <section class="tag-section" aria-label="विषय टैग">
+        <h2 class="tag-section-title">
+          <span aria-hidden="true">🏷️</span> विषय (Tags)
+        </h2>
+        <div class="tag-cloud">
+          {sortedTags.map(([slug, { name, count }]) => (
+            <a href={`${base}/tag/${slug}`} class="tag-chip">
+              <span>{name}</span>
+              <span class="tag-count">{toHindiDigits(count)}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
   </div>
 </BaseLayout>
 
