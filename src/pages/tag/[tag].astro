@@ -59,6 +59,9 @@ const { tagName, texts } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const canonicalUrl = `https://www.ashishvishwakarma.com/Gyankosh/tag/${tagToSlug(tagName)}`;
+const tagCover = texts[0]?.data?.coverImage
+  ? (texts[0].data.coverImage.startsWith('http') ? texts[0].data.coverImage : `https://www.ashishvishwakarma.com/Gyankosh${texts[0].data.coverImage.startsWith('/') ? '' : '/'}${texts[0].data.coverImage}`)
+  : 'https://www.ashishvishwakarma.com/Gyankosh/og-default.jpg';
 
 const jsonLdCollection = {
   '@context': 'https://schema.org',
@@ -92,6 +95,8 @@ const jsonLdBreadcrumb = {
 <BaseLayout
   title={`${tagName} — ज्ञानकोश`}
   description={`'${tagName}' विषय से संबंधित ${toHindiDigits(texts.length)} पावन धर्मग्रंथ — ज्ञानकोश डिजिटल पुस्तकालय।`}
+  canonical={canonicalUrl}
+  image={tagCover}
   keywords={[tagName, 'सनातन धर्म', 'हिन्दू धर्मग्रंथ', 'ज्ञानकोश']}
   jsonLd={[jsonLdCollection, jsonLdBreadcrumb]}
 >

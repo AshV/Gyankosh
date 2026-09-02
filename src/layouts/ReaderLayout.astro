@@ -54,6 +54,10 @@ const resolvedCoverImage = coverImage
   ? (coverImage.startsWith('http') ? coverImage : `${base}${coverImage.startsWith('/') ? '' : '/'}${coverImage}`)
   : `${base}/covers/${slug}.jpg`;
 
+const ogImage = image || (coverImage
+  ? (coverImage.startsWith('http') ? coverImage : `https://www.ashishvishwakarma.com${base}${coverImage.startsWith('/') ? '' : '/'}${coverImage}`)
+  : `https://www.ashishvishwakarma.com${base}/covers/${slug}.jpg`);
+
 function tagToSlug(tag: string): string {
   return tag.toLowerCase().replace(/\s+/g, '-');
 }
@@ -76,7 +80,7 @@ function tagToSlug(tag: string): string {
       author={author}
       language={language}
       type="book"
-      image={image}
+      image={ogImage}
       keywords={keywords}
       jsonLd={jsonLd}
     />
