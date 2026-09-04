@@ -13,7 +13,16 @@ export async function getStaticPaths() {
   const allTexts = await getCollection('library');
 
   return CATEGORIES.map(category => {
-    const filtered = allTexts.filter(t => t.data.category === category);
+    const filtered = allTexts
+      .filter(t => t.data.category === category)
+      .sort((a, b) => {
+        if (a.data.chapter != null && b.data.chapter != null) {
+          return a.data.chapter - b.data.chapter;
+        }
+        if (a.data.chapter != null) return -1;
+        if (b.data.chapter != null) return 1;
+        return a.data.title.localeCompare(b.data.title);
+      });
     return {
       params: { category: category.toLowerCase() },
       props: { category, texts: filtered },

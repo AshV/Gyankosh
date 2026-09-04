@@ -4,7 +4,7 @@ This document tracks all planned sacred texts, scriptures, and stotras for Gyank
 
 ---
 
-## ✅ Completed in Phase 1 & P0 Additions (23 Texts Total)
+## ✅ Completed in Phase 1 & Phase 2 (40 Texts Total)
 
 ### 🪔 Chalisa (11)
 - [x] श्री हनुमान चालीसा (`hanuman-chalisa.md`)
@@ -30,8 +30,25 @@ This document tracks all planned sacred texts, scriptures, and stotras for Gyank
 - [x] मधुराष्टकम् (`madhurashtakam.md`)
 - [x] कालभैरवाष्टकम् (`kala-bhairava-ashtakam.md`)
 
-### 🎵 Gita (1)
+### 🎵 Gita (18 — सम्पूर्ण श्रीमद्भगवद्गीता)
 - [x] श्रीमद्भगवद्गीता — अध्याय १: अर्जुनविषादयोग (`bhagavad-gita-ch1.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय २: सांख्ययोग (`bhagavad-gita-ch2.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय ३: कर्मयोग (`bhagavad-gita-ch3.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय ४: ज्ञानकर्मसंन्यासयोग (`bhagavad-gita-ch4.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय ५: कर्मसंन्यासयोग (`bhagavad-gita-ch5.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय ६: आत्मसंयमयोग / ध्यानयोग (`bhagavad-gita-ch6.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय ७: ज्ञानविज्ञानयोग (`bhagavad-gita-ch7.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय ८: अक्षरब्रह्मयोग (`bhagavad-gita-ch8.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय ९: राजविद्याराजगुह्ययोग (`bhagavad-gita-ch9.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय १०: विभूतियोग (`bhagavad-gita-ch10.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय ११: विश्वरूपदर्शनयोग (`bhagavad-gita-ch11.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय १२: भक्तियोग (`bhagavad-gita-ch12.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय १३: क्षेत्रक्षेत्रज्ञविभागयोग (`bhagavad-gita-ch13.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय १४: गुणत्रयविभागयोग (`bhagavad-gita-ch14.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय १५: पुरुषोत्तमयोग (`bhagavad-gita-ch15.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय १६: दैवासुरसम्पद्विभागयोग (`bhagavad-gita-ch16.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय १७: श्रद्धात्रयविभागयोग (`bhagavad-gita-ch17.md`)
+- [x] श्रीमद्भगवद्गीता — अध्याय १८: मोक्षसंन्यासयोग (`bhagavad-gita-ch18.md`)
 
 ### 🔥 Veda (1)
 - [x] ऋग्वेद — मण्डल १, सूक्त १ (`rigveda-mandala1.md`)
@@ -41,25 +58,25 @@ This document tracks all planned sacred texts, scriptures, and stotras for Gyank
 
 ---
 
-## 📌 Phase 2: Complete Srimad Bhagavad Gita (P0 — Core Spiritual Authority)
+## 📌 Phase 2: Complete Srimad Bhagavad Gita (P0 — Core Spiritual Authority) [COMPLETED]
 
-- [ ] **अध्याय २: सांख्ययोग (Chapter 2: Sankhya Yoga)** — *कर्मण्येवाधिकारस्ते...*, आत्मा की अमरता (72 Shlokas)
-- [ ] **अध्याय ३: कर्मयोग (Chapter 3: Karma Yoga)** — निष्काम कर्म का सिद्धान्त (43 Shlokas)
-- [ ] **अध्याय ४: ज्ञानकर्मसंन्यासयोग (Chapter 4: Jnana Karma Sanyasa Yoga)** — *यदा यदा ही धर्मस्य...* (42 Shlokas)
-- [ ] **अध्याय ५: कर्मसंन्यासयोग (Chapter 5: Karma Sanyasa Yoga)** (29 Shlokas)
-- [ ] **अध्याय ६: आत्मसंयमयोग / ध्यानयोग (Chapter 6: Dhyana Yoga)** (47 Shlokas)
-- [ ] **अध्याय ७: ज्ञानविज्ञानयोग (Chapter 7: Jnana Vijnana Yoga)** (30 Shlokas)
-- [ ] **अध्याय ८: अक्षरब्रह्मयोग (Chapter 8: Akshara Brahma Yoga)** (28 Shlokas)
-- [ ] **अध्याय ९: राजविद्याराजगुह्ययोग (Chapter 9: Raja Vidya Raja Guhya Yoga)** (34 Shlokas)
-- [ ] **अध्याय १०: विभूतियोग (Chapter 10: Vibhuti Yoga)** (42 Shlokas)
-- [ ] **अध्याय ११: विश्वरूपदर्शनयोग (Chapter 11: Vishwaroopa Darshana Yoga)** (55 Shlokas)
-- [ ] **अध्याय १२: भक्तियोग (Chapter 12: Bhakti Yoga)** — भक्ति के लक्षण (20 Shlokas)
-- [ ] **अध्याय १३: क्षेत्रक्षेत्रज्ञविभागयोग (Chapter 13: Kshetra Kshetrajna Vibhaga Yoga)** (35 Shlokas)
-- [ ] **अध्याय १४: गुणत्रयविभागयोग (Chapter 14: Gunatraya Vibhaga Yoga)** (27 Shlokas)
-- [ ] **अध्याय १५: पुरुषोत्तमयोग (Chapter 15: Purushottama Yoga)** — अश्वत्थ वृक्ष एवं पुरुषोत्तम स्वरूप (20 Shlokas)
-- [ ] **अध्याय १६: दैवासुरसम्पद्विभागयोग (Chapter 16: Daivasura Sampad Vibhaga Yoga)** (24 Shlokas)
-- [ ] **अध्याय १७: श्रद्धात्रयविभागयोग (Chapter 17: Shraddhatraya Vibhaga Yoga)** (28 Shlokas)
-- [ ] **अध्याय १८: मोक्षसंन्यासयोग (Chapter 18: Moksha Sanyasa Yoga)** — *सर्वधर्मान्परित्यज्य...* (78 Shlokas)
+- [x] **अध्याय २: सांख्ययोग (Chapter 2: Sankhya Yoga)** — *कर्मण्येवाधिकारस्ते...*, आत्मा की अमरता (72 Shlokas)
+- [x] **अध्याय ३: कर्मयोग (Chapter 3: Karma Yoga)** — निष्काम कर्म का सिद्धान्त (43 Shlokas)
+- [x] **अध्याय ४: ज्ञानकर्मसंन्यासयोग (Chapter 4: Jnana Karma Sanyasa Yoga)** — *यदा यदा ही धर्मस्य...* (42 Shlokas)
+- [x] **अध्याय ५: कर्मसंन्यासयोग (Chapter 5: Karma Sanyasa Yoga)** (29 Shlokas)
+- [x] **अध्याय ६: आत्मसंयमयोग / ध्यानयोग (Chapter 6: Dhyana Yoga)** (47 Shlokas)
+- [x] **अध्याय ७: ज्ञानविज्ञानयोग (Chapter 7: Jnana Vijnana Yoga)** (30 Shlokas)
+- [x] **अध्याय ८: अक्षरब्रह्मयोग (Chapter 8: Akshara Brahma Yoga)** (28 Shlokas)
+- [x] **अध्याय ९: राजविद्याराजगुह्ययोग (Chapter 9: Raja Vidya Raja Guhya Yoga)** (34 Shlokas)
+- [x] **अध्याय १०: विभूतियोग (Chapter 10: Vibhuti Yoga)** (42 Shlokas)
+- [x] **अध्याय ११: विश्वरूपदर्शनयोग (Chapter 11: Vishwaroopa Darshana Yoga)** (55 Shlokas)
+- [x] **अध्याय १२: भक्तियोग (Chapter 12: Bhakti Yoga)** — भक्ति के लक्षण (20 Shlokas)
+- [x] **अध्याय १३: क्षेत्रक्षेत्रज्ञविभागयोग (Chapter 13: Kshetra Kshetrajna Vibhaga Yoga)** (35 Shlokas)
+- [x] **अध्याय १४: गुणत्रयविभागयोग (Chapter 14: Gunatraya Vibhaga Yoga)** (27 Shlokas)
+- [x] **अध्याय १५: पुरुषोत्तमयोग (Chapter 15: Purushottama Yoga)** — अश्वत्थ वृक्ष एवं पुरुषोत्तम स्वरूप (20 Shlokas)
+- [x] **अध्याय १६: दैवासुरसम्पद्विभागयोग (Chapter 16: Daivasura Sampad Vibhaga Yoga)** (24 Shlokas)
+- [x] **अध्याय १७: श्रद्धात्रयविभागयोग (Chapter 17: Shraddhatraya Vibhaga Yoga)** (28 Shlokas)
+- [x] **अध्याय १८: मोक्षसंन्यासयोग (Chapter 18: Moksha Sanyasa Yoga)** — *सर्वधर्मान्परित्यज्य...* (78 Shlokas)
 
 ---
 
