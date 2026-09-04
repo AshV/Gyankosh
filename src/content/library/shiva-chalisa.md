@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(205, 65%, 40%)"
 coverImage: "/covers/shiva-chalisa.jpg"
-tags: ["Shiva", "Bholenath", "Chalisa", "Stotra"]
+tags: ["शिव", "भोलेनाथ", "चालीसा", "स्तोत्र"]
 showNumbering: false
 ---
 

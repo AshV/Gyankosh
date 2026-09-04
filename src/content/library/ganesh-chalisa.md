@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(35, 90%, 45%)"
 coverImage: "/covers/ganesh-chalisa.jpg"
-tags: ["Ganesha", "Ganapati", "Vighnaharta", "Chalisa"]
+tags: ["गणेश", "गणपति", "विघ्नहर्ता", "चालीसा"]
 showNumbering: false
 ---
 

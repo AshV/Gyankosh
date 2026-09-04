@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(215, 75%, 45%)"
 coverImage: "/covers/krishna-chalisa.jpg"
-tags: ["Krishna", "Shyam", "Govinda", "Chalisa"]
+tags: ["कृष्ण", "श्याम", "गोविन्द", "चालीसा"]
 showNumbering: false
 ---
 

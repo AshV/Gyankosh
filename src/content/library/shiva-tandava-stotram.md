@@ -6,7 +6,7 @@ language: "Sanskrit"
 category: "Stotra"
 coverColor: "hsl(210, 60%, 28%)"
 coverImage: "/covers/shiva-tandava-stotram.jpg"
-tags: ["Shiva", "Tandava", "Stotram", "Ravana", "Bholenath", "Sanskrit", "Mahadev"]
+tags: ["शिव", "ताण्डव", "स्तोत्र", "रावण", "भोलेनाथ", "संस्कृत", "महादेव"]
 showNumbering: true
 ---
 

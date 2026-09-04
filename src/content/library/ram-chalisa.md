@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(28, 85%, 45%)"
 coverImage: "/covers/ram-chalisa.jpg"
-tags: ["Rama", "Raghupati", "SitaRam", "Chalisa"]
+tags: ["राम", "रघुपति", "सीताराम", "चालीसा"]
 showNumbering: false
 ---
 

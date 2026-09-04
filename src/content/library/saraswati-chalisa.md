@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(190, 60%, 45%)"
 coverImage: "/covers/saraswati-chalisa.jpg"
-tags: ["Saraswati", "Vidya", "Gyana", "Chalisa"]
+tags: ["सरस्वती", "विद्या", "ज्ञान", "चालीसा"]
 showNumbering: false
 ---
 

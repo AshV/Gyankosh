@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(18, 90%, 48%)"
 coverImage: "/covers/surya-chalisa.jpg"
-tags: ["Surya", "Aditya", "Bhaskara", "Chalisa"]
+tags: ["सूर्य", "आदित्य", "भास्कर", "चालीसा"]
 showNumbering: false
 ---
 

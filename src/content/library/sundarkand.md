@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Purana"
 coverColor: "hsl(18, 90%, 42%)"
 coverImage: "/covers/sundarkand.jpg"
-tags: ["Sundarkand", "Ramcharitmanas", "Hanuman", "Tulsidas", "Ramayana", "Awadhi", "Bhakti"]
+tags: ["सुन्दरकाण्ड", "रामचरितमानस", "हनुमान", "तुलसीदास", "रामायण", "अवधी", "भक्ति"]
 showNumbering: true
 ---
 

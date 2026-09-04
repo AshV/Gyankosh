@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(45, 90%, 45%)"
 coverImage: "/covers/lakshmi-chalisa.jpg"
-tags: ["Lakshmi", "Mahalakshmi", "Samriddhi", "Chalisa"]
+tags: ["लक्ष्मी", "महालक्ष्मी", "समृद्धि", "चालीसा"]
 showNumbering: false
 ---
 

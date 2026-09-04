@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(220, 45%, 25%)"
 coverImage: "/covers/shani-chalisa.jpg"
-tags: ["Shani", "Shani Dev", "Sade Sati", "Chalisa"]
+tags: ["शनि", "शनि देव", "साढ़े साती", "चालीसा"]
 showNumbering: false
 ---
 

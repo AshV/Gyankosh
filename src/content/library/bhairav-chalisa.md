@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(0, 75%, 35%)"
 coverImage: "/covers/bhairav-chalisa.jpg"
-tags: ["Bhairav", "Kaal Bhairav", "Batuk Bhairav", "Chalisa"]
+tags: ["भैरव", "काल भैरव", "बटुक भैरव", "चालीसा"]
 showNumbering: false
 ---
 

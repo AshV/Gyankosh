@@ -6,7 +6,7 @@ language: "Sanskrit"
 category: "Stotra"
 coverColor: "hsl(0, 0%, 20%)"
 coverImage: "/covers/kala-bhairava-ashtakam.jpg"
-tags: ["Bhairav", "Kala Bhairava", "Shiva", "Shankaracharya", "Kashi", "Stotra", "Sanskrit"]
+tags: ["भैरव", "काल भैरव", "शिव", "शंकराचार्य", "काशी", "स्तोत्र", "संस्कृत"]
 showNumbering: true
 ---
 

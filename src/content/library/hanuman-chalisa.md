@@ -7,6 +7,7 @@ category: "Chalisa"
 coverColor: "hsl(22, 85%, 45%)"
 coverImage: "/covers/hanuman-chalisa.jpg"
 showNumbering: false
+tags: ["हनुमान", "चालीसा", "तुलसीदास", "भक्ति", "बजरंगबली"]
 ---
 
 [Instruction]

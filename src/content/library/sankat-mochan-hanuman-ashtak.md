@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Stotra"
 coverColor: "hsl(25, 90%, 45%)"
 coverImage: "/covers/sankat-mochan-hanuman-ashtak.jpg"
-tags: ["Hanuman", "Sankat Mochan", "Ashtak", "Tulsidas", "Stotra", "Awadhi"]
+tags: ["हनुमान", "संकट मोचन", "अष्टक", "तुलसीदास", "स्तोत्र", "अवधी"]
 showNumbering: true
 ---
 

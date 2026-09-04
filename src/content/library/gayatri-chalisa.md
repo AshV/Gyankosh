@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(48, 85%, 45%)"
 coverImage: "/covers/gayatri-chalisa.jpg"
-tags: ["Gayatri", "VedaMata", "Savita", "Chalisa"]
+tags: ["गायत्री", "वेदमाता", "सविता", "चालीसा"]
 showNumbering: false
 ---
 

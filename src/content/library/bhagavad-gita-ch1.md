@@ -7,6 +7,7 @@ language: "Sanskrit"
 category: "Gita"
 coverColor: "hsl(210, 75%, 35%)"
 coverImage: "/covers/bhagavad-gita-ch1.jpg"
+tags: ["श्रीकृष्ण", "अर्जुन", "महाभारत", "कुरुक्षेत्र", "गीता", "विषादयोग"]
 ---
 
 [Instruction]

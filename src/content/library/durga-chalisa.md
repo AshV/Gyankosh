@@ -6,7 +6,7 @@ language: "Hindi/Awadhi"
 category: "Chalisa"
 coverColor: "hsl(350, 75%, 45%)"
 coverImage: "/covers/durga-chalisa.jpg"
-tags: ["Durga", "Shakti", "Ambe", "Chalisa"]
+tags: ["दुर्गा", "शक्ति", "अम्बे", "चालीसा"]
 showNumbering: false
 ---
 
