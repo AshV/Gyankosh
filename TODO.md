@@ -4,9 +4,9 @@ This document tracks all planned sacred texts, scriptures, and stotras for Gyank
 
 ---
 
-## ✅ Completed in Phase 1 & Phase 2 (40 Texts Total)
+## ✅ Completed in Phases 1, 2 & 3 (50 Texts Total)
 
-### 🪔 Chalisa (11)
+### 🪔 Chalisa (12)
 - [x] श्री हनुमान चालीसा (`hanuman-chalisa.md`)
 - [x] श्री शिव चालीसा (`shiva-chalisa.md`)
 - [x] श्री दुर्गा चालीसा (`durga-chalisa.md`)
@@ -20,15 +20,21 @@ This document tracks all planned sacred texts, scriptures, and stotras for Gyank
 - [x] श्री गायत्री चालीसा (`gayatri-chalisa.md`)
 - [x] श्री भैरव चालीसा (`bhairav-chalisa.md`)
 
-### 🌸 Stotras, Ashtakams & Suktams (8)
+### 🌸 Stotras, Ashtakams & Sahasranamas (14)
 - [x] श्री विष्णु सहस्रनाम स्तोत्रम् (`vishnu-sahasranama.md`)
+- [x] श्री ललिता सहस्रनाम स्तोत्रम् (`lalita-sahasranama.md`)
+- [x] शिवमहिम्नः स्तोत्रम् (`shiva-mahimna-stotram.md`)
+- [x] कनकधारा स्तोत्रम् (`kanakadhara-stotram.md`)
 - [x] शिव ताण्डव स्तोत्रम् (`shiva-tandava-stotram.md`)
+- [x] श्रीरुद्राष्टकम् (`rudrashtakam.md`)
 - [x] संकटमोचन हनुमानाष्टक (`sankat-mochan-hanuman-ashtak.md`)
 - [x] श्री बजरंग बाण (`bajrang-baan.md`)
 - [x] महिषासुरमर्दिनी स्तोत्रम् / अयि गिरिनन्दिनि (`mahishasura-mardini-stotram.md`)
 - [x] आदित्यहृदय स्तोत्रम् (`aditya-hridaya-stotram.md`)
 - [x] मधुराष्टकम् (`madhurashtakam.md`)
 - [x] कालभैरवाष्टकम् (`kala-bhairava-ashtakam.md`)
+- [x] नवग्रह स्तोत्रम् (`navagraha-stotram.md`)
+- [x] गंगा स्तोत्रम् (`ganga-stotram.md`)
 
 ### 🎵 Gita (18 — सम्पूर्ण श्रीमद्भगवद्गीता)
 - [x] श्रीमद्भगवद्गीता — अध्याय १: अर्जुनविषादयोग (`bhagavad-gita-ch1.md`)
@@ -50,8 +56,12 @@ This document tracks all planned sacred texts, scriptures, and stotras for Gyank
 - [x] श्रीमद्भगवद्गीता — अध्याय १७: श्रद्धात्रयविभागयोग (`bhagavad-gita-ch17.md`)
 - [x] श्रीमद्भगवद्गीता — अध्याय १८: मोक्षसंन्यासयोग (`bhagavad-gita-ch18.md`)
 
-### 🔥 Veda (1)
+### 🔥 Veda (5)
 - [x] ऋग्वेद — मण्डल १, सूक्त १ (`rigveda-mandala1.md`)
+- [x] श्री सूक्तम् — ऋग्वेद खिलभाग (`sri-suktam.md`)
+- [x] पुरुष सूक्तम् — ऋग्वेद १०.९० (`purusha-suktam.md`)
+- [x] नारायण सूक्तम् — यजुर्वेद तैत्तिरीय आरण्यक (`narayana-suktam.md`)
+- [x] दुर्गा सूक्तम् — महानारायण उपनिषद् (`durga-suktam.md`)
 
 ### 📖 Purana / Itihasa (1)
 - [x] श्री सुन्दरकाण्ड — श्रीरामचरितमानस (`sundarkand.md`)
@@ -80,18 +90,18 @@ This document tracks all planned sacred texts, scriptures, and stotras for Gyank
 
 ---
 
-## 📌 Phase 3: Sacred Vedic Suktams & Key Sahasranamas (P1 — Liturgical Depth)
+## 📌 Phase 3: Sacred Vedic Suktams & Key Sahasranamas (P1 — Liturgical Depth) [COMPLETED]
 
-- [ ] **श्री सूक्तम् (Sri Suktam)** — ऋग्वेद खिलभाग, देवी लक्ष्मी की पावन वैदिक ऋचाएं (15 Mantras + Phalasruti)
-- [ ] **पुरुष सूक्तम् (Purusha Suktam)** — ऋग्वेद १०.९० / यजुर्वेद ३१ (16 Mantras)
-- [ ] **शिवमहिम्नः स्तोत्रम् (Shiva Mahimna Stotram)** — गन्धर्वराज पुष्पदन्त विरचित (43 Shlokas)
-- [ ] **कनकधारा स्तोत्रम् (Kanakadhara Stotram)** — आदिशङ्कराचार्य विरचित (21 Shlokas)
-- [ ] **ललिता सहस्रनाम स्तोत्रम् (Lalita Sahasranama Stotram)** — ब्रह्माण्ड पुराण
-- [ ] **नारायण सूक्तम् (Narayana Suktam)** — यजुर्वेद तैत्तिरीय आरण्यक
-- [ ] **दुर्गा सूक्तम् (Durga Suktam)** — महानारायण उपनिषद्
-- [ ] **रुद्राष्टकम् (Rudrashtakam)** — गोस्वामी तुलसीदास (नमामीशमीशान निर्वाणरूपं)
-- [ ] **नवग्रह स्तोत्रम् (Navagraha Stotram)** — वेदव्यास विरचित
-- [ ] **गंगा स्तोत्रम् (Ganga Stotram)** — आदिशङ्कराचार्य (देवि सुरेश्वरि भगवति गङ्गे)
+- [x] **श्री सूक्तम् (Sri Suktam)** — ऋग्वेद खिलभाग, देवी लक्ष्मी की पावन वैदिक ऋचाएं (15 Mantras + Phalasruti)
+- [x] **पुरुष सूक्तम् (Purusha Suktam)** — ऋग्वेद १०.९० / यजुर्वेद ३१ (16 Mantras)
+- [x] **शिवमहिम्नः स्तोत्रम् (Shiva Mahimna Stotram)** — गन्धर्वराज पुष्पदन्त विरचित (43 Shlokas)
+- [x] **कनकधारा स्तोत्रम् (Kanakadhara Stotram)** — आदिशङ्कराचार्य विरचित (21 Shlokas)
+- [x] **ललिता सहस्रनाम स्तोत्रम् (Lalita Sahasranama Stotram)** — ब्रह्माण्ड पुराण
+- [x] **नारायण सूक्तम् (Narayana Suktam)** — यजुर्वेद तैत्तिरीय आरण्यक
+- [x] **दुर्गा सूक्तम् (Durga Suktam)** — महानारायण उपनिषद्
+- [x] **रुद्राष्टकम् (Rudrashtakam)** — गोस्वामी तुलसीदास (नमामीशमीशान निर्वाणरूपं)
+- [x] **नवग्रह स्तोत्रम् (Navagraha Stotram)** — वेदव्यास विरचित
+- [x] **गंगा स्तोत्रम् (Ganga Stotram)** — आदिशङ्कराचार्य (देवि सुरेश्वरि भगवति गङ्गे)
 
 ---
 
