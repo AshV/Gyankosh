@@ -61,6 +61,15 @@ const ogImage = image || (coverImage
 function tagToSlug(tag: string): string {
   return tag.toLowerCase().replace(/\s+/g, '-');
 }
+
+const categoryHindiMap: Record<string, string> = {
+  Veda: '🔥 वेद',
+  Gita: '🎵 गीता',
+  Chalisa: '🪔 चालीसा',
+  Stotra: '🌸 स्तोत्र',
+  Purana: '📖 पुराण',
+  Other: '📜 अन्य',
+};
 ---
 
 <!doctype html>
@@ -190,7 +199,16 @@ function tagToSlug(tag: string): string {
 
             <h1 class="cover-title">{title}</h1>
             {author && <p class="cover-author">{author}</p>}
-            {category && <span class="cover-category-badge">{category}</span>}
+            {category && (
+              <a
+                href={`${base}/category/${category.toLowerCase()}`}
+                class="cover-category-badge"
+                style="text-decoration:none;"
+                title={`${categoryHindiMap[category] || category} संग्रह देखें`}
+              >
+                {categoryHindiMap[category] || category}
+              </a>
+            )}
 
             {tags.length > 0 && (
               <div class="cover-tags">
