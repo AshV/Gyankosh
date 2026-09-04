@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.ashishvishwakarma.com/Gyankosh/sitemap-index.xml
+Sitemap: https://www.ashishvishwakarma.com/gyankosh/sitemap-index.xml

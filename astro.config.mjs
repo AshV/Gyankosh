@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   // Custom domain deployment URL and repository base path
   site: 'https://www.ashishvishwakarma.com',
-  base: '/Gyankosh',
+  base: '/gyankosh',
 
   output: 'static',
 
@@ -17,7 +17,7 @@ export default defineConfig({
       priority: 0.7,
       serialize(item) {
         // Homepage gets highest priority
-        if (item.url.endsWith('/Gyankosh/') || item.url.endsWith('/Gyankosh')) {
+        if (item.url.endsWith('/gyankosh/') || item.url.endsWith('/gyankosh')) {
           item.changefreq = 'daily';
           item.priority = 1.0;
         }

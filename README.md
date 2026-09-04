@@ -1,6 +1,8 @@
 # ज्ञानकोश (Gyankosh) — सनातन धर्मग्रंथ ई-रीडर एवं डिजिटल पुस्तकालय
 
 > **ज्ञानकोश (Gyankosh)** सनातन वैदिक एवं पौराणिक धर्मग्रंथों का एक प्रामाणिक, भव्य एवं आधुनिक डिजिटल ई-रीडर पुस्तकालय है। यह पारम्परिक सनातन मुद्रण शैली, सजीव ३डी पन्ना-पलट (3D Paper Flip) एवं १००% देवनागरी/हिन्दी इंटरफेस के साथ निर्मित है।
+> 
+> 🌐 **लाइव वेबसाइट**: [https://www.ashishvishwakarma.com/gyankosh/](https://www.ashishvishwakarma.com/gyankosh/)
 
 ---
 
@@ -29,16 +31,16 @@
 ### १. श्रेणियों का प्रबंधन (Maintaining Categories)
 
 1. **मास्टर सूची (Master Schema)**:
-   [`src/content.config.ts`](file:///a:/GitHub/Gyankosh/src/content.config.ts) में `CATEGORIES` ऐरे में नई श्रेणी जोड़ें:
+   [`src/content.config.ts`](src/content.config.ts) में `CATEGORIES` ऐरे में नई श्रेणी जोड़ें:
    ```typescript
    export const CATEGORIES = ['Veda', 'Purana', 'Chalisa', 'Stotra', 'Gita', 'Other'] as const;
    ```
 
 2. **हिन्दी नाम, आइकन एवं विवरण (Hindi Metadata)**:
    निम्नलिखित ३ फाइलों में `categoryMeta` ऑब्जेक्ट में श्रेणी का विवरण दर्ज करें:
-   * [`src/pages/index.astro`](file:///a:/GitHub/Gyankosh/src/pages/index.astro) (मुख्य सूची पृष्ठ)
-   * [`src/pages/category/[category].astro`](file:///a:/GitHub/Gyankosh/src/pages/category/[category].astro) (श्रेणी संग्रह पृष्ठ)
-   * [`src/components/BookCard.astro`](file:///a:/GitHub/Gyankosh/src/components/BookCard.astro) (ग्रंथ कार्ड)
+   * [`src/pages/index.astro`](src/pages/index.astro) (मुख्य सूची पृष्ठ)
+   * [`src/pages/category/[category].astro`](src/pages/category/[category].astro) (श्रेणी संग्रह पृष्ठ)
+   * [`src/components/BookCard.astro`](src/components/BookCard.astro) (ग्रंथ कार्ड)
 
    ```typescript
    const categoryMeta: Record<string, { icon: string; nameHindi: string; description: string }> = {
