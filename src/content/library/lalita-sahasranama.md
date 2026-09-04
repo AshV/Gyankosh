@@ -5,7 +5,7 @@ description: "ब्रह्माण्ड पुराणान्तर्�
 language: "Sanskrit"
 category: "Stotra"
 coverColor: "hsl(340, 85%, 40%)"
-coverImage: "/covers/mahishasura-mardini-stotram.jpg"
+coverImage: "/covers/lalita-sahasranama.jpg"
 tags: ["स्तोत्र", "ललिता", "सहस्रनाम", "त्रिपुरसुन्दरी", "श्रीविद्या", "देवी"]
 showNumbering: true
 ---

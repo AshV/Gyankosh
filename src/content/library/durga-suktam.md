@@ -5,7 +5,7 @@ description: "महानारायण उपनिषद् एवं ऋग
 language: "Vedic Sanskrit"
 category: "Veda"
 coverColor: "hsl(350, 80%, 42%)"
-coverImage: "/covers/durga-chalisa.jpg"
+coverImage: "/covers/durga-suktam.jpg"
 tags: ["वेद", "दुर्गा-सूक्त", "दुर्गा", "अग्नि", "महानारायण-उपनिषद्", "रक्षा"]
 showNumbering: true
 ---

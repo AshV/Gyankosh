@@ -5,7 +5,7 @@ description: "जगद्गुरु आदिशङ्कराचार्�
 language: "Sanskrit"
 category: "Stotra"
 coverColor: "hsl(190, 75%, 40%)"
-coverImage: "/covers/shiva-chalisa.jpg"
+coverImage: "/covers/ganga-stotram.jpg"
 tags: ["स्तोत्र", "गंगा", "शङ्कराचार्य", "पतित-पावनी", "भागीरथी", "मोक्ष"]
 showNumbering: true
 ---

@@ -5,7 +5,7 @@ description: "गन्धर्वराज पुष्पदन्त वि�
 language: "Sanskrit"
 category: "Stotra"
 coverColor: "hsl(200, 75%, 36%)"
-coverImage: "/covers/shiva-tandava-stotram.jpg"
+coverImage: "/covers/shiva-mahimna-stotram.jpg"
 tags: ["स्तोत्र", "शिव", "पुष्पदन्त", "महिम्न", "भोलेनाथ", "कैलाश"]
 showNumbering: true
 ---

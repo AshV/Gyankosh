@@ -5,7 +5,7 @@ description: "कृष्ण यजुर्वेद तैत्तिरी�
 language: "Vedic Sanskrit"
 category: "Veda"
 coverColor: "hsl(220, 85%, 35%)"
-coverImage: "/covers/vishnu-sahasranama.jpg"
+coverImage: "/covers/narayana-suktam.jpg"
 tags: ["वेद", "यजुर्वेद", "नारायण-सूक्त", "नारायण", "हृदय-कमल", "ब्रह्म"]
 showNumbering: true
 ---

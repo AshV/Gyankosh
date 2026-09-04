@@ -5,7 +5,7 @@ description: "गोस्वामी तुलसीदास विरचि�
 language: "Sanskrit"
 category: "Stotra"
 coverColor: "hsl(210, 70%, 38%)"
-coverImage: "/covers/shiva-chalisa.jpg"
+coverImage: "/covers/rudrashtakam.jpg"
 tags: ["स्तोत्र", "अष्टक", "शिव", "रुद्राष्टक", "तुलसीदास", "रामचरितमानस"]
 showNumbering: true
 ---

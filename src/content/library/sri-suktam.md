@@ -5,7 +5,7 @@ description: "ऋग्वेद खिलभागान्तर्गत प�
 language: "Vedic Sanskrit"
 category: "Veda"
 coverColor: "hsl(45, 90%, 45%)"
-coverImage: "/covers/lakshmi-chalisa.jpg"
+coverImage: "/covers/sri-suktam.jpg"
 tags: ["वेद", "ऋग्वेद", "लक्ष्मी", "श्री-सूक्त", "वैदिक-ऋचा", "समृद्धि"]
 showNumbering: true
 ---
